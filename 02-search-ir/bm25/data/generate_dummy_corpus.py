@@ -241,8 +241,7 @@ def build_title(topic_name, kws):
     while len(padded) < 3:
         padded.append(random.choice(TOPICS[topic_name]["keywords"]))
 
-    title = template.format(k1=padded[0], k2=padded[1], k3=padded[2])
-    return title
+    return template.format(k1=padded[0], k2=padded[1], k3=padded[2])
 
 
 def build_irrelevant_title(topic_data, kws):
@@ -263,8 +262,8 @@ def make_short_doc(doc_id, topic_name):
     phrase = random.choice(TOPICS[topic_name]["phrases"])
     title = build_title(topic_name, kws)
     tags = build_tags(topic_name, kws)
-
     text = f"{phrase} 핵심 키워드는 {' '.join(kws)} 이다."
+
     return {
         "id": f"doc_{doc_id}",
         "topic": topic_name,
@@ -276,7 +275,10 @@ def make_short_doc(doc_id, topic_name):
 
 
 def make_long_doc(doc_id, topic_name):
-    phrases = random.sample(TOPICS[topic_name]["phrases"], k=min(4, len(TOPICS[topic_name]["phrases"])))
+    phrases = random.sample(
+        TOPICS[topic_name]["phrases"],
+        k=min(4, len(TOPICS[topic_name]["phrases"]))
+    )
     kws = sample_keywords(topic_name, 4, 7)
     extras = random_noise_words(5)
     repeated = random.choice(kws)
@@ -307,8 +309,8 @@ def make_keyword_repeated_doc(doc_id, topic_name):
     title = build_title(topic_name, [target] + kws)
     tags = list(dict.fromkeys([target] + kws[:2]))
     repeated_block = " ".join([target] * random.randint(6, 12))
-
     text = f"{phrase} {repeated_block} 이 문서는 특정 키워드 반복이 많은 테스트용 문서이다."
+
     return {
         "id": f"doc_{doc_id}",
         "topic": topic_name,
@@ -345,6 +347,7 @@ def make_variant_doc(doc_id, topic_name):
             variants.append(kw)
 
     text = f"{phrase} 유사 표현으로는 {' '.join(variants)} 같은 말이 사용될 수 있다."
+
     return {
         "id": f"doc_{doc_id}",
         "topic": topic_name,
@@ -446,6 +449,84 @@ def generate_queries(n_queries=200):
     return queries[:n_queries]
 
 
+def simple_tokenize(text):
+    return set(text.lower().split())
+
+
+def compute_overlap_score(query, doc):
+    q_tokens = simple_tokenize(query)
+
+    title_tokens = simple_tokenize(doc["title"])
+    tag_tokens = set(t.lower() for t in doc["tags"])
+    text_tokens = simple_tokenize(doc["text"])
+
+    score = 0.0
+    score += len(q_tokens & title_tokens) * 3.0
+    score += len(q_tokens & tag_tokens) * 4.0
+    score += len(q_tokens & text_tokens) * 1.5
+
+    if doc["doc_type"] == "short":
+        score += 0.5
+    elif doc["doc_type"] == "long":
+        score += 0.3
+    elif doc["doc_type"] == "keyword_repeated":
+        score += 0.4
+    elif doc["doc_type"] == "variant":
+        score += 0.2
+    elif doc["doc_type"] == "mixed":
+        score -= 0.2
+    elif doc["doc_type"] == "irrelevant":
+        score -= 10.0
+
+    return score
+
+
+def generate_qrels(docs, queries, max_high=3, max_rel=5):
+    """
+    relevance:
+      2 = highly relevant
+      1 = relevant
+    """
+    qrels = []
+
+    for q in queries:
+        query_id = q["query_id"]
+        query_text = q["query"]
+        query_topic = q["topic"]
+
+        candidates = []
+        for doc in docs:
+            if doc["topic"] != query_topic:
+                continue
+            if doc["doc_type"] == "irrelevant":
+                continue
+
+            score = compute_overlap_score(query_text, doc)
+            if score > 0:
+                candidates.append((doc["id"], score))
+
+        candidates.sort(key=lambda x: x[1], reverse=True)
+
+        high_docs = candidates[:max_high]
+        rel_docs = candidates[max_high:max_high + max_rel]
+
+        for doc_id, _ in high_docs:
+            qrels.append({
+                "query_id": query_id,
+                "doc_id": doc_id,
+                "relevance": 2
+            })
+
+        for doc_id, _ in rel_docs:
+            qrels.append({
+                "query_id": query_id,
+                "doc_id": doc_id,
+                "relevance": 1
+            })
+
+    return qrels
+
+
 def write_jsonl(path, rows):
     with open(path, "w", encoding="utf-8") as f:
         for row in rows:
@@ -457,12 +538,50 @@ def write_json(path, obj):
         json.dump(obj, f, ensure_ascii=False, indent=2)
 
 
+def summarize_docs(docs):
+    topic_counts = {}
+    doc_type_counts = {}
+
+    for doc in docs:
+        topic_counts[doc["topic"]] = topic_counts.get(doc["topic"], 0) + 1
+        doc_type_counts[doc["doc_type"]] = doc_type_counts.get(doc["doc_type"], 0) + 1
+
+    return topic_counts, doc_type_counts
+
+
+def summarize_qrels(qrels):
+    per_query = {}
+    rel_dist = {}
+
+    for item in qrels:
+        qid = item["query_id"]
+        rel = item["relevance"]
+
+        per_query[qid] = per_query.get(qid, 0) + 1
+        rel_dist[str(rel)] = rel_dist.get(str(rel), 0) + 1
+
+    if per_query:
+        avg_qrels = sum(per_query.values()) / len(per_query)
+    else:
+        avg_qrels = 0.0
+
+    return {
+        "n_qrels": len(qrels),
+        "avg_qrels_per_query": round(avg_qrels, 2),
+        "relevance_distribution": rel_dist,
+    }
+
+
 def main():
-    parser = argparse.ArgumentParser(description="Generate synthetic BM25/BM25F test corpus")
+    parser = argparse.ArgumentParser(
+        description="Generate synthetic BM25/BM25+/BM25L/BM25F test corpus with qrels"
+    )
     parser.add_argument("--n_docs", type=int, default=10000, help="number of documents")
     parser.add_argument("--n_queries", type=int, default=200, help="number of queries")
     parser.add_argument("--output_dir", type=str, default="02-search-ir/bm25/data/generated", help="output directory")
     parser.add_argument("--seed", type=int, default=42, help="random seed")
+    parser.add_argument("--max_high", type=int, default=3, help="max relevance=2 docs per query")
+    parser.add_argument("--max_rel", type=int, default=5, help="max relevance=1 docs per query")
     args = parser.parse_args()
 
     random.seed(args.seed)
@@ -472,20 +591,19 @@ def main():
 
     docs = [generate_document(i) for i in range(1, args.n_docs + 1)]
     queries = generate_queries(args.n_queries)
+    qrels = generate_qrels(docs, queries, max_high=args.max_high, max_rel=args.max_rel)
 
     docs_path = output_dir / "bm25f_corpus.jsonl"
     queries_path = output_dir / "bm25f_queries.json"
+    qrels_path = output_dir / "bm25f_qrels.json"
     summary_path = output_dir / "summary.json"
 
     write_jsonl(docs_path, docs)
     write_json(queries_path, {"queries": queries})
+    write_json(qrels_path, {"qrels": qrels})
 
-    topic_counts = {}
-    doc_type_counts = {}
-
-    for doc in docs:
-        topic_counts[doc["topic"]] = topic_counts.get(doc["topic"], 0) + 1
-        doc_type_counts[doc["doc_type"]] = doc_type_counts.get(doc["doc_type"], 0) + 1
+    topic_counts, doc_type_counts = summarize_docs(docs)
+    qrels_summary = summarize_qrels(qrels)
 
     summary = {
         "n_docs": len(docs),
@@ -493,15 +611,23 @@ def main():
         "seed": args.seed,
         "topics": topic_counts,
         "doc_types": doc_type_counts,
+        "fields": ["title", "tags", "text"],
+        "qrels": qrels_summary,
         "docs_path": str(docs_path),
         "queries_path": str(queries_path),
-        "fields": ["title", "tags", "text"],
+        "qrels_path": str(qrels_path),
+        "note": (
+            "Qrels are automatically generated heuristic relevance labels based on "
+            "topic matching and token overlap across title, tags, and text fields."
+        ),
     }
+
     write_json(summary_path, summary)
 
     print("생성 완료")
     print(f"- docs: {docs_path}")
     print(f"- queries: {queries_path}")
+    print(f"- qrels: {qrels_path}")
     print(f"- summary: {summary_path}")
 
 
