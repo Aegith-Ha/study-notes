@@ -593,9 +593,9 @@ def main():
     queries = generate_queries(args.n_queries)
     qrels = generate_qrels(docs, queries, max_high=args.max_high, max_rel=args.max_rel)
 
-    docs_path = output_dir / "bm25f_corpus.jsonl"
-    queries_path = output_dir / "bm25f_queries.json"
-    qrels_path = output_dir / "bm25f_qrels.json"
+    docs_path = output_dir / "corpus.jsonl"
+    queries_path = output_dir / "queries.json"
+    qrels_path = output_dir / "qrels.json"
     summary_path = output_dir / "summary.json"
 
     write_jsonl(docs_path, docs)

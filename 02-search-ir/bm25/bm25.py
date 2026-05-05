@@ -8,17 +8,20 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from heapq import nlargest
 from pathlib import Path
-from typing import DefaultDict
+from typing import DefaultDict, Callable
 
 
 TOKEN_PATTERN = re.compile(r"[0-9a-zA-Z가-힣]+(?:-[0-9a-zA-Z가-힣]+)?")
+# BM25F는 문서를 하나의 텍스트가 아니라 여러 필드로 나눠 점수를 계산한다.
 FIELDS = ("title", "tags", "text")
+MODEL_CHOICES = ("bm25", "bm25+", "bm25l", "bm25f")
 
 
 @dataclass
 class Document:
     doc_id: str
     topic: str
+    doc_type: str
     title: str
     tags: list[str]
     text: str
@@ -34,7 +37,7 @@ class Query:
 
 @dataclass
 class FlatIndex:
-    documents: dict[str, Document]
+    # 일반 BM25 계열에서 쓰는 단일 역색인: term -> doc_id -> term frequency.
     postings: dict[str, dict[str, int]]
     doc_lengths: dict[str, int]
     avg_doc_length: float
@@ -44,7 +47,7 @@ class FlatIndex:
 
 @dataclass
 class FieldIndex:
-    documents: dict[str, Document]
+    # BM25F에서 쓰는 필드별 역색인: field -> term -> doc_id -> term frequency.
     field_postings: dict[str, dict[str, dict[str, int]]]
     field_lengths: dict[str, dict[str, int]]
     avg_field_lengths: dict[str, float]
@@ -52,15 +55,8 @@ class FieldIndex:
     n_docs: int
 
 
-@dataclass
-class Metrics:
-    precision: float
-    recall: float
-    mrr: float
-    ndcg: float
-
-
 def tokenize(text: str) -> list[str]:
+    # 예제용 단순 토크나이저다. 영어/숫자/한국어와 하이픈 단어를 추출한다.
     return TOKEN_PATTERN.findall(text.lower())
 
 
@@ -72,6 +68,7 @@ def load_documents(path: Path) -> dict[str, Document]:
             documents[raw["id"]] = Document(
                 doc_id=raw["id"],
                 topic=raw.get("topic", ""),
+                doc_type=raw.get("doc_type", ""),
                 title=raw.get("title", ""),
                 tags=raw.get("tags", []),
                 text=raw.get("text", ""),
@@ -95,16 +92,21 @@ def load_queries(path: Path) -> list[Query]:
 
 
 def load_qrels(path: Path) -> dict[str, dict[str, int]]:
+    if not path.exists():
+        return {}
+
     with path.open("r", encoding="utf-8") as handle:
         payload = json.load(handle)
 
     qrels: DefaultDict[str, dict[str, int]] = defaultdict(dict)
     for item in payload["qrels"]:
+        # query_id별로 평가 정답 문서와 relevance를 빠르게 찾기 위한 구조로 바꾼다.
         qrels[item["query_id"]][item["doc_id"]] = item["relevance"]
     return dict(qrels)
 
 
 def build_indexes(documents: dict[str, Document]) -> tuple[FlatIndex, FieldIndex]:
+    # 한 번의 순회에서 일반 BM25용 flat index와 BM25F용 field index를 함께 만든다.
     postings: DefaultDict[str, dict[str, int]] = defaultdict(dict)
     doc_lengths: dict[str, int] = {}
     doc_freqs: DefaultDict[str, int] = defaultdict(int)
@@ -118,7 +120,6 @@ def build_indexes(documents: dict[str, Document]) -> tuple[FlatIndex, FieldIndex
     for doc_id, document in documents.items():
         flattened_terms: Counter[str] = Counter()
         seen_terms: set[str] = set()
-
         field_texts = {
             "title": document.title,
             "tags": " ".join(document.tags),
@@ -126,14 +127,14 @@ def build_indexes(documents: dict[str, Document]) -> tuple[FlatIndex, FieldIndex
         }
 
         for field, text in field_texts.items():
-            tokens = tokenize(text)
-            counts = Counter(tokens)
-            field_lengths[field][doc_id] = len(tokens)
-            total_field_lengths[field] += len(tokens)
+            counts = Counter(tokenize(text))
+            field_lengths[field][doc_id] = sum(counts.values())
+            total_field_lengths[field] += sum(counts.values())
 
             for term, tf in counts.items():
                 field_postings[field][term][doc_id] = tf
 
+            # flat index는 title/tags/text를 하나의 문서 본문처럼 합쳐서 본다.
             flattened_terms.update(counts)
             seen_terms.update(counts.keys())
 
@@ -146,31 +147,31 @@ def build_indexes(documents: dict[str, Document]) -> tuple[FlatIndex, FieldIndex
     n_docs = len(documents)
     avg_doc_length = sum(doc_lengths.values()) / n_docs if n_docs else 0.0
     avg_field_lengths = {
-        field: (total_field_lengths[field] / n_docs if n_docs else 0.0)
+        field: total_field_lengths[field] / n_docs if n_docs else 0.0
         for field in FIELDS
     }
 
-    flat_index = FlatIndex(
-        documents=documents,
-        postings=dict(postings),
-        doc_lengths=doc_lengths,
-        avg_doc_length=avg_doc_length,
-        doc_freqs=dict(doc_freqs),
-        n_docs=n_docs,
+    return (
+        FlatIndex(
+            postings=dict(postings),
+            doc_lengths=doc_lengths,
+            avg_doc_length=avg_doc_length,
+            doc_freqs=dict(doc_freqs),
+            n_docs=n_docs,
+        ),
+        FieldIndex(
+            field_postings={field: dict(index) for field, index in field_postings.items()},
+            field_lengths=field_lengths,
+            avg_field_lengths=avg_field_lengths,
+            doc_freqs=dict(doc_freqs),
+            n_docs=n_docs,
+        ),
     )
-    field_index = FieldIndex(
-        documents=documents,
-        field_postings={field: dict(index) for field, index in field_postings.items()},
-        field_lengths=field_lengths,
-        avg_field_lengths=avg_field_lengths,
-        doc_freqs=dict(doc_freqs),
-        n_docs=n_docs,
-    )
-    return flat_index, field_index
 
 
 def idf(term: str, doc_freqs: dict[str, int], n_docs: int) -> float:
     df = doc_freqs.get(term, 0)
+    # 문서 전체에 흔한 단어는 낮게, 드문 단어는 높게 평가한다.
     return math.log1p((n_docs - df + 0.5) / (df + 0.5))
 
 
@@ -192,6 +193,7 @@ def bm25(
         term_idf = idf(term, index.doc_freqs, index.n_docs)
         for doc_id, tf in postings.items():
             doc_len = index.doc_lengths[doc_id]
+            # b는 문서 길이 정규화 강도, k1은 term frequency 포화 속도를 조절한다.
             norm = k1 * (1.0 - b + b * doc_len / index.avg_doc_length)
             score = term_idf * ((tf * (k1 + 1.0)) / (tf + norm))
             scores[doc_id] += qtf * score
@@ -220,6 +222,7 @@ def bm25_plus(
             doc_len = index.doc_lengths[doc_id]
             norm = k1 * (1.0 - b + b * doc_len / index.avg_doc_length)
             tf_component = (tf * (k1 + 1.0)) / (tf + norm)
+            # BM25+는 delta를 더해 긴 문서가 과하게 불리해지는 현상을 완화한다.
             scores[doc_id] += qtf * term_idf * (tf_component + delta)
 
     return dict(scores)
@@ -246,6 +249,7 @@ def bm25l(
             doc_len = index.doc_lengths[doc_id]
             length_norm = 1.0 - b + b * doc_len / index.avg_doc_length
             normalized_tf = tf / length_norm
+            # BM25L은 정규화된 tf에 delta를 더해 길이 보정을 조금 부드럽게 만든다.
             tf_component = ((k1 + 1.0) * (normalized_tf + delta)) / (
                 k1 + normalized_tf + delta
             )
@@ -264,8 +268,9 @@ def bm25f(
 ) -> dict[str, float]:
     query_tf = Counter(query_tokens)
     scores: DefaultDict[str, float] = defaultdict(float)
-    weights = field_weights or {"title": 2.2, "tags": 1.6, "text": 1.0}
-    b_values = field_b or {"title": 0.3, "tags": 0.2, "text": 0.75}
+    # 더미 qrels는 title/tags의 키워드 겹침을 강하게 보므로 본문 가중치는 낮춘다.
+    weights = field_weights or {"title": 2.0, "tags": 2.0, "text": 0.5}
+    b_values = field_b or {"title": 0.5, "tags": 0.0, "text": 0.75}
 
     for term, qtf in query_tf.items():
         if index.doc_freqs.get(term, 0) == 0:
@@ -276,14 +281,17 @@ def bm25f(
         for field in FIELDS:
             candidate_docs.update(index.field_postings[field].get(term, {}).keys())
 
-        for doc_id in candidate_docs:
+        # set 순회 순서는 실행마다 달라질 수 있으므로 동점 순위가 흔들리지 않게 정렬한다.
+        for doc_id in sorted(candidate_docs):
             weighted_tf = 0.0
             for field in FIELDS:
                 tf = index.field_postings[field].get(term, {}).get(doc_id, 0)
                 if tf == 0:
                     continue
+
                 field_len = index.field_lengths[field][doc_id]
                 avg_len = index.avg_field_lengths[field] or 1.0
+                # 필드마다 길이 분포가 다르므로 title/tags/text를 따로 정규화한다.
                 norm = 1.0 - b_values[field] + b_values[field] * field_len / avg_len
                 weighted_tf += weights[field] * (tf / norm)
 
@@ -294,90 +302,48 @@ def bm25f(
 
 
 def rank_documents(scores: dict[str, float], top_k: int) -> list[tuple[str, float]]:
+    # 점수가 높은 문서 top-k만 뽑는다.
     return nlargest(top_k, scores.items(), key=lambda item: item[1])
 
 
-def evaluate_ranking(
-    ranked_docs: list[tuple[str, float]],
-    qrel: dict[str, int],
-    *,
-    k: int,
-) -> Metrics:
-    relevant_docs = {doc_id: rel for doc_id, rel in qrel.items() if rel > 0}
-    hits = 0
-    dcg = 0.0
-    reciprocal_rank = 0.0
+def select_query(args: argparse.Namespace, queries: list[Query]) -> tuple[str, str | None]:
+    # 우선순위: 직접 입력한 --query, generated의 --query-id, generated 첫 번째 query.
+    if args.query:
+        return args.query, None
 
-    for rank, (doc_id, _) in enumerate(ranked_docs[:k], start=1):
-        rel = relevant_docs.get(doc_id, 0)
-        if rel > 0:
-            hits += 1
-            if reciprocal_rank == 0.0:
-                reciprocal_rank = 1.0 / rank
-        dcg += (2**rel - 1) / math.log2(rank + 1)
+    if args.query_id:
+        queries_by_id = {query.query_id: query for query in queries}
+        if args.query_id not in queries_by_id:
+            raise SystemExit(f"Unknown query id: {args.query_id}")
+        query = queries_by_id[args.query_id]
+        return query.text, query.query_id
 
-    ideal_rels = sorted(relevant_docs.values(), reverse=True)[:k]
-    idcg = sum((2**rel - 1) / math.log2(rank + 1) for rank, rel in enumerate(ideal_rels, start=1))
-    recall_denom = len(relevant_docs)
+    if queries:
+        query = queries[0]
+        return query.text, query.query_id
 
-    return Metrics(
-        precision=hits / k if k else 0.0,
-        recall=hits / recall_denom if recall_denom else 0.0,
-        mrr=reciprocal_rank,
-        ndcg=dcg / idcg if idcg else 0.0,
-    )
+    raise SystemExit("No query was provided and no generated query exists.")
 
 
-def mean_metrics(metrics: list[Metrics]) -> Metrics:
-    if not metrics:
-        return Metrics(0.0, 0.0, 0.0, 0.0)
-
-    count = len(metrics)
-    return Metrics(
-        precision=sum(item.precision for item in metrics) / count,
-        recall=sum(item.recall for item in metrics) / count,
-        mrr=sum(item.mrr for item in metrics) / count,
-        ndcg=sum(item.ndcg for item in metrics) / count,
-    )
-
-
-def print_summary(
-    summary: dict[str, Metrics],
-    *,
-    top_k: int,
-) -> None:
-    print(f"\n=== Overall metrics @ {top_k} ===")
-    print(f"{'model':<8} {'P@k':>8} {'R@k':>8} {'MRR@k':>8} {'nDCG@k':>8}")
-    print("-" * 44)
-    for model_name, metrics in sorted(summary.items(), key=lambda item: item[1].ndcg, reverse=True):
-        print(
-            f"{model_name:<8} "
-            f"{metrics.precision:>8.4f} "
-            f"{metrics.recall:>8.4f} "
-            f"{metrics.mrr:>8.4f} "
-            f"{metrics.ndcg:>8.4f}"
-        )
-
-
-def print_preview(
+def print_results(
     model_name: str,
-    query: Query,
     ranked_docs: list[tuple[str, float]],
-    qrel: dict[str, int],
     documents: dict[str, Document],
-    *,
-    depth: int,
+    relevance_by_doc: dict[str, int],
 ) -> None:
-    print(
-        f"\n[{model_name}] {query.query_id} | topic={query.topic} | intent={query.intent}\n"
-        f"query: {query.text}"
-    )
-    for rank, (doc_id, score) in enumerate(ranked_docs[:depth], start=1):
+    print(f"\n[{model_name}]")
+    if not ranked_docs:
+        print("No results")
+        return
+
+    for rank, (doc_id, score) in enumerate(ranked_docs, start=1):
         document = documents[doc_id]
-        relevance = qrel.get(doc_id, 0)
+        relevance = relevance_by_doc.get(doc_id, 0)
+        tags = ", ".join(document.tags)
         print(
-            f"{rank:>2}. {doc_id:<10} score={score:>8.4f} "
-            f"rel={relevance} title={document.title}"
+            f"{rank:>2}. {doc_id:<10} score={score:>8.4f} rel={relevance} "
+            f"topic={document.topic:<10} type={document.doc_type:<16} "
+            f"title={document.title} tags=[{tags}]"
         )
 
 
@@ -386,43 +352,48 @@ def parse_args() -> argparse.Namespace:
     data_dir = base_dir / "data" / "generated"
 
     parser = argparse.ArgumentParser(
-        description="Compare BM25, BM25+, BM25L, and BM25F using generated data and qrels."
+        description="Search generated corpus with a selected BM25 model."
     )
     parser.add_argument(
         "--docs",
         type=Path,
-        default=data_dir / "bm25f_corpus.jsonl",
-        help="Path to the corpus JSONL file.",
+        default=data_dir / "corpus.jsonl",
+        help="Path to generated corpus JSONL.",
     )
     parser.add_argument(
         "--queries",
         type=Path,
-        default=data_dir / "bm25f_queries.json",
-        help="Path to the queries JSON file.",
+        default=data_dir / "queries.json",
+        help="Path to generated queries JSON.",
     )
     parser.add_argument(
         "--qrels",
         type=Path,
-        default=data_dir / "bm25f_qrels.json",
-        help="Path to the qrels JSON file.",
+        default=data_dir / "qrels.json",
+        help="Path to generated qrels JSON.",
+    )
+    parser.add_argument(
+        "--query",
+        type=str,
+        help="Search text. If omitted, --query-id or the first generated query is used.",
+    )
+    parser.add_argument(
+        "--query-id",
+        type=str,
+        help="Generated query id such as q_1.",
+    )
+    parser.add_argument(
+        "--model",
+        type=str.lower,
+        choices=MODEL_CHOICES,
+        default="bm25",
+        help="Search model to use. Default: bm25.",
     )
     parser.add_argument(
         "--top-k",
         type=int,
-        default=10,
-        help="Use top-k results when ranking and evaluating.",
-    )
-    parser.add_argument(
-        "--preview-queries",
-        type=int,
-        default=3,
-        help="Print detailed ranking results for the first N queries.",
-    )
-    parser.add_argument(
-        "--preview-depth",
-        type=int,
         default=5,
-        help="How many documents to print per preview query.",
+        help="Number of results to print.",
     )
     return parser.parse_args()
 
@@ -431,53 +402,32 @@ def main() -> None:
     args = parse_args()
 
     documents = load_documents(args.docs)
-    queries = load_queries(args.queries)
+    queries = load_queries(args.queries) if args.queries.exists() else []
     qrels = load_qrels(args.qrels)
+    query_text, query_id = select_query(args, queries)
+    query_tokens = tokenize(query_text)
     flat_index, field_index = build_indexes(documents)
 
-    search_functions = {
-        "bm25": lambda tokens: bm25(tokens, flat_index),
-        "bm25+": lambda tokens: bm25_plus(tokens, flat_index),
-        "bm25L": lambda tokens: bm25l(tokens, flat_index),
-        "bm25F": lambda tokens: bm25f(tokens, field_index),
+    search_functions: dict[str, tuple[str, Callable[[list[str]], dict[str, float]]]] = {
+        "bm25": ("bm25", lambda tokens: bm25(tokens, flat_index)),
+        "bm25+": ("bm25+", lambda tokens: bm25_plus(tokens, flat_index)),
+        "bm25l": ("bm25L", lambda tokens: bm25l(tokens, flat_index)),
+        "bm25f": ("bm25F", lambda tokens: bm25f(tokens, field_index)),
     }
+    # --model로 선택한 검색 함수 하나만 실행한다. 기본값은 bm25다.
+    model_name, search_fn = search_functions[args.model]
 
-    print(
-        f"Loaded {len(documents)} docs, {len(queries)} queries, "
-        f"{sum(len(items) for items in qrels.values())} qrels"
-    )
+    print(f"Loaded {len(documents)} docs")
+    print(f"Model: {model_name}")
+    print(f"Query: {query_text}")
+    if query_id:
+        print(f"Query id: {query_id}")
+    print(f"Tokens: {query_tokens}")
 
-    summary: dict[str, Metrics] = {}
-    previews: dict[str, list[tuple[Query, list[tuple[str, float]]]]] = defaultdict(list)
-
-    for model_name, search_fn in search_functions.items():
-        per_query_metrics: list[Metrics] = []
-
-        for index, query in enumerate(queries):
-            query_tokens = tokenize(query.text)
-            scores = search_fn(query_tokens)
-            ranked_docs = rank_documents(scores, args.top_k)
-            per_query_metrics.append(
-                evaluate_ranking(ranked_docs, qrels.get(query.query_id, {}), k=args.top_k)
-            )
-
-            if index < args.preview_queries:
-                previews[model_name].append((query, ranked_docs))
-
-        summary[model_name] = mean_metrics(per_query_metrics)
-
-    print_summary(summary, top_k=args.top_k)
-
-    for model_name in ("bm25", "bm25+", "bm25L", "bm25F"):
-        for query, ranked_docs in previews[model_name]:
-            print_preview(
-                model_name,
-                query,
-                ranked_docs,
-                qrels.get(query.query_id, {}),
-                documents,
-                depth=min(args.preview_depth, args.top_k),
-            )
+    relevance_by_doc = qrels.get(query_id, {}) if query_id else {}
+    scores = search_fn(query_tokens)
+    ranked_docs = rank_documents(scores, args.top_k)
+    print_results(model_name, ranked_docs, documents, relevance_by_doc)
 
 
 if __name__ == "__main__":

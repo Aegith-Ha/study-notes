@@ -1,0 +1,51 @@
+
+name: study-py312
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # Python
+  - python=3.12
+
+  # 기본 필수
+  - pip
+  - setuptools
+  - wheel
+
+  # 개발 편의
+  - ipython
+  - jupyterlab
+
+  # (선택) 컴파일 필요할 때 대비
+  - gcc  # linux only (WSL 포함)
+  - gxx
+
+  # pip 패키지
+  - pip:
+      # Web
+      - fastapi
+      - uvicorn[standard]
+
+      # 설정
+      - pydantic
+      - pydantic-settings
+      - python-dotenv
+
+      # DB
+      - sqlalchemy
+
+      # Milvus
+      #- pymilvus==2.4.15
+
+      # RAG / NLP
+      - rank-bm25
+
+      # 기타 유틸
+      - requests
+      - tqdm
+
+
+
+# 명령어 
+# conda env create -f environment.yml
