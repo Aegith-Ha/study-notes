@@ -108,7 +108,7 @@ def evaluate_model(
         ranked_docs = bm25_module.rank_documents(scores, k)
         per_query_metrics.append(
             evaluate_ranking(ranked_docs, qrels.get(query.query_id, {}), k=k)
-        )
+        ) 
 
     return mean_metrics(per_query_metrics)
 
