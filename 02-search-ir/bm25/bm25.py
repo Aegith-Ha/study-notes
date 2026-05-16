@@ -15,6 +15,11 @@ TOKEN_PATTERN = re.compile(r"[0-9a-zA-Z가-힣]+(?:-[0-9a-zA-Z가-힣]+)?")
 # BM25F는 문서를 하나의 텍스트가 아니라 여러 필드로 나눠 점수를 계산한다.
 FIELDS = ("title", "tags", "text")
 MODEL_CHOICES = ("bm25", "bm25+", "bm25l", "bm25f")
+GENERATED_FILE_FALLBACKS = {
+    "corpus.jsonl": "bm25f_corpus.jsonl",
+    "queries.json": "bm25f_queries.json",
+    "qrels.json": "bm25f_qrels.json",
+}
 
 
 @dataclass
@@ -58,6 +63,20 @@ class FieldIndex:
 def tokenize(text: str) -> list[str]:
     # 예제용 단순 토크나이저다. 영어/숫자/한국어와 하이픈 단어를 추출한다.
     return TOKEN_PATTERN.findall(text.lower())
+
+
+def resolve_generated_path(data_dir: Path, filename: str) -> Path:
+    canonical_path = data_dir / filename
+    if canonical_path.exists():
+        return canonical_path
+
+    fallback_name = GENERATED_FILE_FALLBACKS.get(filename)
+    if fallback_name:
+        fallback_path = data_dir / fallback_name
+        if fallback_path.exists():
+            return fallback_path
+
+    return canonical_path
 
 
 def load_documents(path: Path) -> dict[str, Document]:
@@ -357,19 +376,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--docs",
         type=Path,
-        default=data_dir / "corpus.jsonl",
+        default=resolve_generated_path(data_dir, "corpus.jsonl"),
         help="Path to generated corpus JSONL.",
     )
     parser.add_argument(
         "--queries",
         type=Path,
-        default=data_dir / "queries.json",
+        default=resolve_generated_path(data_dir, "queries.json"),
         help="Path to generated queries JSON.",
     )
     parser.add_argument(
         "--qrels",
         type=Path,
-        default=data_dir / "qrels.json",
+        default=resolve_generated_path(data_dir, "qrels.json"),
         help="Path to generated qrels JSON.",
     )
     parser.add_argument(

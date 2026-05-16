@@ -1,7 +1,11 @@
 import json
 import random
 import argparse
+import re
 from pathlib import Path
+
+
+TOKEN_PATTERN = re.compile(r"[0-9a-zA-Z가-힣]+(?:-[0-9a-zA-Z가-힣]+)?")
 
 
 TOPICS = {
@@ -435,7 +439,12 @@ def generate_queries(n_queries=200):
             })
             qid += 1
 
-        for _ in range(max(5, n_queries // len(TOPICS) // 2)):
+    topic_names = list(TOPICS.keys())
+    while len(queries) < n_queries:
+        for topic_name in topic_names:
+            if len(queries) >= n_queries:
+                break
+            info = TOPICS[topic_name]
             kws = random.sample(info["keywords"], k=random.randint(2, 4))
             queries.append({
                 "query_id": f"q_{qid}",
@@ -449,16 +458,16 @@ def generate_queries(n_queries=200):
     return queries[:n_queries]
 
 
-def simple_tokenize(text):
-    return set(text.lower().split())
+def tokenize(text):
+    return set(TOKEN_PATTERN.findall(text.lower()))
 
 
 def compute_overlap_score(query, doc):
-    q_tokens = simple_tokenize(query)
+    q_tokens = tokenize(query)
 
-    title_tokens = simple_tokenize(doc["title"])
-    tag_tokens = set(t.lower() for t in doc["tags"])
-    text_tokens = simple_tokenize(doc["text"])
+    title_tokens = tokenize(doc["title"])
+    tag_tokens = tokenize(" ".join(doc["tags"]))
+    text_tokens = tokenize(doc["text"])
 
     score = 0.0
     score += len(q_tokens & title_tokens) * 3.0
