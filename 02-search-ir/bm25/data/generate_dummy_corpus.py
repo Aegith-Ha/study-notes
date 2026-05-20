@@ -4,6 +4,8 @@ import argparse
 from pathlib import Path
 
 
+# 검색 실험에 사용할 주요 주제다.
+# 각 주제는 문서/쿼리/제목을 만들기 위한 키워드와 템플릿을 가진다.
 TOPICS = {
     "search": {
         "keywords": [
@@ -169,6 +171,8 @@ TOPICS = {
     },
 }
 
+# 검색 품질을 흔드는 무관 문서용 주제다.
+# qrels 생성 시 정답 후보에서 제외되어야 하는 negative sample 역할을 한다.
 IRRELEVANT_TOPICS = [
     {
         "topic": "cooking",
@@ -220,12 +224,14 @@ def choose_topic():
 
 
 def sample_keywords(topic_name, k_min=2, k_max=5):
+    # 한 문서나 쿼리에 넣을 주제 키워드를 무작위로 뽑는다.
     keywords = TOPICS[topic_name]["keywords"]
     k = random.randint(k_min, min(k_max, len(keywords)))
     return random.sample(keywords, k)
 
 
 def random_noise_words(n=5):
+    # 긴 문서에 섞을 일반 단어다. 문서 길이 정규화 실험을 위해 사용한다.
     pool = [
         "테스트", "예시", "기본", "설명", "동작", "성능", "결과", "비교",
         "설계", "구현", "구조", "방식", "활용", "분석", "데이터"
@@ -234,6 +240,7 @@ def random_noise_words(n=5):
 
 
 def build_title(topic_name, kws):
+    # 제목은 BM25F에서 별도 필드로 평가되므로 키워드가 잘 드러나게 만든다.
     templates = TOPICS[topic_name]["title_templates"]
     template = random.choice(templates)
 
@@ -258,6 +265,7 @@ def build_tags(topic_name, kws, n_min=2, n_max=4):
 
 
 def make_short_doc(doc_id, topic_name):
+    # 짧은 문서: 같은 키워드라도 짧은 문서에서 더 강하게 보이는지 확인하기 좋다.
     kws = sample_keywords(topic_name, 2, 4)
     phrase = random.choice(TOPICS[topic_name]["phrases"])
     title = build_title(topic_name, kws)
@@ -275,6 +283,7 @@ def make_short_doc(doc_id, topic_name):
 
 
 def make_long_doc(doc_id, topic_name):
+    # 긴 문서: 본문 길이가 길 때 BM25 길이 정규화가 어떻게 작동하는지 보기 위한 타입이다.
     phrases = random.sample(
         TOPICS[topic_name]["phrases"],
         k=min(4, len(TOPICS[topic_name]["phrases"]))
@@ -303,6 +312,7 @@ def make_long_doc(doc_id, topic_name):
 
 
 def make_keyword_repeated_doc(doc_id, topic_name):
+    # 키워드 반복 문서: term frequency가 커질 때 점수가 얼마나 포화되는지 확인한다.
     kws = sample_keywords(topic_name, 2, 3)
     target = random.choice(kws)
     phrase = random.choice(TOPICS[topic_name]["phrases"])
@@ -322,6 +332,7 @@ def make_keyword_repeated_doc(doc_id, topic_name):
 
 
 def make_variant_doc(doc_id, topic_name):
+    # 유사 표현 문서: query와 정확히 같은 단어가 아니어도 관련 표현이 섞이는 상황을 흉내 낸다.
     kws = sample_keywords(topic_name, 2, 4)
     phrase = random.choice(TOPICS[topic_name]["phrases"])
     title = build_title(topic_name, kws)
@@ -359,6 +370,7 @@ def make_variant_doc(doc_id, topic_name):
 
 
 def make_irrelevant_doc(doc_id):
+    # 무관 문서: 검색 주제와 상관없는 문서가 top-k에 섞이는지 확인하기 위한 negative sample이다.
     chosen = random.choice(IRRELEVANT_TOPICS)
     kws = random.sample(chosen["keywords"], k=random.randint(2, min(4, len(chosen["keywords"]))))
     title = build_irrelevant_title(chosen, kws)
@@ -377,6 +389,7 @@ def make_irrelevant_doc(doc_id):
 
 
 def make_mixed_doc(doc_id):
+    # 혼합 문서: 주제는 맞지만 다른 주제 키워드도 일부 섞어 노이즈를 만든다.
     topic_name = choose_topic()
     kws_main = sample_keywords(topic_name, 2, 4)
 
@@ -407,6 +420,7 @@ def make_mixed_doc(doc_id):
 def generate_document(doc_id):
     r = random.random()
 
+    # 문서 타입 비율을 조절한다. 다양한 문서 길이/반복/노이즈 상황을 섞기 위한 분포다.
     if r < 0.25:
         return make_short_doc(doc_id, choose_topic())
     elif r < 0.45:
@@ -426,6 +440,7 @@ def generate_queries(n_queries=200):
     qid = 1
 
     for topic_name, info in TOPICS.items():
+        # 사람이 만든 듯한 주제 탐색형 쿼리를 먼저 넣는다.
         for template in info["query_templates"]:
             queries.append({
                 "query_id": f"q_{qid}",
@@ -435,6 +450,7 @@ def generate_queries(n_queries=200):
             })
             qid += 1
 
+        # 키워드 조합형 쿼리를 추가해 단순 term matching 상황도 평가한다.
         for _ in range(max(5, n_queries // len(TOPICS) // 2)):
             kws = random.sample(info["keywords"], k=random.randint(2, 4))
             queries.append({
@@ -450,10 +466,13 @@ def generate_queries(n_queries=200):
 
 
 def simple_tokenize(text):
+    # qrels 생성용 간단 토크나이저다. 실제 bm25.py의 토크나이저와 완전히 같지는 않다.
     return set(text.lower().split())
 
 
 def compute_overlap_score(query, doc):
+    # qrels 생성을 위한 휴리스틱 점수다.
+    # title/tags/text 중 어디에서 query token이 겹쳤는지에 따라 가중치를 다르게 준다.
     q_tokens = simple_tokenize(query)
 
     title_tokens = simple_tokenize(doc["title"])
@@ -461,10 +480,12 @@ def compute_overlap_score(query, doc):
     text_tokens = simple_tokenize(doc["text"])
 
     score = 0.0
+    # tags와 title은 짧고 의도가 선명한 필드라 본문보다 높은 가중치를 준다.
     score += len(q_tokens & title_tokens) * 3.0
     score += len(q_tokens & tag_tokens) * 4.0
     score += len(q_tokens & text_tokens) * 1.5
 
+    # 문서 타입별로 약간의 보정값을 줘서 정답 문서 구성이 한쪽으로만 쏠리지 않게 한다.
     if doc["doc_type"] == "short":
         score += 0.5
     elif doc["doc_type"] == "long":
@@ -496,8 +517,10 @@ def generate_qrels(docs, queries, max_high=3, max_rel=5):
 
         candidates = []
         for doc in docs:
+            # 같은 topic 문서만 정답 후보로 본다.
             if doc["topic"] != query_topic:
                 continue
+            # irrelevant 문서는 평가 정답에 포함하지 않는다.
             if doc["doc_type"] == "irrelevant":
                 continue
 
@@ -507,6 +530,7 @@ def generate_qrels(docs, queries, max_high=3, max_rel=5):
 
         candidates.sort(key=lambda x: x[1], reverse=True)
 
+        # overlap score 상위 문서는 relevance=2, 그 다음 문서는 relevance=1로 라벨링한다.
         high_docs = candidates[:max_high]
         rel_docs = candidates[max_high:max_high + max_rel]
 
@@ -528,6 +552,7 @@ def generate_qrels(docs, queries, max_high=3, max_rel=5):
 
 
 def write_jsonl(path, rows):
+    # corpus는 문서 수가 많으므로 한 줄에 JSON 하나씩 쓰는 JSONL 형식을 사용한다.
     with open(path, "w", encoding="utf-8") as f:
         for row in rows:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
@@ -539,6 +564,7 @@ def write_json(path, obj):
 
 
 def summarize_docs(docs):
+    # summary.json에 넣을 주제별/문서 타입별 분포를 만든다.
     topic_counts = {}
     doc_type_counts = {}
 
@@ -550,6 +576,7 @@ def summarize_docs(docs):
 
 
 def summarize_qrels(qrels):
+    # query당 정답 개수와 relevance 분포를 요약한다.
     per_query = {}
     rel_dist = {}
 
@@ -589,6 +616,7 @@ def main():
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    # seed가 같으면 동일한 corpus/query/qrels를 재생성할 수 있다.
     docs = [generate_document(i) for i in range(1, args.n_docs + 1)]
     queries = generate_queries(args.n_queries)
     qrels = generate_qrels(docs, queries, max_high=args.max_high, max_rel=args.max_rel)
