@@ -16,7 +16,6 @@ RAG 관련 개념 정리와 실습 기록
 
 - `chunking/`
 - `retriever/`
-- `reranker/`
 - `pipeline/`
 - `evaluation/`
 - `data/`
