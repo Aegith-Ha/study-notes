@@ -1,7 +1,11 @@
 import json
 import random
 import argparse
+import re
 from pathlib import Path
+
+
+TOKEN_PATTERN = re.compile(r"[0-9a-zA-Z가-힣]+(?:-[0-9a-zA-Z가-힣]+)?")
 
 
 # 검색 실험에 사용할 주요 주제다.
@@ -450,7 +454,6 @@ def generate_queries(n_queries=200):
             })
             qid += 1
 
-        # 키워드 조합형 쿼리를 추가해 단순 term matching 상황도 평가한다.
         for _ in range(max(5, n_queries // len(TOPICS) // 2)):
             kws = random.sample(info["keywords"], k=random.randint(2, 4))
             queries.append({
@@ -465,19 +468,16 @@ def generate_queries(n_queries=200):
     return queries[:n_queries]
 
 
-def simple_tokenize(text):
-    # qrels 생성용 간단 토크나이저다. 실제 bm25.py의 토크나이저와 완전히 같지는 않다.
-    return set(text.lower().split())
+def tokenize(text):
+    return set(TOKEN_PATTERN.findall(text.lower()))
 
 
 def compute_overlap_score(query, doc):
-    # qrels 생성을 위한 휴리스틱 점수다.
-    # title/tags/text 중 어디에서 query token이 겹쳤는지에 따라 가중치를 다르게 준다.
-    q_tokens = simple_tokenize(query)
+    q_tokens = tokenize(query)
 
-    title_tokens = simple_tokenize(doc["title"])
-    tag_tokens = set(t.lower() for t in doc["tags"])
-    text_tokens = simple_tokenize(doc["text"])
+    title_tokens = tokenize(doc["title"])
+    tag_tokens = tokenize(" ".join(doc["tags"]))
+    text_tokens = tokenize(doc["text"])
 
     score = 0.0
     # tags와 title은 짧고 의도가 선명한 필드라 본문보다 높은 가중치를 준다.

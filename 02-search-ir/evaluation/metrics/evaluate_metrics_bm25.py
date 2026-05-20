@@ -8,10 +8,10 @@ from pathlib import Path
 from typing import Callable
 
 
-SEARCH_IR_DIR = Path(__file__).resolve().parents[1]
+SEARCH_IR_DIR = Path(__file__).resolve().parents[2]
 BM25_DIR = SEARCH_IR_DIR / "bm25"
 if str(BM25_DIR) not in sys.path:
-    # metrics/ 위치가 바뀌어도 bm25/bm25.py를 import할 수 있게 한다.
+    # evaluation/metrics/ 위치에서도 bm25/bm25.py를 import할 수 있게 한다.
     sys.path.insert(0, str(BM25_DIR))
 
 import bm25 as bm25_module
@@ -136,19 +136,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--docs",
         type=Path,
-        default=data_dir / "corpus.jsonl",
+        default=bm25_module.resolve_generated_path(data_dir, "corpus.jsonl"),
         help="Path to generated corpus JSONL.",
     )
     parser.add_argument(
         "--queries",
         type=Path,
-        default=data_dir / "queries.json",
+        default=bm25_module.resolve_generated_path(data_dir, "queries.json"),
         help="Path to generated queries JSON.",
     )
     parser.add_argument(
         "--qrels",
         type=Path,
-        default=data_dir / "qrels.json",
+        default=bm25_module.resolve_generated_path(data_dir, "qrels.json"),
         help="Path to generated qrels JSON.",
     )
     parser.add_argument(
