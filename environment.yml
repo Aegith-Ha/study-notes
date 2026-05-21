@@ -30,6 +30,7 @@ dependencies:
       # 설정
       - pydantic
       - pydantic-settings
+      - email-validator
       - python-dotenv
 
       # DB
