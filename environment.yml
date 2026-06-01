@@ -1,4 +1,3 @@
-
 name: study-py312
 channels:
   - conda-forge
