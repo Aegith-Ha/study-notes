@@ -47,11 +47,19 @@
  - 개념 설명, 코드 설명, 예시, 정리
  - GitHub 상대 링크는 최소화
 
-
-
-## 실행환경
+# 실행환경
  - environmnet.yml
  - conda activate study-py312
 
-
- 
+# git comment 
+- 타입	의미	예시
+- feat	새로운 기능	feat: 회원가입 API 추가
+- fix	버그 수정	fix: 로그인 시 세션 만료 오류 수정
+- docs	문서 수정	docs: README 업데이트
+- style	코드 스타일 변경(기능 변화 없음)	style: 들여쓰기 정리
+- refactor	리팩토링	refactor: 검색 서비스 구조 개선
+- perf	성능 개선	perf: 벡터 검색 속도 개선
+- test	테스트 추가/수정	test: 검색 API 단위 테스트 추가
+- build	빌드 관련	build: Maven 의존성 업데이트
+- ci	CI/CD	ci: GitHub Actions 수정
+- chore	기타 작업	chore: .gitignore 수정 

@@ -1,65 +1,92 @@
-# Pydantic 실행 예시
+# Pydantic
 
-이 폴더는 Pydantic으로 입력 데이터를 검증하고 변환하는 예제 코드가 있다.
+Pydantic은 Python 타입 힌트를 기준으로 입력 데이터를 검증하고 필요한 타입으로 변환하는 라이브러리다. API 요청, 설정값, JSON, DB 조회 결과처럼 외부에서 들어오는 데이터를 Python 객체로 다루기 전에 구조와 값이 올바른지 확인할 때 유용하다.
 
-## 주요 파일
+이 예제는 Pydantic v2 문법을 기준으로 한다.
 
-- `example.py`: `BaseModel`, `Field`, `EmailStr`, validator, 중첩 모델, `model_dump()` 예제
-- `README_VELOG.md`: Velog 게시용 개념 정리 글
+## 핵심 개념
 
-## conda 환경 준비
+- `BaseModel`: 타입이 지정된 데이터 모델의 기반 클래스다. 모델 생성 시 필드 검증과 변환을 수행한다.
+- 타입 힌트 기반 검증: 선언한 타입과 입력값을 비교하고, 변환 가능한 값은 알맞은 타입으로 변환한다.
+- `Field`: 필수 여부, 기본값, 숫자 범위, 문자열 길이, 별칭 같은 필드 규칙을 설정한다.
+- 중첩 모델: 모델을 다른 모델의 필드로 사용해 내부 데이터 구조까지 함께 검증한다.
+- `Literal`: 필드에 입력할 수 있는 값을 미리 정한 선택지로 제한한다.
+- `field_validator`: 한 필드에 별도의 검증 또는 정규화 규칙을 추가한다.
+- `model_validator`: 여러 필드의 관계를 함께 확인하는 검증 규칙을 추가한다.
+- `computed_field`: 기존 필드로 계산한 값을 출력 필드처럼 제공한다.
+- `ConfigDict`: 추가 필드 허용 여부, 필드 이름 사용 방식 등 모델 전체의 동작을 설정한다.
+- `ValidationError`: 검증에 실패한 필드 위치, 메시지, 오류 유형을 구조화해서 제공한다.
+- `model_validate()`: 딕셔너리 같은 외부 데이터를 모델로 검증하고 변환한다.
+- `model_dump()`, `model_dump_json()`: 검증된 모델을 딕셔너리나 JSON 문자열로 변환한다.
 
-repo 루트(`/home/test0000/study-notes`)에서 실행한다.
+## 예제에서 다루는 검증
+
+| 항목 | 적용 내용 |
+| --- | --- |
+| 필수값과 기본값 | 필수 필드를 검사하고 나이, 역할, 활성 상태 등에 기본값을 적용한다. |
+| 숫자와 문자열 범위 | ID와 나이의 범위, 이름과 주소 문자열의 길이를 검사한다. |
+| 이메일 | `EmailStr`로 이메일 형식을 검사하고 소문자로 정규화한다. |
+| 선택지 | 역할을 `user` 또는 `admin`으로 제한한다. |
+| 중첩 데이터 | 사용자 모델 안의 주소 모델도 함께 검증한다. |
+| 필드 간 규칙 | 관리자 역할인 사용자는 18세 이상인지 확인한다. |
+| 추가 필드 | 모델에 선언되지 않은 입력값은 허용하지 않는다. |
+| 별칭 | 외부 데이터의 `id`를 모델 내부의 `user_id`로 사용한다. |
+| 계산 필드 | 이름과 역할을 조합한 표시 이름을 만든다. |
+| 동적 기본값 | 모델이 생성되는 시점의 시간을 생성일로 사용한다. |
+
+## 사용 방법
+
+1. `BaseModel`을 상속한 모델에 필드명과 타입을 정의한다.
+2. 필요한 필드에 `Field` 제약 조건이나 validator를 추가한다.
+3. 외부 데이터를 `model_validate()`에 전달한다.
+4. 성공하면 검증된 모델 객체를 사용하고, 실패하면 `ValidationError`를 처리한다.
+5. 외부로 전달할 때는 `model_dump()` 또는 `model_dump_json()`으로 변환한다.
+
+Pydantic은 변환 가능한 문자열 숫자나 불리언 문자열 등을 자동 변환할 수 있다. 타입을 엄격하게 검사해야 하는 경우에는 별도의 strict 설정을 검토해야 한다.
+
+## 실행 환경 준비
+
+저장소 루트(`/home/test0000/study-notes`)에서 conda 환경을 생성하고 활성화한다.
 
 ```bash
 conda env create -f environment.yml
 conda activate study-py312
 ```
 
-이미 환경이 만들어져 있으면 activate만 하면 된다.
+환경이 이미 만들어져 있다면 활성화만 한다.
 
 ```bash
 conda activate study-py312
 ```
 
-## 기본 실행
-
-```bash
-python 01-python/pydantic/example.py
-```
-
-이 예제는 정상 데이터 검증과 실패 데이터 검증을 한 번에 보여준다.
-
-출력에서 아래 두 구간이 보이면 정상 실행된 것이다.
-
-```text
-=== 검증 성공 ===
-user_id: 1
-name: Kim
-email: kim@example.com
-age: 29
-role: admin
-is_active: True
-city: Seoul
-display_name: Kim (admin)
-```
-
-```text
-=== 검증 실패 ===
-1. 위치: ('id',)
-   메시지: Input should be greater than or equal to 1
-   에러 타입: greater_than_equal
-```
-
-`created_at` 값은 실행 시점마다 달라진다.
-
-## 패키지만 직접 설치해서 실행
-
-conda 환경을 쓰지 않고 현재 Python 환경에 직접 설치하려면 아래처럼 설치한다.
+conda 환경을 사용하지 않을 때는 현재 Python 환경에 필요한 패키지를 직접 설치할 수 있다.
 
 ```bash
 python3 -m pip install "pydantic[email]"
+```
+
+예제의 `EmailStr`은 `email-validator` 패키지가 필요하므로 `pydantic[email]` 형태로 설치한다.
+
+## 실행 방법
+
+저장소 루트에서 다음 명령어를 실행한다.
+
+```bash
 python3 01-python/pydantic/example.py
 ```
 
-`EmailStr`을 사용하므로 `pydantic`만 설치하면 부족할 수 있다. 이메일 검증에 필요한 `email-validator`까지 함께 설치되는 `"pydantic[email]"` 형태를 사용한다.
+실행 결과에서는 다음 내용을 확인할 수 있다.
+
+- 정상 데이터의 타입 변환과 검증 결과
+- 모델을 딕셔너리와 JSON 문자열로 변환한 결과
+- 잘못된 데이터의 필드별 검증 오류
+
+`created_at` 값은 모델 생성 시점에 만들어지므로 실행할 때마다 달라진다.
+
+## 주의할 점
+
+- 타입 변환이 가능한 입력은 자동으로 변환될 수 있으므로 검증 강도를 요구사항에 맞게 설정한다.
+- `field_validator`는 개별 필드, `model_validator`는 여러 필드 사이의 규칙에 사용한다.
+- 시간처럼 매번 새 값이 필요한 기본값은 고정값이 아닌 factory 방식으로 생성한다.
+- 외부 데이터와 Python 필드명이 다르면 alias 입력과 출력 방식을 함께 확인한다.
+- 예제는 Pydantic v2 기준이므로 v1의 validator 및 직렬화 문법과 구분한다.
