@@ -47,7 +47,8 @@
  - 개념 설명, 코드 설명, 예시, 정리
  - GitHub 상대 링크는 최소화
 
-# 실행환경
+
+## 실행환경
  - environmnet.yml
  - conda activate study-py312
 
