@@ -7,14 +7,14 @@ from pathlib import Path
 
 
 SEARCH_IR_DIR = Path(__file__).resolve().parents[2]
-METRICS_DIR = SEARCH_IR_DIR / "evaluation" / "metrics"
+METRICS_DIR = SEARCH_IR_DIR / "02-evaluation" / "02-metrics"
 if str(METRICS_DIR) not in sys.path:
     sys.path.insert(0, str(METRICS_DIR))
 
 import evaluate_metrics_bm25 as evaluation
 
 
-DATA_DIR = SEARCH_IR_DIR / "bm25" / "data" / "generated"
+DATA_DIR = SEARCH_IR_DIR / "01-bm25" / "data" / "generated"
 
 
 def analyze_errors(

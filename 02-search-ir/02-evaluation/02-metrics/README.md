@@ -217,7 +217,7 @@ IDCG는 해당 query에서 가능한 최대 DCG이므로 nDCG는 일반적으로
 ### 기본 실행
 
 ```bash
-python3 02-search-ir/evaluation/metrics/evaluate_metrics_bm25.py
+python3 02-search-ir/02-evaluation/02-metrics/evaluate_metrics_bm25.py
 ```
 
 기본값은 BM25, BM25+, BM25L, BM25F 모델을 모두 `top-k=10` 기준으로 평가한다.
@@ -225,7 +225,7 @@ python3 02-search-ir/evaluation/metrics/evaluate_metrics_bm25.py
 ### 특정 모델만 평가
 
 ```bash
-python3 02-search-ir/evaluation/metrics/evaluate_metrics_bm25.py \
+python3 02-search-ir/02-evaluation/02-metrics/evaluate_metrics_bm25.py \
   --model bm25f \
   --top-k 10
 ```
@@ -235,10 +235,10 @@ python3 02-search-ir/evaluation/metrics/evaluate_metrics_bm25.py \
 ### 데이터 파일 직접 지정
 
 ```bash
-python3 02-search-ir/evaluation/metrics/evaluate_metrics_bm25.py \
-  --docs 02-search-ir/bm25/data/generated/corpus.jsonl \
-  --queries 02-search-ir/bm25/data/generated/queries.json \
-  --qrels 02-search-ir/bm25/data/generated/qrels.json \
+python3 02-search-ir/02-evaluation/02-metrics/evaluate_metrics_bm25.py \
+  --docs 02-search-ir/01-bm25/data/generated/corpus.jsonl \
+  --queries 02-search-ir/01-bm25/data/generated/queries.json \
+  --qrels 02-search-ir/01-bm25/data/generated/qrels.json \
   --top-k 10
 ```
 

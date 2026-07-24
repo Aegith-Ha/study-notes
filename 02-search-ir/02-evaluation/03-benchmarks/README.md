@@ -29,7 +29,7 @@ Benchmark는 여러 모델을 같은 시험지로 평가하는 실험이다. BM2
 - 실행 환경과 소요 시간
 - 재현 명령어
 
-현재 BM25 계열 비교는 [`metrics/evaluate_metrics_bm25.py`](../metrics/evaluate_metrics_bm25.py)로 실행할 수 있다. 이 폴더에는 반복 가능한 실험 설정과 비교 기록을 저장한다.
+현재 BM25 계열 비교는 [`02-metrics/evaluate_metrics_bm25.py`](../02-metrics/evaluate_metrics_bm25.py)로 실행할 수 있다. 이 폴더에는 반복 가능한 실험 설정과 비교 기록을 저장한다.
 
 ## 예제 소스
 
@@ -40,14 +40,14 @@ Benchmark는 여러 모델을 같은 시험지로 평가하는 실험이다. BM2
 모든 BM25 모델을 `top-k=10`으로 비교한다.
 
 ```bash
-python 02-search-ir/evaluation/benchmarks/run_benchmark.py \
-  --output 02-search-ir/evaluation/benchmarks/generated/bm25.json
+python 02-search-ir/02-evaluation/03-benchmarks/run_benchmark.py \
+  --output 02-search-ir/02-evaluation/03-benchmarks/generated/bm25.json
 ```
 
 특정 모델과 `top-k`만 실험할 수도 있다.
 
 ```bash
-python 02-search-ir/evaluation/benchmarks/run_benchmark.py \
+python 02-search-ir/02-evaluation/03-benchmarks/run_benchmark.py \
   --model bm25f \
   --top-k 5
 ```

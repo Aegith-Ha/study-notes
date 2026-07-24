@@ -12,7 +12,7 @@
 repo 루트(`/home/test0000/study-notes`)에서 실행한다.
 
 ```bash
-python3 02-search-ir/bm25/data/generate_dummy_corpus.py
+python3 02-search-ir/01-bm25/data/generate_dummy_corpus.py
 ```
 
 기본값:
@@ -20,12 +20,12 @@ python3 02-search-ir/bm25/data/generate_dummy_corpus.py
 - 문서 수: `10000`
 - query 수: `200`
 - seed: `42`
-- 출력 폴더: `02-search-ir/bm25/data/generated`
+- 출력 폴더: `02-search-ir/01-bm25/data/generated`
 
 ## 문서와 query 개수 지정
 
 ```bash
-python3 02-search-ir/bm25/data/generate_dummy_corpus.py \
+python3 02-search-ir/01-bm25/data/generate_dummy_corpus.py \
   --n_docs 10000 \
   --n_queries 200 \
   --seed 42
@@ -34,7 +34,7 @@ python3 02-search-ir/bm25/data/generate_dummy_corpus.py \
 ## 출력 경로 지정
 
 ```bash
-python3 02-search-ir/bm25/data/generate_dummy_corpus.py \
+python3 02-search-ir/01-bm25/data/generate_dummy_corpus.py \
   --n_docs 1000 \
   --n_queries 100 \
   --output_dir /tmp/bm25-generated

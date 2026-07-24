@@ -55,11 +55,11 @@ score는 모델 내부의 상대적인 순위 값이다. BM25 score `10`이 rele
 BM25의 상위 10개 결과를 분석하고 최대 10개 query 사례를 저장한다.
 
 ```bash
-python 02-search-ir/evaluation/error-analysis/analyze_bm25_errors.py \
+python 02-search-ir/02-evaluation/05-error-analysis/analyze_bm25_errors.py \
   --model bm25 \
   --top-k 10 \
   --max-cases 10 \
-  --output 02-search-ir/evaluation/error-analysis/generated/bm25-errors.json
+  --output 02-search-ir/02-evaluation/05-error-analysis/generated/bm25-errors.json
 ```
 
 선택 가능한 모델은 `bm25`, `bm25+`, `bm25l`, `bm25f`다. `--output`을 생략하면 JSON을 표준 출력으로 보여 준다.

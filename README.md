@@ -23,9 +23,9 @@
 | Topic | GitHub README | Velog 원문 | Code |
 | --- | --- | --- | --- |
 | Search / IR 개요 | [README](./02-search-ir/README.md) | - | - |
-| BM25 검색 | [README](./02-search-ir/bm25/README.md) | [README_VELOG](./02-search-ir/bm25/README_VELOG.md) | [bm25.py](./02-search-ir/bm25/bm25.py) |
-| BM25 더미 데이터 | [README](./02-search-ir/bm25/data/README.md) | - | [generate_dummy_corpus.py](./02-search-ir/bm25/data/generate_dummy_corpus.py) |
-| 검색 평가 지표 | [README](./02-search-ir/evaluation/metrics/README.md) | [README_VELOG](./02-search-ir/evaluation/metrics/README_VELOG.md) | [evaluate_metrics_bm25.py](./02-search-ir/evaluation/metrics/evaluate_metrics_bm25.py) |
+| BM25 검색 | [README](./02-search-ir/01-bm25/README.md) | - | [bm25.py](./02-search-ir/01-bm25/bm25.py) |
+| BM25 더미 데이터 | [README](./02-search-ir/01-bm25/data/README.md) | - | [generate_dummy_corpus.py](./02-search-ir/01-bm25/data/generate_dummy_corpus.py) |
+| 검색 평가 지표 | [README](./02-search-ir/02-evaluation/02-metrics/README.md) | - | [evaluate_metrics_bm25.py](./02-search-ir/02-evaluation/02-metrics/evaluate_metrics_bm25.py) |
 
 ### RAG
 

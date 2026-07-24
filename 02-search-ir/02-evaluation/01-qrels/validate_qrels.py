@@ -7,7 +7,7 @@ from typing import Any
 
 
 SEARCH_IR_DIR = Path(__file__).resolve().parents[2]
-DATA_DIR = SEARCH_IR_DIR / "bm25" / "data" / "generated"
+DATA_DIR = SEARCH_IR_DIR / "01-bm25" / "data" / "generated"
 
 
 def load_json(path: Path) -> Any:

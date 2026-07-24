@@ -26,7 +26,7 @@ delta가 양수면 baseline보다 향상되었고, 음수면 낮아졌다는 뜻
 - 기준 모델 대비 변화량
 - 결과 해석, 한계, 후속 실험
 
-실험 설정은 `benchmarks/`에 두고, 이 폴더에는 요약 표와 분석 문서를 저장한다.
+실험 설정은 `03-benchmarks/`에 두고, 이 폴더에는 요약 표와 분석 문서를 저장한다.
 
 ## 예제 소스
 
@@ -41,19 +41,19 @@ delta가 양수면 baseline보다 향상되었고, 음수면 낮아졌다는 뜻
 먼저 benchmark JSON을 생성한 뒤 보고서로 변환한다.
 
 ```bash
-python 02-search-ir/evaluation/benchmarks/run_benchmark.py \
-  --output 02-search-ir/evaluation/benchmarks/generated/bm25.json
+python 02-search-ir/02-evaluation/03-benchmarks/run_benchmark.py \
+  --output 02-search-ir/02-evaluation/03-benchmarks/generated/bm25.json
 
-python 02-search-ir/evaluation/reports/render_report.py \
-  02-search-ir/evaluation/benchmarks/generated/bm25.json \
-  --output 02-search-ir/evaluation/reports/generated/bm25.md
+python 02-search-ir/02-evaluation/04-reports/render_report.py \
+  02-search-ir/02-evaluation/03-benchmarks/generated/bm25.json \
+  --output 02-search-ir/02-evaluation/04-reports/generated/bm25.md
 ```
 
 기본적으로 JSON의 첫 번째 모델을 baseline으로 사용한다. 다른 모델과 nDCG 변화량을 비교하려면 `--baseline`을 지정한다.
 
 ```bash
-python 02-search-ir/evaluation/reports/render_report.py \
-  02-search-ir/evaluation/benchmarks/generated/bm25.json \
+python 02-search-ir/02-evaluation/04-reports/render_report.py \
+  02-search-ir/02-evaluation/03-benchmarks/generated/bm25.json \
   --baseline bm25F
 ```
 
@@ -65,7 +65,7 @@ python 02-search-ir/evaluation/reports/render_report.py \
 2. 제품 목표에 가장 중요한 metric을 먼저 비교한다.
 3. baseline 대비 delta로 변화 방향과 크기를 확인한다.
 4. 품질이 높아진 대신 속도가 느려지지 않았는지 확인한다.
-5. `error-analysis/`에서 점수 변화를 만든 실제 query 사례를 확인한다.
+5. `05-error-analysis/`에서 점수 변화를 만든 실제 query 사례를 확인한다.
 
 ## 자동 보고서의 한계
 

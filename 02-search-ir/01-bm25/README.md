@@ -184,7 +184,7 @@ BM25F는 다음 상황에 적합하다.
 ### 기본 실행
 
 ```bash
-python3 02-search-ir/bm25/bm25.py
+python3 02-search-ir/01-bm25/bm25.py
 ```
 
 기본 실행은 generated 데이터의 첫 번째 query와 `bm25` 모델을 사용한다.
@@ -192,7 +192,7 @@ python3 02-search-ir/bm25/bm25.py
 ### 모델 선택
 
 ```bash
-python3 02-search-ir/bm25/bm25.py --model bm25f
+python3 02-search-ir/01-bm25/bm25.py --model bm25f
 ```
 
 `--model`에는 `bm25`, `bm25+`, `bm25l`, `bm25f`를 지정할 수 있다.
@@ -200,7 +200,7 @@ python3 02-search-ir/bm25/bm25.py --model bm25f
 ### 직접 query 검색
 
 ```bash
-python3 02-search-ir/bm25/bm25.py \
+python3 02-search-ir/01-bm25/bm25.py \
   --query "bm25 검색 랭킹" \
   --model bm25f \
   --top-k 10
@@ -209,7 +209,7 @@ python3 02-search-ir/bm25/bm25.py \
 ### generated query ID로 검색
 
 ```bash
-python3 02-search-ir/bm25/bm25.py \
+python3 02-search-ir/01-bm25/bm25.py \
   --query-id q_90 \
   --model bm25 \
   --top-k 5
@@ -218,10 +218,10 @@ python3 02-search-ir/bm25/bm25.py \
 ### 데이터 파일 직접 지정
 
 ```bash
-python3 02-search-ir/bm25/bm25.py \
-  --docs 02-search-ir/bm25/data/generated/corpus.jsonl \
-  --queries 02-search-ir/bm25/data/generated/queries.json \
-  --qrels 02-search-ir/bm25/data/generated/qrels.json
+python3 02-search-ir/01-bm25/bm25.py \
+  --docs 02-search-ir/01-bm25/data/generated/corpus.jsonl \
+  --queries 02-search-ir/01-bm25/data/generated/queries.json \
+  --qrels 02-search-ir/01-bm25/data/generated/qrels.json
 ```
 
 `corpus.jsonl`, `queries.json`, `qrels.json`이 없으면 기존 `bm25f_*` generated 파일을 fallback으로 사용한다.

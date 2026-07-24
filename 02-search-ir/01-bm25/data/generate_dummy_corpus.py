@@ -605,7 +605,7 @@ def main():
     )
     parser.add_argument("--n_docs", type=int, default=10000, help="number of documents")
     parser.add_argument("--n_queries", type=int, default=200, help="number of queries")
-    parser.add_argument("--output_dir", type=str, default="02-search-ir/bm25/data/generated", help="output directory")
+    parser.add_argument("--output_dir", type=str, default="02-search-ir/01-bm25/data/generated", help="output directory")
     parser.add_argument("--seed", type=int, default=42, help="random seed")
     parser.add_argument("--max_high", type=int, default=3, help="max relevance=2 docs per query")
     parser.add_argument("--max_rel", type=int, default=5, help="max relevance=1 docs per query")
