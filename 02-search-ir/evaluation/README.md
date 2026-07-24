@@ -24,8 +24,8 @@ query, corpus, qrels 중 하나라도 바뀌면 서로 다른 실험이 된다. 
 
 ## Structure
 
-- [metrics](./metrics/README.md): Precision@k, Recall@k, MRR, nDCG 등 평가 지표의 개념과 계산 코드
 - [qrels](./qrels/README.md): query와 정답 문서 사이의 관련도 정답 데이터 관리
+- [metrics](./metrics/README.md): Precision@k, Recall@k, MRR, nDCG 등 평가 지표의 개념과 계산 코드
 - [benchmarks](./benchmarks/README.md): 동일한 데이터와 조건에서 검색 모델별 성능 비교
 - [reports](./reports/README.md): 평가 결과 요약과 분석 문서 관리
 - [error-analysis](./error-analysis/README.md): 오검색과 미검색 사례를 분류하고 개선 방향 기록
@@ -33,10 +33,12 @@ query, corpus, qrels 중 하나라도 바뀌면 서로 다른 실험이 된다. 
 ## Evaluation flow
 
 1. `qrels/`에서 평가용 정답을 정의한다.
-2. `benchmarks/`에서 검색 모델과 실험 조건을 고정한다.
-3. `metrics/`의 지표로 검색 결과를 계산한다.
+2. `metrics/`에서 검색 결과를 평가할 지표와 계산 방법을 정의한다.
+3. `benchmarks/`에서 검색 모델과 실험 조건을 고정하고 `metrics/`의 지표로 성능을 비교한다.
 4. `reports/`에 모델별 성능과 해석을 정리한다.
 5. `error-analysis/`에서 실패 사례와 개선 가설을 기록한다.
+
+실제 실행에서는 `benchmarks/run_benchmark.py`가 `metrics/evaluate_metrics_bm25.py`의 계산 기능을 내부에서 사용하므로 metrics 스크립트를 먼저 별도로 실행할 필요는 없다. metrics 스크립트는 지표만 독립적으로 확인할 때 실행한다.
 
 수치만 확인하면 어느 모델이 더 나은지는 알 수 있지만, 왜 나아졌는지는 알기 어렵다. 따라서 benchmark와 metric은 전체 경향을 알려 주고, error analysis는 개별 실패의 원인을 찾는 상호 보완적인 관계다.
 
