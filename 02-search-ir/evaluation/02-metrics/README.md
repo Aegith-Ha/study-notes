@@ -236,9 +236,9 @@ python3 02-search-ir/evaluation/02-metrics/evaluate_metrics_bm25.py \
 
 ```bash
 python3 02-search-ir/evaluation/02-metrics/evaluate_metrics_bm25.py \
-  --docs 02-search-ir/sparse-retrieval/bm25/data/generated/corpus.jsonl \
-  --queries 02-search-ir/sparse-retrieval/bm25/data/generated/queries.json \
-  --qrels 02-search-ir/sparse-retrieval/bm25/data/generated/qrels.json \
+  --docs 02-search-ir/sparse-retrieval/03-bm25/data/generated/corpus.jsonl \
+  --queries 02-search-ir/sparse-retrieval/03-bm25/data/generated/queries.json \
+  --qrels 02-search-ir/sparse-retrieval/03-bm25/data/generated/qrels.json \
   --top-k 10
 ```
 

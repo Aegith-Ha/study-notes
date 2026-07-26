@@ -14,7 +14,7 @@ if str(METRICS_DIR) not in sys.path:
 import evaluate_metrics_bm25 as evaluation
 
 
-DATA_DIR = SEARCH_IR_DIR / "sparse-retrieval" / "bm25" / "data" / "generated"
+DATA_DIR = SEARCH_IR_DIR / "sparse-retrieval" / "03-bm25" / "data" / "generated"
 
 
 def analyze_errors(

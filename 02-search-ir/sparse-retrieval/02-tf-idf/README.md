@@ -63,13 +63,13 @@ cosine_similarity(query, document) = query · document
 repository 루트에서 실행한다.
 
 ```bash
-python 02-search-ir/sparse-retrieval/tf-idf/tf_idf.py
+python 02-search-ir/sparse-retrieval/02-tf-idf/tf_idf.py
 ```
 
 query와 결과 개수를 지정할 수 있다.
 
 ```bash
-python 02-search-ir/sparse-retrieval/tf-idf/tf_idf.py \
+python 02-search-ir/sparse-retrieval/02-tf-idf/tf_idf.py \
   --query "검색 평가 지표" \
   --top-k 3
 ```
@@ -84,4 +84,3 @@ python 02-search-ir/sparse-retrieval/tf-idf/tf_idf.py \
 | 용도 | vector space model과 검색 기초 학습 | 일반적인 키워드 검색의 강한 baseline |
 
 TF-IDF를 먼저 이해하면 BM25의 TF saturation과 문서 길이 정규화가 왜 필요한지 비교하기 쉽다.
-

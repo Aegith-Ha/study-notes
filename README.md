@@ -23,10 +23,10 @@
 | Topic | GitHub README | Velog 원문 | Code |
 | --- | --- | --- | --- |
 | Search / IR 개요 | [README](./02-search-ir/README.md) | - | - |
-| Inverted Index | [README](./02-search-ir/sparse-retrieval/inverted-index/README.md) | - | [inverted_index.py](./02-search-ir/sparse-retrieval/inverted-index/inverted_index.py) |
-| TF-IDF | [README](./02-search-ir/sparse-retrieval/tf-idf/README.md) | - | [tf_idf.py](./02-search-ir/sparse-retrieval/tf-idf/tf_idf.py) |
-| BM25 검색 | [README](./02-search-ir/sparse-retrieval/bm25/README.md) | - | [bm25.py](./02-search-ir/sparse-retrieval/bm25/bm25.py) |
-| BM25 더미 데이터 | [README](./02-search-ir/sparse-retrieval/bm25/data/README.md) | - | [generate_dummy_corpus.py](./02-search-ir/sparse-retrieval/bm25/data/generate_dummy_corpus.py) |
+| Inverted Index | [README](./02-search-ir/sparse-retrieval/01-inverted-index/README.md) | - | [inverted_index.py](./02-search-ir/sparse-retrieval/01-inverted-index/inverted_index.py) |
+| TF-IDF | [README](./02-search-ir/sparse-retrieval/02-tf-idf/README.md) | - | [tf_idf.py](./02-search-ir/sparse-retrieval/02-tf-idf/tf_idf.py) |
+| BM25 검색 | [README](./02-search-ir/sparse-retrieval/03-bm25/README.md) | - | [bm25.py](./02-search-ir/sparse-retrieval/03-bm25/bm25.py) |
+| BM25 더미 데이터 | [README](./02-search-ir/sparse-retrieval/03-bm25/data/README.md) | - | [generate_dummy_corpus.py](./02-search-ir/sparse-retrieval/03-bm25/data/generate_dummy_corpus.py) |
 | 검색 평가 지표 | [README](./02-search-ir/evaluation/02-metrics/README.md) | - | [evaluate_metrics_bm25.py](./02-search-ir/evaluation/02-metrics/evaluate_metrics_bm25.py) |
 
 ### RAG

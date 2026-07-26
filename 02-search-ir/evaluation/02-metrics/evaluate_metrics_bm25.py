@@ -9,9 +9,9 @@ from typing import Callable
 
 
 SEARCH_IR_DIR = Path(__file__).resolve().parents[2]
-BM25_DIR = SEARCH_IR_DIR / "sparse-retrieval" / "bm25"
+BM25_DIR = SEARCH_IR_DIR / "sparse-retrieval" / "03-bm25"
 if str(BM25_DIR) not in sys.path:
-    # evaluation/02-metrics/ 위치에서도 sparse-retrieval/bm25/bm25.py를 import할 수 있게 한다.
+    # evaluation/02-metrics/ 위치에서도 sparse-retrieval/03-bm25/bm25.py를 import할 수 있게 한다.
     sys.path.insert(0, str(BM25_DIR))
 
 import bm25 as bm25_module

@@ -46,19 +46,19 @@ query가 `검색 평가`라면 두 단어의 posting을 가져온다.
 repository 루트에서 실행한다.
 
 ```bash
-python 02-search-ir/sparse-retrieval/inverted-index/inverted_index.py
+python 02-search-ir/sparse-retrieval/01-inverted-index/inverted_index.py
 ```
 
 query와 연산자를 직접 지정할 수 있다.
 
 ```bash
-python 02-search-ir/sparse-retrieval/inverted-index/inverted_index.py \
+python 02-search-ir/sparse-retrieval/01-inverted-index/inverted_index.py \
   --query "검색 평가" \
   --operator and
 ```
 
 ```bash
-python 02-search-ir/sparse-retrieval/inverted-index/inverted_index.py \
+python 02-search-ir/sparse-retrieval/01-inverted-index/inverted_index.py \
   --query "검색 평가" \
   --operator or
 ```
@@ -75,4 +75,3 @@ python 02-search-ir/sparse-retrieval/inverted-index/inverted_index.py \
 ```
 
 역색인은 검색 대상을 빠르게 좁히는 구조이고, TF-IDF와 BM25는 posting에 저장된 통계를 이용해 관련도 점수를 계산한다.
-
