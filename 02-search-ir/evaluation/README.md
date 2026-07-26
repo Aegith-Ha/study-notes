@@ -57,15 +57,15 @@ query, corpus, qrels 중 하나라도 바뀌면 서로 다른 실험이 된다. 
 
 ```bash
 conda activate study-py312
-python 02-search-ir/02-evaluation/01-qrels/validate_qrels.py
-python 02-search-ir/02-evaluation/03-benchmarks/run_benchmark.py \
-  --output 02-search-ir/02-evaluation/03-benchmarks/generated/bm25.json
-python 02-search-ir/02-evaluation/04-reports/render_report.py \
-  02-search-ir/02-evaluation/03-benchmarks/generated/bm25.json \
-  --output 02-search-ir/02-evaluation/04-reports/generated/bm25.md
-python 02-search-ir/02-evaluation/05-error-analysis/analyze_bm25_errors.py \
+python 02-search-ir/evaluation/01-qrels/validate_qrels.py
+python 02-search-ir/evaluation/03-benchmarks/run_benchmark.py \
+  --output 02-search-ir/evaluation/03-benchmarks/generated/bm25.json
+python 02-search-ir/evaluation/04-reports/render_report.py \
+  02-search-ir/evaluation/03-benchmarks/generated/bm25.json \
+  --output 02-search-ir/evaluation/04-reports/generated/bm25.md
+python 02-search-ir/evaluation/05-error-analysis/analyze_bm25_errors.py \
   --model bm25 \
-  --output 02-search-ir/02-evaluation/05-error-analysis/generated/bm25-errors.json
+  --output 02-search-ir/evaluation/05-error-analysis/generated/bm25-errors.json
 ```
 
 `generated/`는 `.gitignore`에서 제외되므로 반복 실행해도 실험 산출물이 Git 변경 내역에 포함되지 않는다. 공유할 가치가 있는 결과만 별도의 Markdown 문서로 정리한다.

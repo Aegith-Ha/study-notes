@@ -41,19 +41,19 @@ delta가 양수면 baseline보다 향상되었고, 음수면 낮아졌다는 뜻
 먼저 benchmark JSON을 생성한 뒤 보고서로 변환한다.
 
 ```bash
-python 02-search-ir/02-evaluation/03-benchmarks/run_benchmark.py \
-  --output 02-search-ir/02-evaluation/03-benchmarks/generated/bm25.json
+python 02-search-ir/evaluation/03-benchmarks/run_benchmark.py \
+  --output 02-search-ir/evaluation/03-benchmarks/generated/bm25.json
 
-python 02-search-ir/02-evaluation/04-reports/render_report.py \
-  02-search-ir/02-evaluation/03-benchmarks/generated/bm25.json \
-  --output 02-search-ir/02-evaluation/04-reports/generated/bm25.md
+python 02-search-ir/evaluation/04-reports/render_report.py \
+  02-search-ir/evaluation/03-benchmarks/generated/bm25.json \
+  --output 02-search-ir/evaluation/04-reports/generated/bm25.md
 ```
 
 기본적으로 JSON의 첫 번째 모델을 baseline으로 사용한다. 다른 모델과 nDCG 변화량을 비교하려면 `--baseline`을 지정한다.
 
 ```bash
-python 02-search-ir/02-evaluation/04-reports/render_report.py \
-  02-search-ir/02-evaluation/03-benchmarks/generated/bm25.json \
+python 02-search-ir/evaluation/04-reports/render_report.py \
+  02-search-ir/evaluation/03-benchmarks/generated/bm25.json \
   --baseline bm25F
 ```
 

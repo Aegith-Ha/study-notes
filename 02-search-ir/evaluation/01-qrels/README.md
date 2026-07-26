@@ -30,7 +30,7 @@ Qrels(query relevance judgments)는 query별로 문서의 정답 여부나 관�
 - 이진 관련도(`0`, `1`) 또는 다단계 관련도(`0`~`3` 등)
 - 라벨링 기준, 작성 일자, 데이터 버전
 
-BM25 예제에서 생성된 qrels는 [`01-bm25/data/generated/qrels.json`](../../01-bm25/data/generated/qrels.json)에 있다. 이 폴더에는 평가에 고정해 사용할 qrels와 라벨링 기준을 정리한다.
+BM25 예제에서 생성된 qrels는 [`sparse-retrieval/bm25/data/generated/qrels.json`](../../sparse-retrieval/bm25/data/generated/qrels.json)에 있다. 이 폴더에는 평가에 고정해 사용할 qrels와 라벨링 기준을 정리한다.
 
 ## 예제 소스
 
@@ -52,13 +52,13 @@ BM25 예제에서 생성된 qrels는 [`01-bm25/data/generated/qrels.json`](../..
 기본값은 BM25 예제의 `corpus.jsonl`, `queries.json`, `qrels.json`이다.
 
 ```bash
-python 02-search-ir/02-evaluation/01-qrels/validate_qrels.py
+python 02-search-ir/evaluation/01-qrels/validate_qrels.py
 ```
 
 다른 데이터를 검증할 때는 세 파일을 함께 지정한다.
 
 ```bash
-python 02-search-ir/02-evaluation/01-qrels/validate_qrels.py \
+python 02-search-ir/evaluation/01-qrels/validate_qrels.py \
   --docs path/to/corpus.jsonl \
   --queries path/to/queries.json \
   --qrels path/to/qrels.json
