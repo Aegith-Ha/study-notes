@@ -15,9 +15,9 @@ Benchmark는 여러 모델을 같은 시험지로 평가하는 실험이다. BM2
 1. corpus, queries, qrels를 로드한다.
 2. corpus에서 BM25용 역색인 인덱스와 BM25F용 필드 인덱스를 만든다.
 3. query를 tokenize하고 모델별로 문서 score를 계산한다.
-4. score가 높은 `top-k` 문서를 qrels와 비교한다.
-5. query별 P@k, R@k, MRR@k, nDCG@k를 구한 뒤 산술 평균한다.
-6. 모델별 점수와 검색 소요 시간을 JSON으로 출력한다.
+4. 가장 큰 `top-k`까지의 문서를 qrels와 비교한다.
+5. 각 cutoff에서 query별 P@k, R@k, MRR@k, nDCG@k를 구한 뒤 산술 평균한다.
+6. 모델별 평균, query별 점수와 검색 소요 시간을 JSON으로 출력한다.
 
 산출 시간은 Python의 `perf_counter()`로 각 모델의 query 평가 구간을 측정한다. index 생성 시간은 포함하지 않으므로, 이 값은 전체 서비스 latency가 아니라 현재 예제의 상대적인 검색 비용을 비교하는 참고값이다.
 
@@ -52,7 +52,17 @@ python 02-search-ir/evaluation/03-benchmarks/run_benchmark.py \
   --top-k 5
 ```
 
-`--output`을 생략하면 JSON을 표준 출력으로 보여 준다. JSON에는 입력 파일, query/document 수, `top-k`, 모델별 지표와 소요 시간이 포함된다.
+여러 cutoff를 한 번에 평가할 수도 있다.
+
+```bash
+python 02-search-ir/evaluation/03-benchmarks/run_benchmark.py \
+  --top-k 1 3 5 10 \
+  --output 02-search-ir/evaluation/03-benchmarks/generated/bm25.json
+```
+
+가장 큰 cutoff까지 검색을 한 번 수행하고 각 cutoff의 지표를 계산하므로 모델 검색을 반복하지 않는다.
+
+`--output`을 생략하면 JSON을 표준 출력으로 보여 준다. JSON에는 입력 파일, query/document 수, cutoff별 모델 평균과 query별 지표, query의 topic·intent·token 수, 모델별 소요 시간이 포함된다. Query별 결과는 slice analysis와 paired significance test의 입력으로 사용한다.
 
 ## 결과 해석
 
@@ -61,7 +71,7 @@ python 02-search-ir/evaluation/03-benchmarks/run_benchmark.py \
 - MRR이 높으면 첫 정답이 빠르게 나온다는 뜻이다.
 - nDCG가 높으면 관련도가 높은 문서가 더 위에 배치됐다는 뜻이다.
 
-모델의 점수 차이가 작다면 query 샘플에 따른 우연일 수 있다. 실무에서는 query 그룹별 점수, 여러 번의 반복 측정, 통계적 유의성도 함께 확인한다.
+모델의 점수 차이가 작다면 query 샘플에 따른 우연일 수 있다. `06-slice-analysis/`에서 query 그룹별 점수를 확인하고 `07-significance/`에서 query 단위 bootstrap 신뢰구간을 계산한다.
 
 ## 재현 가능성을 높이는 방법
 

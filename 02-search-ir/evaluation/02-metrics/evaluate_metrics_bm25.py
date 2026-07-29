@@ -28,6 +28,21 @@ class Metrics:
     ndcg: float
 
 
+@dataclass
+class EvaluationDetails:
+    summaries: dict[int, Metrics]
+    per_query: dict[str, dict[int, Metrics]]
+
+
+def metrics_to_dict(metrics: Metrics) -> dict[str, float]:
+    return {
+        "precision": metrics.precision,
+        "recall": metrics.recall,
+        "mrr": metrics.mrr,
+        "ndcg": metrics.ndcg,
+    }
+
+
 def evaluate_ranking(
     ranked_docs: list[tuple[str, float]],
     qrel: dict[str, int],
@@ -99,18 +114,54 @@ def evaluate_model(
     *,
     k: int,
 ) -> Metrics:
-    per_query_metrics: list[Metrics] = []
+    return evaluate_model_details(
+        search_fn,
+        queries,
+        qrels,
+        cutoffs=[k],
+    ).summaries[k]
+
+
+def evaluate_model_details(
+    search_fn: Callable[[list[str]], dict[str, float]],
+    queries: list[bm25_module.Query],
+    qrels: dict[str, dict[str, int]],
+    *,
+    cutoffs: list[int],
+) -> EvaluationDetails:
+    normalized_cutoffs = sorted(set(cutoffs))
+    if not normalized_cutoffs or normalized_cutoffs[0] <= 0:
+        raise ValueError("cutoffs must contain positive integers")
+
+    metrics_by_cutoff: dict[int, list[Metrics]] = {
+        cutoff: [] for cutoff in normalized_cutoffs
+    }
+    per_query: dict[str, dict[int, Metrics]] = {}
+    max_cutoff = normalized_cutoffs[-1]
 
     for query in queries:
-        # 각 query를 검색한 뒤 qrels 기준으로 query별 metric을 계산한다.
+        # 가장 큰 cutoff까지만 한 번 검색하고 각 cutoff에서 metric을 다시 계산한다.
         query_tokens = bm25_module.tokenize(query.text)
         scores = search_fn(query_tokens)
-        ranked_docs = bm25_module.rank_documents(scores, k)
-        per_query_metrics.append(
-            evaluate_ranking(ranked_docs, qrels.get(query.query_id, {}), k=k)
-        ) 
+        ranked_docs = bm25_module.rank_documents(scores, max_cutoff)
+        query_metrics: dict[int, Metrics] = {}
+        for cutoff in normalized_cutoffs:
+            metrics = evaluate_ranking(
+                ranked_docs,
+                qrels.get(query.query_id, {}),
+                k=cutoff,
+            )
+            metrics_by_cutoff[cutoff].append(metrics)
+            query_metrics[cutoff] = metrics
+        per_query[query.query_id] = query_metrics
 
-    return mean_metrics(per_query_metrics)
+    return EvaluationDetails(
+        summaries={
+            cutoff: mean_metrics(metrics)
+            for cutoff, metrics in metrics_by_cutoff.items()
+        },
+        per_query=per_query,
+    )
 
 
 def print_summary(summary: dict[str, Metrics], *, k: int, n_queries: int) -> None:
@@ -131,7 +182,10 @@ def parse_args() -> argparse.Namespace:
     data_dir = BM25_DIR / "data" / "generated"
 
     parser = argparse.ArgumentParser(
-        description="Evaluate generated BM25 search results with P@k, R@k, MRR@k, and nDCG@k."
+        description=(
+            "Evaluate generated BM25 search results with P@k, R@k, "
+            "MRR@k, and nDCG@k."
+        )
     )
     parser.add_argument(
         "--docs",
@@ -161,14 +215,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--top-k",
         type=int,
-        default=10,
-        help="Evaluate the top-k ranked documents. Default: 10.",
+        nargs="+",
+        default=[10],
+        help="Evaluate one or more cutoffs. Example: --top-k 1 3 5 10",
     )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
+    cutoffs = sorted(set(args.top_k))
+    if not cutoffs or cutoffs[0] <= 0:
+        raise SystemExit("--top-k values must be greater than zero")
 
     documents = bm25_module.load_documents(args.docs)
     queries = bm25_module.load_queries(args.queries)
@@ -180,12 +238,28 @@ def main() -> None:
     selected_models = (
         search_functions.keys() if args.model == "all" else (args.model,)
     )
-    summary: dict[str, Metrics] = {}
+    summaries_by_model: dict[str, dict[int, Metrics]] = {}
     for model_key in selected_models:
         model_name, search_fn = search_functions[model_key]
-        summary[model_name] = evaluate_model(search_fn, queries, qrels, k=args.top_k)
+        details = evaluate_model_details(
+            search_fn,
+            queries,
+            qrels,
+            cutoffs=cutoffs,
+        )
+        summaries_by_model[model_name] = details.summaries
 
-    print_summary(summary, k=args.top_k, n_queries=len(queries))
+    for index, cutoff in enumerate(cutoffs):
+        if index:
+            print()
+        print_summary(
+            {
+                model_name: summaries[cutoff]
+                for model_name, summaries in summaries_by_model.items()
+            },
+            k=cutoff,
+            n_queries=len(queries),
+        )
 
 
 if __name__ == "__main__":

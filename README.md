@@ -28,6 +28,8 @@
 | BM25 검색 | [README](./02-search-ir/sparse-retrieval/03-bm25/README.md) | - | [bm25.py](./02-search-ir/sparse-retrieval/03-bm25/bm25.py) |
 | BM25 더미 데이터 | [README](./02-search-ir/sparse-retrieval/03-bm25/data/README.md) | - | [generate_dummy_corpus.py](./02-search-ir/sparse-retrieval/03-bm25/data/generate_dummy_corpus.py) |
 | 검색 평가 지표 | [README](./02-search-ir/evaluation/02-metrics/README.md) | - | [evaluate_metrics_bm25.py](./02-search-ir/evaluation/02-metrics/evaluate_metrics_bm25.py) |
+| Query Slice Analysis | [README](./02-search-ir/evaluation/06-slice-analysis/README.md) | - | [analyze_query_slices.py](./02-search-ir/evaluation/06-slice-analysis/analyze_query_slices.py) |
+| Statistical Significance | [README](./02-search-ir/evaluation/07-significance/README.md) | - | [compare_models.py](./02-search-ir/evaluation/07-significance/compare_models.py) |
 
 ### RAG
 

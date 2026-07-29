@@ -31,6 +31,8 @@ query, corpus, qrels 중 하나라도 바뀌면 서로 다른 실험이 된다. 
 - [benchmarks](./03-benchmarks/README.md): 동일한 데이터와 조건에서 검색 모델별 성능 비교
 - [reports](./04-reports/README.md): 평가 결과 요약과 분석 문서 관리
 - [error-analysis](./05-error-analysis/README.md): 오검색과 미검색 사례를 분류하고 개선 방향 기록
+- [slice-analysis](./06-slice-analysis/README.md): topic, intent, query 길이별 성능 비교
+- [significance](./07-significance/README.md): 모델 간 점수 차이의 bootstrap 신뢰구간 계산
 
 ## Evaluation flow
 
@@ -39,6 +41,8 @@ query, corpus, qrels 중 하나라도 바뀌면 서로 다른 실험이 된다. 
 3. `03-benchmarks/`에서 검색 모델과 실험 조건을 고정하고 `02-metrics/`의 지표로 성능을 비교한다.
 4. `04-reports/`에 모델별 성능과 해석을 정리한다.
 5. `05-error-analysis/`에서 실패 사례와 개선 가설을 기록한다.
+6. `06-slice-analysis/`에서 query 그룹별로 반복되는 성능 차이를 찾는다.
+7. `07-significance/`에서 모델 간 차이가 query 표본에 따른 우연인지 확인한다.
 
 실제 실행에서는 `03-benchmarks/run_benchmark.py`가 `02-metrics/evaluate_metrics_bm25.py`의 계산 기능을 내부에서 사용하므로 metrics 스크립트를 먼저 별도로 실행할 필요는 없다. metrics 스크립트는 지표만 독립적으로 확인할 때 실행한다.
 
@@ -59,6 +63,7 @@ query, corpus, qrels 중 하나라도 바뀌면 서로 다른 실험이 된다. 
 conda activate study-py312
 python 02-search-ir/evaluation/01-qrels/validate_qrels.py
 python 02-search-ir/evaluation/03-benchmarks/run_benchmark.py \
+  --top-k 1 3 5 10 \
   --output 02-search-ir/evaluation/03-benchmarks/generated/bm25.json
 python 02-search-ir/evaluation/04-reports/render_report.py \
   02-search-ir/evaluation/03-benchmarks/generated/bm25.json \
@@ -66,6 +71,17 @@ python 02-search-ir/evaluation/04-reports/render_report.py \
 python 02-search-ir/evaluation/05-error-analysis/analyze_bm25_errors.py \
   --model bm25 \
   --output 02-search-ir/evaluation/05-error-analysis/generated/bm25-errors.json
+python 02-search-ir/evaluation/06-slice-analysis/analyze_query_slices.py \
+  02-search-ir/evaluation/03-benchmarks/generated/bm25.json \
+  --model bm25F \
+  --top-k 10 \
+  --slice-by topic
+python 02-search-ir/evaluation/07-significance/compare_models.py \
+  02-search-ir/evaluation/03-benchmarks/generated/bm25.json \
+  --baseline bm25 \
+  --contender bm25F \
+  --metric ndcg \
+  --top-k 10
 ```
 
 `generated/`는 `.gitignore`에서 제외되므로 반복 실행해도 실험 산출물이 Git 변경 내역에 포함되지 않는다. 공유할 가치가 있는 결과만 별도의 Markdown 문서로 정리한다.

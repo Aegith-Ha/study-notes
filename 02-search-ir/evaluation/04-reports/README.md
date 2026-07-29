@@ -34,7 +34,7 @@ delta가 양수면 baseline보다 향상되었고, 음수면 낮아졌다는 뜻
 
 ### 변환 원리
 
-`render_report.py`는 benchmark JSON의 `models`를 순회하며 P@k, R@k, MRR@k, nDCG@k, 소요 시간을 Markdown table의 한 행으로 변환한다. 선택한 baseline의 nDCG를 각 모델의 nDCG에서 빼 delta를 계산하고, 실험에 사용한 입력 파일 경로도 함께 기록한다.
+`render_report.py`는 benchmark JSON의 모델과 cutoff를 순회하며 P@k, R@k, MRR@k, nDCG@k, 소요 시간을 Markdown table의 한 행으로 변환한다. 선택한 baseline의 같은 cutoff nDCG를 각 모델의 nDCG에서 빼 delta를 계산하고, 실험에 사용한 입력 파일 경로도 함께 기록한다.
 
 ## 사용법
 
@@ -42,6 +42,7 @@ delta가 양수면 baseline보다 향상되었고, 음수면 낮아졌다는 뜻
 
 ```bash
 python 02-search-ir/evaluation/03-benchmarks/run_benchmark.py \
+  --top-k 1 3 5 10 \
   --output 02-search-ir/evaluation/03-benchmarks/generated/bm25.json
 
 python 02-search-ir/evaluation/04-reports/render_report.py \
@@ -61,11 +62,13 @@ python 02-search-ir/evaluation/04-reports/render_report.py \
 
 ## 보고서를 읽는 순서
 
-1. query/document 수와 `top-k`를 확인해 비교 범위를 파악한다.
+1. query/document 수와 cutoff 목록을 확인해 비교 범위를 파악한다.
 2. 제품 목표에 가장 중요한 metric을 먼저 비교한다.
 3. baseline 대비 delta로 변화 방향과 크기를 확인한다.
 4. 품질이 높아진 대신 속도가 느려지지 않았는지 확인한다.
-5. `05-error-analysis/`에서 점수 변화를 만든 실제 query 사례를 확인한다.
+5. `06-slice-analysis/`에서 어떤 query 그룹의 차이가 큰지 확인한다.
+6. `07-significance/`에서 delta의 95% 신뢰구간을 확인한다.
+7. `05-error-analysis/`에서 점수 변화를 만든 실제 query 사례를 확인한다.
 
 ## 자동 보고서의 한계
 

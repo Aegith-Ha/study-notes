@@ -232,6 +232,15 @@ python3 02-search-ir/evaluation/02-metrics/evaluate_metrics_bm25.py \
 
 `--model`에는 `all`, `bm25`, `bm25+`, `bm25l`, `bm25f`를 지정할 수 있다.
 
+### 여러 cutoff 평가
+
+```bash
+python3 02-search-ir/evaluation/02-metrics/evaluate_metrics_bm25.py \
+  --top-k 1 3 5 10
+```
+
+가장 큰 cutoff까지 검색을 한 번 수행한 뒤 각 cutoff의 P@k, R@k, MRR@k, nDCG@k를 계산한다. 작은 k는 사용자가 처음 보는 결과의 품질을, 큰 k는 후보군의 회수 능력을 확인하는 데 유용하다.
+
 ### 데이터 파일 직접 지정
 
 ```bash
@@ -244,4 +253,4 @@ python3 02-search-ir/evaluation/02-metrics/evaluate_metrics_bm25.py \
 
 `corpus.jsonl`, `queries.json`, `qrels.json`이 없으면 기존 `bm25f_*` generated 파일을 fallback으로 사용한다.
 
-스크립트는 각 query의 지표를 계산한 뒤 모델별 평균 `P@k`, `R@k`, `MRR@k`, `nDCG@k`를 출력한다.
+스크립트는 각 query의 지표를 계산한 뒤 cutoff별 모델 평균 `P@k`, `R@k`, `MRR@k`, `nDCG@k`를 출력한다.

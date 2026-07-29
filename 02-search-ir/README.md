@@ -31,3 +31,7 @@
    - 평가 결과 요약과 분석 문서 관리
 5. [Error Analysis](./evaluation/05-error-analysis/README.md)
    - 오검색과 미검색 사례 분류 및 개선 방향 기록
+6. [Query Slice Analysis](./evaluation/06-slice-analysis/README.md)
+   - topic, intent, query 길이별 성능 비교
+7. [Statistical Significance](./evaluation/07-significance/README.md)
+   - query 단위 paired bootstrap을 이용한 모델 차이 검정
