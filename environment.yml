@@ -41,6 +41,13 @@ dependencies:
       # RAG / NLP
       - rank-bm25
 
+      # Embedding (dense retrieval)
+      # 모델: dragonkue/snowflake-arctic-embed-l-v2.0-ko (1024차원, 약 2.3GB, 첫 실행 시 자동 다운로드)
+      # GPU가 없는 환경이므로 CPU 전용 torch를 설치한다. (CUDA 버전은 불필요한 라이브러리가 수 GB 추가됨)
+      - --extra-index-url https://download.pytorch.org/whl/cpu
+      - torch
+      - sentence-transformers
+
       # 기타 유틸
       - requests
       - tqdm

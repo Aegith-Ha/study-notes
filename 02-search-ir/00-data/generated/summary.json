@@ -1,0 +1,55 @@
+{
+  "n_docs": 500,
+  "n_queries": 60,
+  "seed": 42,
+  "topics": {
+    "search": 72,
+    "llm": 78,
+    "linux": 76,
+    "database": 85,
+    "korean_nlp": 81,
+    "irrelevant": 39,
+    "python": 69
+  },
+  "doc_types": {
+    "variant": 74,
+    "short": 123,
+    "long": 101,
+    "mixed": 80,
+    "keyword_repeated": 83,
+    "irrelevant": 39
+  },
+  "intents": {
+    "keyword": 30,
+    "paraphrase": 30
+  },
+  "n_concepts": 30,
+  "fields": [
+    "title",
+    "tags",
+    "text"
+  ],
+  "qrels": {
+    "n_qrels": 1326,
+    "avg_qrels_per_query": 22.1,
+    "min_qrels_per_query": 15,
+    "max_qrels_per_query": 30,
+    "relevance_distribution": {
+      "2": 922,
+      "1": 404
+    }
+  },
+  "lexical_overlap": {
+    "keyword": {
+      "avg_overlap_tokens": 2.1,
+      "zero_overlap_queries": 0,
+      "n_queries": 30
+    },
+    "paraphrase": {
+      "avg_overlap_tokens": 0.0,
+      "zero_overlap_queries": 30,
+      "n_queries": 30
+    }
+  },
+  "note": "Qrels are labeled by concept match, not token overlap. relevance=2: primary concept, relevance=1: secondary concept in long docs."
+}
