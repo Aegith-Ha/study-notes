@@ -2,7 +2,7 @@
 
 정답 문서 목록(qrels)이 있을 때 쓰는 지표를 정리한다. 검색기가 정답을 얼마나 많이, 얼마나 위쪽에 가져오는지를 측정한다.
 
-- 폴더 요약, 메인 지표, 결과는 [README](./README.md) 참고
+- 폴더 요약과 메인 지표는 [README](./README.md) 참고
 - 골든셋을 만드는 방법은 [03-golden-set](../03-golden-set/README.md) 참고
 - 정답 없이 쓰는 지표는 [02-reference-free](./02-reference-free.md) 참고
 

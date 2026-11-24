@@ -2,7 +2,7 @@
 
 LLM 앱과 외부 도구·데이터를 연결하는 표준 프로토콜인 MCP의 구조와, 사내 DB·API를 MCP로 연결할 때의 설계 원칙을 정리한다.
 
-- 폴더 요약, 메인 결정, 결과는 [README](./README.md) 참고
+- 폴더 요약과 메인 결정은 [README](./README.md) 참고
 - 도구 정의와 평가는 [01-function-calling](./01-function-calling.md) 참고
 
 ## 1. 왜 표준이 필요한가

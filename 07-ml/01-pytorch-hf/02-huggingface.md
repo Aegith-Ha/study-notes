@@ -2,7 +2,7 @@
 
 모델을 불러오고, 데이터를 다루고, 결과를 재현하는 데 쓰는 Hugging Face 도구(transformers, tokenizers, datasets, Hub)를 정리한다.
 
-- 폴더 요약, 메인 결정, 결과는 [README](./README.md) 참고
+- 폴더 요약과 메인 결정은 [README](./README.md) 참고
 - PyTorch 기초는 [01-pytorch-basics](./01-pytorch-basics.md) 참고
 
 ## 1. 구성 요소
@@ -47,7 +47,7 @@
 | 최대 길이, 권장 사용법 | 질의 접두어("query: ") 같은 사용 규칙 |
 | 리비전(커밋 해시) | 같은 이름 모델이 갱신될 수 있음 |
 
-- 결과를 기록할 때 모델 이름과 함께 리비전을 남긴다(실험 조건 표).
+- 결과를 기록할 때 모델 이름과 함께 리비전을 남긴다.
 
 ## 5. 재현성
 

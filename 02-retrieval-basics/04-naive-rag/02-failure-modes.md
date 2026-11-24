@@ -2,7 +2,7 @@
 
 naive RAG에서 자주 생기는 실패를 유형별로 나누고, 어떤 지표로 드러나는지, 어떤 고급 기법으로 고치는지 연결한다. 기준선 결과를 분석할 때 이 표로 실패를 분류하면 [04-advanced-rag](../../04-advanced-rag/README.md)에서 무엇부터 할지 정할 수 있다.
 
-- 폴더 요약, 메인 결정, 결과는 [README](./README.md) 참고
+- 폴더 요약과 메인 결정은 [README](./README.md) 참고
 - 파이프라인 구조는 [01-pipeline](./01-pipeline.md) 참고
 
 ## 1. 실패 유형
@@ -36,7 +36,7 @@ naive RAG에서 자주 생기는 실패를 유형별로 나누고, 어떤 지표
 ```
 
 - 이 분류는 [02-generation-metrics](../../03-evals/02-generation-metrics/README.md)의 질의별 원인 나누기(검색 성공·실패 × 답변 맞음·틀림)를 한 단계 더 쪼갠 것이다.
-- 유형별 질의 수를 [README](./README.md) 결과 표에 기록한다. 가장 많은 유형이 [04-advanced-rag](../../04-advanced-rag/README.md)에서 먼저 할 기법이다.
+- 유형별 질의 수를 센다. 가장 많은 유형이 [04-advanced-rag](../../04-advanced-rag/README.md)에서 먼저 할 기법이다.
 
 ## 3. 확인할 점
 

@@ -2,7 +2,7 @@
 
 정답 문서 목록(qrels) 없이, 질문과 검색 결과만으로 검색 품질을 판정하는 지표를 정리한다. 판정은 LLM judge가 맡는다.
 
-- 폴더 요약, 메인 지표, 결과는 [README](./README.md) 참고
+- 폴더 요약과 메인 지표는 [README](./README.md) 참고
 - 정답 기반 지표는 [01-reference-based](./01-reference-based.md) 참고
 - judge 프롬프트 설계, 사람 판정과의 일치도 검증은 [04-llm-judge](../04-llm-judge/README.md)에서 다룬다
 
@@ -114,12 +114,3 @@ Sufficiency@5:     1 (judge: "d2, d5로 답할 수 있다")
 | 골든셋 후보 만들기 ([03-evals/03-golden-set](../03-golden-set/README.md)) | 사용 | Pooling 후보를 judge로 1차 판정하고 사람이 검수 |
 | 골든셋 밖 질의, 새 도메인 | 사용 | 정답이 없으므로 다른 방법이 없다 |
 | 운영 모니터링 ([06-llmops](../../06-llmops/01-tracing/02-tools-and-monitoring.md)) | 사용 | 샘플링한 운영 질의에 Context Relevance, Sufficiency 추적 |
-
-## 8. 기록할 조건
-
-결과를 남길 때 [README](./README.md) 실험 조건 표에 함께 적는다.
-
-- judge 모델과 버전
-- 프롬프트 버전 (프로젝트 링크)
-- temperature, 판정 단위, 등급 기준
-- 판정한 질의 수 (샘플링했다면 샘플링 방식)

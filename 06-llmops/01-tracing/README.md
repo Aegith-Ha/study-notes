@@ -1,6 +1,6 @@
 # 트레이싱 (Tracing)
 
-요청 하나가 검색, 리랭크, LLM 호출, 도구 호출을 거치는 과정을 단계별로 기록하고, 이 기록으로 실패 원인과 지연·비용을 찾는 방법을 정리한다. 이 README에는 메인 결정과 결과를 두고, 설계와 도구·모니터링은 하위 노트에 둔다.
+요청 하나가 검색, 리랭크, LLM 호출, 도구 호출을 거치는 과정을 단계별로 기록하고, 이 기록으로 실패 원인과 지연·비용을 찾는 방법을 정리한다. 이 README에는 메인 결정을 두고, 설계와 도구·모니터링은 하위 노트에 둔다.
 
 - 에이전트 경로 평가는 [05-agents/01-agentic-rag/02-trajectory-evaluation](../../05-agents/01-agentic-rag/02-trajectory-evaluation.md) 참고
 - 운영 질의 품질 지표는 [03-evals/01-retrieval-metrics/02-reference-free](../../03-evals/01-retrieval-metrics/02-reference-free.md), [03-evals/02-generation-metrics/02-reference-free](../../03-evals/02-generation-metrics/02-reference-free.md) 참고
@@ -20,34 +20,6 @@
 | 수집 범위 | 메타데이터(지연, 토큰, 오류)는 전부, 품질 judge는 샘플링 | judge 비용 통제 |
 | 도구 | OpenTelemetry 형식으로 남기고 Langfuse 또는 Phoenix로 조회 | 도구 교체 쉬움 |
 | 연결 | trace ID를 사용자 피드백과 함께 저장 | 피드백 → 원인 분석 ([04-feedback-loop](../04-feedback-loop/README.md)) |
-
-## 실험 조건
-
-| 항목 | 값 |
-| --- | --- |
-| 프로젝트 / 커밋 | - |
-| 트레이싱 도구 / 버전 | - |
-| 수집 기간, 요청 수 | - |
-| 품질 judge 샘플링 비율, judge 모델 / 프롬프트 버전 | - |
-
-## 결과
-
-### 단계별 지연
-
-| 단계 | p50 (ms) | p95 (ms) | 전체 대비 비율 (p50) |
-| --- | --- | --- | --- |
-| 쿼리 변환 | - | - | - |
-| 검색 | - | - | - |
-| 리랭크 | - | - | - |
-| LLM 첫 토큰까지 | - | - | - |
-| LLM 생성 | - | - | - |
-| 전체 | - | - | - |
-
-### 운영 지표
-
-| 기간 | 요청 수 | 오류율 | 질의당 토큰 | 질의당 비용 | 샘플 Faithfulness | 샘플 Context Relevance |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | - | - | - | - |
 
 ## 관련 코드
 

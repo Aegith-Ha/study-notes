@@ -2,7 +2,7 @@
 
 벡터 인덱스를 직접 다루는 대신 저장, 검색, 메타데이터 필터, 운영을 함께 제공하는 벡터 DB의 기본 개념을 Milvus를 예로 정리한다.
 
-- 폴더 요약, 메인 결정, 결과는 [README](./README.md) 참고
+- 폴더 요약과 메인 결정은 [README](./README.md) 참고
 - 인덱스 알고리즘은 [01-ann-algorithms](./01-ann-algorithms.md) 참고
 
 ## 1. 왜 벡터 DB를 쓰나

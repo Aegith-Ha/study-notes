@@ -1,6 +1,6 @@
 # 생성 평가 지표 (Generation Metrics)
 
-검색된 컨텍스트로 만든 답변을 점수로 바꾸는 방법을 정리한다. 이 README에는 두 지표 계열의 비교, 검색 평가와 분리하는 방법, 메인 지표 결정, 실험 결과를 두고, 지표별 설명은 하위 노트에 둔다.
+검색된 컨텍스트로 만든 답변을 점수로 바꾸는 방법을 정리한다. 이 README에는 두 지표 계열의 비교, 검색 평가와 분리하는 방법, 메인 지표 결정을 두고, 지표별 설명은 하위 노트에 둔다.
 
 - 검색 평가는 [01-retrieval-metrics](../01-retrieval-metrics/README.md) 참고
 - 골든셋을 만드는 방법은 [03-golden-set](../03-golden-set/README.md) 참고
@@ -63,49 +63,6 @@
 | 골든셋 밖 / 운영 | 정답 없음 | Faithfulness, Answer Relevance, Refusal Appropriateness | 골든셋이 닿지 않는 질의의 답변 품질 추적 |
 
 - 이후 프롬프트, 모델, 컨텍스트 구성 비교는 이 표의 기준 지표와 Faithfulness를 함께 본다.
-
-## 실험 조건
-
-| 항목 | 값 |
-| --- | --- |
-| 프로젝트 / 커밋 | - |
-| 골든셋 버전 | - (질문 수, 답변 유형 분포, 답 없음 질의 비율, 생성일) |
-| 생성 모델 / 버전 | - |
-| 생성 프롬프트 버전 | - |
-| 생성 설정 | - (temperature, 최대 토큰) |
-| 컨텍스트 | - (검색기, top-k, 청크 크기 / oracle) |
-| 정규화 규칙 | - (EM, Token F1을 쓸 때) |
-| judge 모델 / 프롬프트 버전 | - (Answer Correctness, Faithfulness 각각) |
-| judge temperature, 판정 질의 수 | - |
-
-## 결과: 기준선
-
-### 정답 기반
-
-| 설정 | 컨텍스트 | Answer Correctness | Claim Recall | 모순 포함 답변 비율 | EM (단답형) | 거절 정확도 | 과잉 거절률 |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 기준 프롬프트 | oracle | - | - | - | - | - | - |
-| 기준 프롬프트 | BM25 top-5 | - | - | - | - | - | - |
-
-### 정답 없음
-
-| 설정 | 컨텍스트 | Faithfulness | Answer Relevance | Citation Support | Citation Coverage |
-| --- | --- | --- | --- | --- | --- |
-| 기준 프롬프트 | BM25 top-5 | - | - | - | - |
-
-### 원인 나누기 (BM25 top-5)
-
-| | 답변 맞음 | 답변 틀림 |
-| --- | --- | --- |
-| 검색 성공 | - | - |
-| 검색 실패 | - | - |
-
-### 두 계열 일치도
-
-| 확인 | 값 |
-| --- | --- |
-| Faithfulness 판정과 사람 판정 일치율 / Cohen's kappa | - |
-| 오답 중 Faithfulness가 낮게 나온 비율 | - |
 
 ## 관련 코드
 

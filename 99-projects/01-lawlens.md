@@ -60,7 +60,7 @@
 | [04-advanced-rag/05-document-parsing](../04-advanced-rag/05-document-parsing/README.md) | `parsing/statute.py`, `parsing/text.py` |
 
 - 리랭커(`retrieval/reranker.py`), 답변 생성(`generation/`), 에이전트(`agent/`)는 파일만 있고 구현 전이다. 구현되면 해당 노트(04-advanced-rag/02-reranking, 03-evals/02-generation-metrics, 05-agents)를 연결한다.
-- 결과를 노트에 기록할 때는 `main` 링크가 아니라 그 결과를 낸 커밋 해시 링크를 쓴다.
+- 특정 실험 결과와 연결하는 링크는 `main`이 아니라 그 결과를 낸 커밋 해시 링크를 쓴다.
 
 ## 관련 코드
 

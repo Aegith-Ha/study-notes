@@ -2,7 +2,7 @@
 
 LLM 서빙의 지연과 처리량 지표, 동시 요청 수에 따른 변화, 측정 방법과 API 대비 비용 계산을 정리한다.
 
-- 폴더 요약, 메인 결정, 결과는 [README](./README.md) 참고
+- 폴더 요약과 메인 결정은 [README](./README.md) 참고
 - 서빙 원리는 [01-vllm-basics](./01-vllm-basics.md) 참고
 
 ## 1. 지표

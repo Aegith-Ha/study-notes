@@ -2,7 +2,7 @@
 
 LLM 서빙의 병목인 KV 캐시 메모리와, vLLM이 이를 다루는 방법(PagedAttention, 연속 배칭, 접두어 캐시), 양자화와 API 형식을 정리한다.
 
-- 폴더 요약, 메인 결정, 결과는 [README](./README.md) 참고
+- 폴더 요약과 메인 결정은 [README](./README.md) 참고
 - 측정 방법은 [02-serving-benchmark](./02-serving-benchmark.md) 참고
 
 ## 1. 생성 과정과 KV 캐시

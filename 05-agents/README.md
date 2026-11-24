@@ -23,7 +23,7 @@
 | 검색 경로 | 검색 횟수, 중복 검색률, 검색 판단 정확도 | [01-agentic-rag](./01-agentic-rag/02-trajectory-evaluation.md) |
 | 도구 호출 | 도구 선택 정확도, 인자 정확 일치, 스키마 위반율 | [02-tool-calling-mcp](./02-tool-calling-mcp/01-function-calling.md) |
 | 작업 | 작업 성공률, 부분 성공률, 실패 주입 복구 성공률 | [03-plan-execute-verify](./03-plan-execute-verify/02-failure-recovery.md) |
-| 비용 | 질의당 LLM 호출 수, 토큰, 지연 | 각 주제 결과 표 |
+| 비용 | 질의당 LLM 호출 수, 토큰, 지연 | [06-llmops/01-tracing](../06-llmops/01-tracing/README.md) |
 
 - 에이전트 구조는 고정 파이프라인보다 비용이 크다. 평균이 아니라 **질문·작업 유형별**로 이득을 보고, 이득이 있는 유형에만 쓰는 라우팅을 함께 검토한다.
 - 같은 입력에도 실행마다 경로가 달라질 수 있다. 회귀 테스트의 허용 폭(δ)은 반복 실행의 흔들림보다 크게 잡는다([05-regression-ci](../03-evals/05-regression-ci/01-gate-design.md) 5장).

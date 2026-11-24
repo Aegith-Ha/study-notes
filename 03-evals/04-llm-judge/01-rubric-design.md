@@ -2,7 +2,7 @@
 
 LLM judge가 일관되게 판정하도록 판정 과제, 등급 기준(rubric), 프롬프트, 판정 방식, judge 모델을 정하는 방법을 정리한다.
 
-- 폴더 요약, 메인 결정, 결과는 [README](./README.md) 참고
+- 폴더 요약과 메인 결정은 [README](./README.md) 참고
 - 설계한 judge를 사람 판정과 맞춰 검증하는 방법은 [02-human-agreement](./02-human-agreement.md) 참고
 
 ## 1. 판정 과제 정의

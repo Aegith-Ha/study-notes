@@ -21,7 +21,6 @@
 - The Joplin note title is the file name without `.md` (`README.md` -> `README`), set by `98-etc/joplin/sync_to_joplin.py`; the H1 does not affect it. Renaming a file creates a new note in Joplin (the old one is reported as `[로컬에 없음]`).
 - In every .md document, place the execution section (how to run: commands, options, output examples) at the very bottom of the document.
 - Name the section `## 실행 방법`. If environment setup is needed, put `## 실행 환경` (or `## 실행 환경 준비`) directly above it, so both stay at the bottom.
-- Do not put run commands in concept or result sections; refer to the bottom section instead (e.g. "재현 명령은 하단 실행 방법 참고").
+- Do not put run commands in concept sections; refer to the bottom section instead (e.g. "재현 명령은 하단 실행 방법 참고").
 - For notes whose code lives in an external project, use `## 관련 코드` at the very bottom instead of `## 실행 방법`: link to the project (via `99-projects/`) and say that run commands are in that project's README. Do not copy run commands into the note.
-- Record experiment results in the note itself, together with the conditions: project commit hash, eval set version (question count, date), model, key parameters.
 - This applies when creating new documents and when editing existing ones. Generated output files (`generated/`) are excluded.

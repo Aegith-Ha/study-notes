@@ -20,6 +20,6 @@ sparse·dense 검색과 기본 RAG 파이프라인을 다룬다. 여기서 만�
 | [03-vector-index](./03-vector-index/README.md) | 근사 최근접 탐색(ANN): Flat, IVF, HNSW, PQ, 벡터 DB(Milvus 등) | 초안 |
 | [04-naive-rag](./04-naive-rag/README.md) | 기본 RAG 파이프라인: 검색 top-k → 프롬프트 → 생성. 생성 평가의 기준선 | 초안 |
 
-- 각 검색기의 기준선 점수는 [03-evals/01-retrieval-metrics](../03-evals/01-retrieval-metrics/README.md), 기본 RAG의 기준선 점수는 [03-evals/02-generation-metrics](../03-evals/02-generation-metrics/README.md) 결과 표에 기록한다.
+- 각 검색기는 [03-evals/01-retrieval-metrics](../03-evals/01-retrieval-metrics/README.md), 기본 RAG는 [03-evals/02-generation-metrics](../03-evals/02-generation-metrics/README.md)의 메인 지표로 잰다.
 
 노트 작성 방식은 루트 [README](../README.md)의 작성 규칙 참고.

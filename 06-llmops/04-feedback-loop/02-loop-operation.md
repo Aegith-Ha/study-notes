@@ -2,7 +2,7 @@
 
 모은 피드백을 분류하고, 원인별로 조치하고, 골든셋에 반영하고, 회귀 테스트로 확인하는 루프의 절차를 정리한다.
 
-- 폴더 요약, 메인 결정, 결과는 [README](./README.md) 참고
+- 폴더 요약과 메인 결정은 [README](./README.md) 참고
 - 피드백 종류와 수집은 [01-feedback-collection](./01-feedback-collection.md) 참고
 
 ## 1. 루프

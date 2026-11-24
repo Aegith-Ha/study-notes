@@ -2,7 +2,7 @@
 
 질의와 문서를 의미 벡터로 바꿔 가까운 문서를 찾는 dense 검색의 원리, 유사도 척도, 인코딩할 때 주의할 점을 정리한다.
 
-- 폴더 요약, 메인 결정, 결과는 [README](./README.md) 참고
+- 폴더 요약과 메인 결정은 [README](./README.md) 참고
 - 임베딩 모델을 고르는 방법은 [02-model-selection](./02-model-selection.md) 참고
 
 ## 1. dense 검색이란
