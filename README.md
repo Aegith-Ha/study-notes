@@ -39,6 +39,12 @@
 
 | Topic | GitHub README | Velog 원문 | 프로젝트 링크 |
 | --- | --- | --- | --- |
+| 검색 평가 지표 (Recall@k, MRR, nDCG) | [README](./02-evals/01-retrieval-metrics/README.md) | - | - |
+| 정답 기반 검색 지표 | [01-reference-based](./02-evals/01-retrieval-metrics/01-reference-based.md) | - | - |
+| 정답 없는 검색 지표 | [02-reference-free](./02-evals/01-retrieval-metrics/02-reference-free.md) | - | - |
+| 생성 평가 지표 (Answer Correctness, Faithfulness) | [README](./02-evals/02-generation-metrics/README.md) | - | - |
+| 정답 기반 생성 지표 | [01-reference-based](./02-evals/02-generation-metrics/01-reference-based.md) | - | - |
+| 정답 없는 생성 지표 | [02-reference-free](./02-evals/02-generation-metrics/02-reference-free.md) | - | - |
 | Golden Set 생성 방법 | [README](./02-evals/03-golden-set/README.md) | - | - |
 | 평가 질의 만드는 방법 A~D | [01-query-sources](./02-evals/03-golden-set/01-query-sources.md) | - | - |
 | Pooling 방식 | [02-pooling](./02-evals/03-golden-set/02-pooling.md) | - | - |
