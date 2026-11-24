@@ -6,8 +6,6 @@ env/
 .idea/
 
 generated/
-# 공통 실험 데이터(corpus, queries, qrels)는 고정해서 커밋한다.
-!02-search-ir/00-data/generated/
 
 # Joplin API 토큰 등 비밀값
 .env

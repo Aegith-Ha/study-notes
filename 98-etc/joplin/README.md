@@ -13,7 +13,7 @@ Joplin의 동기화 설정은 건드리지 않는다. 스크립트로 바뀐 노
 | 항목 | 동작 |
 |---|---|
 | 대상 노트북 | Joplin 최상위의 `100. study-notes` 노트북 (없으면 생성) |
-| 폴더 | 폴더마다 하위 노트북을 만든다 (`03-rag/01-basics` → `03-rag` › `01-basics`) |
+| 폴더 | 폴더마다 하위 노트북을 만든다 (`02-evals/03-golden-set` → `02-evals` › `03-golden-set`) |
 | 노트 제목 | 파일 이름에서 `.md` 를 뺀 것. `README.md` 는 폴더 이름을 쓴다 (저장소 루트의 README는 `study-notes`) |
 | 같은 노트 판별 | 노트의 `source_url` 필드에 `study-notes:<상대경로>` 를 저장해 두고 이 값으로 찾는다 |
 | 링크 변환 | 상대경로 링크를 Joplin에 넣을 때만 바꾼다 (로컬 파일은 그대로). 아래 표 참고 |
@@ -26,8 +26,8 @@ Joplin의 동기화 설정은 건드리지 않는다. 스크립트로 바뀐 노
 | 원래 링크 | Joplin에 들어가는 링크 |
 |---|---|
 | 동기화되는 `.md` 파일 (`./argparse/README.md`) | 해당 노트 링크 `:/노트ID` |
-| README가 있는 폴더 (`./01-basics/`) | 그 폴더 README 노트의 `:/노트ID` |
-| README가 없는 폴더 (`./milvus/`) | 링크를 빼고 텍스트만 남긴다. 그 폴더에 README.md를 만들면 다음 실행부터 노트 링크로 연결된다 |
+| README가 있는 폴더 (`./03-golden-set/`) | 그 폴더 README 노트의 `:/노트ID` |
+| README가 없는 폴더 (`./01-hybrid-search/`) | 링크를 빼고 텍스트만 남긴다. 그 폴더에 README.md를 만들면 다음 실행부터 노트 링크로 연결된다 |
 | `.py` 등 다른 파일 | GitHub 주소 (`https://github.com/<owner>/<repo>/blob/main/<경로>`) |
 | `http(s)://`, `#앵커`, 이미지, 코드 블록 안의 링크 | 그대로 둔다 |
 

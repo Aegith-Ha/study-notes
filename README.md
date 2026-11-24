@@ -3,20 +3,23 @@
 개인 학습 및 실습 기록 저장소입니다.
 
 ## Structure
-- [`00-infra/`](./00-infra/) : 실습 공통 인프라 (Milvus)
 - [`01-python/`](./01-python/) : Python 기초 및 실습
-- [`02-search-ir/`](./02-search-ir/) : 검색(IR), sparse·dense·hybrid retrieval, reranking, evaluation
-- [`03-rag/`](./03-rag/) : RAG 구조, chunking, retrieval integration, evaluation
-- [`04-llmops/`](./04-llmops/) : LLM 기초 개념, LLMOps
+- [`02-evals/`](./02-evals/README.md) : 평가 체계 (검색·생성 평가, 골든셋, LLM judge, 회귀 테스트)
+- [`03-advanced-rag/`](./03-advanced-rag/README.md) : 고급 RAG 기법 (하이브리드, 리랭커, 쿼리 변환, 청킹, 파싱)
+- [`04-agents/`](./04-agents/README.md) : 에이전트 확장 (Agentic RAG, tool calling·MCP, 계획-실행-검증)
+- [`05-llmops/`](./05-llmops/README.md) : 운영 (트레이싱, 비용, 보안, 피드백 루프)
+- [`06-ml/`](./06-ml/README.md) : ML 심화 (파인튜닝, LoRA, 서빙)
 - [`98-etc/`](./98-etc/) : 단순 설명 모음
-- [`99-projects/`](./99-projects/) : 프로젝트 실습
+- [`99-projects/`](./99-projects/README.md) : 실제 소스가 있는 외부 프로젝트 색인
 
 ## Learning Path
 
 ```
-00-infra (Milvus 구축)
-  → 02-search-ir : 문서를 잘 찾는 법 (평가: Recall@k, nDCG)
-  → 03-rag       : 찾은 문서로 답을 잘 만드는 법 (평가: 답변 품질)
+02-evals (평가 체계)
+  → 03-advanced-rag : 평가 지표로 기법별 개선 폭 비교
+  → 04-agents       : 검색·도구 호출을 모델이 결정
+  → 05-llmops       : 트레이싱, 비용, 보안, 피드백 루프
+  → 06-ml           : 평가 체계를 갖춘 뒤 모델 자체 개선
 ```
 
 ## Document Index
@@ -25,25 +28,20 @@
 
 | Section | 내용 | 상태 |
 | --- | --- | --- |
-| [Milvus](./00-infra/milvus/) | Milvus 설치, 실행, 접속 확인 (Milvus Lite부터 시작) | 예정 |
-| [Search / IR](./02-search-ir/README.md) | Data, Sparse, Dense, Hybrid, Reranking, Evaluation | 진행 중 |
-| [RAG](./03-rag/README.md) | Data, Basics, Chunking, Retrieval Integration, Evaluation, Advanced | 예정 |
-| [LLMOps](./04-llmops/README.md) | LLM 기초 개념, LLMOps | 예정 |
+| [Evals](./02-evals/README.md) | 검색 평가, 생성 평가, 골든셋, LLM judge, 회귀 테스트 | 진행 중 |
+| [Advanced RAG](./03-advanced-rag/README.md) | 하이브리드 검색, 리랭커, 쿼리 변환, 청킹, 문서 파싱, 긴 컨텍스트 비교 | 예정 |
+| [Agents](./04-agents/README.md) | Agentic RAG, function calling·MCP, 계획-실행-검증 루프 | 예정 |
+| [LLMOps](./05-llmops/README.md) | 트레이싱, 비용 최적화, 보안, 피드백 루프 | 예정 |
+| [ML](./06-ml/README.md) | PyTorch·HF, 임베딩 파인튜닝, LoRA/QLoRA, vLLM 서빙 | 예정 |
+| [Projects](./99-projects/README.md) | 외부 프로젝트 색인 | 예정 |
 
-### Search / IR
+### Evals
 
-| Topic | GitHub README | Velog 원문 | Code |
+| Topic | GitHub README | Velog 원문 | 프로젝트 링크 |
 | --- | --- | --- | --- |
-| 공통 데이터 (corpus, queries, qrels) | [README](./02-search-ir/00-data/README.md) | - | [generate_corpus.py](./02-search-ir/00-data/generate_corpus.py) |
-| Inverted Index | [README](./02-search-ir/01-sparse-retrieval/01-inverted-index/README.md) | - | [inverted_index.py](./02-search-ir/01-sparse-retrieval/01-inverted-index/inverted_index.py) |
-| TF-IDF | [README](./02-search-ir/01-sparse-retrieval/02-tf-idf/README.md) | - | [tf_idf.py](./02-search-ir/01-sparse-retrieval/02-tf-idf/tf_idf.py) |
-| BM25, BM25+, BM25L, BM25F | [README](./02-search-ir/01-sparse-retrieval/03-bm25/README.md) | - | [bm25.py](./02-search-ir/01-sparse-retrieval/03-bm25/bm25.py) |
-| Qrels | [README](./02-search-ir/05-evaluation/01-qrels/README.md) | - | [validate_qrels.py](./02-search-ir/05-evaluation/01-qrels/validate_qrels.py) |
-| Metrics (P@k, R@k, MRR, nDCG) | [README](./02-search-ir/05-evaluation/02-metrics/README.md) | - | [evaluate_metrics_bm25.py](./02-search-ir/05-evaluation/02-metrics/evaluate_metrics_bm25.py) |
-| Benchmarks, Report | [README](./02-search-ir/05-evaluation/03-benchmarks/README.md) | - | [run_benchmark.py](./02-search-ir/05-evaluation/03-benchmarks/run_benchmark.py), [render_report.py](./02-search-ir/05-evaluation/03-benchmarks/render_report.py) |
-| Error Analysis | [README](./02-search-ir/05-evaluation/04-error-analysis/README.md) | - | [analyze_bm25_errors.py](./02-search-ir/05-evaluation/04-error-analysis/analyze_bm25_errors.py) |
-| Slice Analysis | [README](./02-search-ir/05-evaluation/05-slice-analysis/README.md) | - | [analyze_query_slices.py](./02-search-ir/05-evaluation/05-slice-analysis/analyze_query_slices.py) |
-| Significance | [README](./02-search-ir/05-evaluation/06-significance/README.md) | - | [compare_models.py](./02-search-ir/05-evaluation/06-significance/compare_models.py) |
+| Golden Set 생성 방법 | [README](./02-evals/03-golden-set/README.md) | - | - |
+| 평가 질의 만드는 방법 A~D | [01-query-sources](./02-evals/03-golden-set/01-query-sources.md) | - | - |
+| Pooling 방식 | [02-pooling](./02-evals/03-golden-set/02-pooling.md) | - | - |
 
 ### Python
 
@@ -56,19 +54,37 @@
 
 | Topic | GitHub README | Velog 원문 | Code |
 | --- | --- | --- | --- |
+| Claude Code 단계별 사용법 | [README](./98-etc/claude/README.md) | - | - |
 | Codex 프로젝트 세팅 | [README](./98-etc/codex/README.md) | - | - |
+| Joplin 단방향 동기화 | [README](./98-etc/joplin/README.md) | - | [sync_to_joplin.py](./98-etc/joplin/sync_to_joplin.py) |
 | VS Code 설정 | [README](./98-etc/vscode/README.md) | - | - |
 
 ## 작성 규칙
 
 ### 이름 규칙
-- 폴더와 파일 이름은 `번호-kebab-case` 형식을 사용한다. (예: `01-inverted-index/`, `01-mlm-vs-ar.md`)
+- 폴더와 파일 이름은 `번호-kebab-case` 형식을 사용한다. (예: `01-hybrid-search/`, `01-query-sources.md`)
 - 공백, 대문자, 마침표는 이름에 사용하지 않는다. (`README.md` 제외)
+- 아직 노트가 없는 폴더는 `.gitkeep`으로 추적하고, 첫 노트를 만들면 `.gitkeep`을 지운다.
+
+### 소스 코드 위치
+- `02-evals` ~ `06-ml` 노트에는 소스를 두지 않는다. 실제 코드는 외부 프로젝트에 두고 링크로 연결한다.
+- 외부 프로젝트는 [`99-projects/`](./99-projects/README.md)에 등록하고, 노트는 가능하면 그 문서를 거쳐 연결한다.
+- 코드 링크는 GitHub URL을 쓴다. 로컬 상대경로(`../other-project/...`)는 쓰지 않는다.
+- 실험 결과와 연결된 링크는 커밋 해시 고정 링크(`blob/<commit>/...`)를 쓴다.
+- private 저장소라면 핵심 코드 몇 줄은 노트에 직접 인용한다.
+- `01-python`, `98-etc`의 짧은 예제 코드는 예외로 이 저장소에 둔다.
+
+### 노트 구성 (`02-evals` ~ `06-ml`)
+1. 개념: 무엇이고 왜 필요한가
+2. 설계 판단: 선택지와 고른 이유
+3. 실험 조건: 프로젝트 커밋 해시, 평가셋 버전(질문 수, 생성일), 모델, 주요 파라미터
+4. 결과: 수치는 노트에 직접 적는다 (예: 기준선 대비 Recall@10 변화)
+5. 관련 코드: 프로젝트 링크 (`## 관련 코드`, 문서 하단)
 
 ### README.md
 - 폴더마다 하나씩 두고, 하위 주제 목차는 해당 폴더 README에서 관리
 - GitHub용
-- 실행 방법, 주요 파일, 명령어, 출력 예시, 관련 Velog 링크
+- 주요 내용, 관련 코드(또는 실행 방법), 관련 Velog 링크
 
 ### README_VELOG.md
 - Velog 게시용 원문
@@ -82,9 +98,9 @@
 
 | 타입 | 의미 | 예시 |
 | --- | --- | --- |
-| feat | 새로운 기능, 예제 코드 추가 | feat(search-ir): BM25F 예제 추가 |
-| fix | 버그 수정 | fix: qrels 검증 시 빈 query 오류 수정 |
-| docs | 문서, 학습 노트 추가/수정 | docs(llmops): MLM vs AR 노트 추가 |
+| feat | 새로운 기능, 예제 코드 추가 | feat(python): pydantic 예제 추가 |
+| fix | 버그 수정 | fix: joplin 동기화 링크 변환 오류 수정 |
+| docs | 문서, 학습 노트 추가/수정 | docs(evals): pooling 노트 추가 |
 | style | 코드 스타일 변경(기능 변화 없음) | style: 들여쓰기 정리 |
 | refactor | 리팩토링 | refactor: 평가 지표 계산 함수 분리 |
 | perf | 성능 개선 | perf: 벡터 검색 속도 개선 |

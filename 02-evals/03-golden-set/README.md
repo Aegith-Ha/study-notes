@@ -1,5 +1,9 @@
 # RAG 평가 데이터(Golden Set) 생성 방법
 
+## 하위 노트
+- [01-query-sources](./01-query-sources.md): 평가 질의 만드는 방법 A~D
+- [02-pooling](./02-pooling.md): Pooling 방식으로 정답 후보를 모아 Golden Set 만들기
+
 ## 1. 개요
 
 RAG(Retrieval-Augmented Generation) 시스템의 성능을 평가하려면 질문과 정답 문서, 정답 답변 등으로 구성된 **평가 데이터(Golden Set)**가 필요하다.
