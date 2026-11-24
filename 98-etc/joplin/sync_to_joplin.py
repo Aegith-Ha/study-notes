@@ -95,12 +95,8 @@ def collect_local_notes(root: Path) -> list[LocalNote]:
             path = Path(dirpath) / name
             rel = path.relative_to(root)
             folder_parts = rel.parent.parts
-            stem = path.stem
-            if stem.lower() == "readme":
-                title = folder_parts[-1] if folder_parts else root.name
-            else:
-                title = stem
             body = path.read_text(encoding="utf-8")
+            title = path.stem  # 노트 제목은 항상 파일 이름 (README.md -> README)
             notes.append(LocalNote(rel.as_posix(), folder_parts, title, body))
     return notes
 

@@ -1,4 +1,4 @@
-# VS Code
+# VS Code 설정
 
 ## `__pycache__` 폴더 안 보이게 하기
 

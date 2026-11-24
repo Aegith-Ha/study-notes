@@ -1,4 +1,4 @@
-# 01-python
+# Python 학습 기록
 
 python 관련 학습 기록
 

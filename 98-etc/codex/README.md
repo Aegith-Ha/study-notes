@@ -6,7 +6,7 @@ Codex를 프로젝트에 투입할 때 가장 중요한 건 **프로젝트 구�
 
 ---
 
-# 1. AGENTS.md 만들기
+## 1. AGENTS.md 만들기
 
 프로젝트 루트에 `AGENTS.md`를 생성한다.
 
@@ -31,7 +31,7 @@ Codex는 작업을 시작할 때 이 파일을 가장 먼저 참고한다.
 
 ---
 
-## 디렉토리별 AGENTS.md
+### 디렉토리별 AGENTS.md
 
 프로젝트가 커지면 하위 디렉토리에도 별도로 둘 수 있다.
 
@@ -56,7 +56,7 @@ project/
 
 ---
 
-# Project Docs
+### Project Docs
 
 프로젝트 문서 위치를 알려준다.
 
@@ -76,7 +76,7 @@ Before modifying configuration-related code:
 - Read .env.example
 ```
 
-### 왜 필요한가?
+#### 왜 필요한가?
 
 보통 AI는 프로젝트 전체를 뒤져가며 구조를 파악하려고 한다.
 
@@ -92,7 +92,7 @@ Before modifying configuration-related code:
 
 ---
 
-# Dangerous Operations
+### Dangerous Operations
 
 AI가 하면 안 되는 작업을 명시한다.
 
@@ -106,7 +106,7 @@ AI가 하면 안 되는 작업을 명시한다.
 - Never hardcode credentials.
 ```
 
-### 왜 필요한가?
+#### 왜 필요한가?
 
 AI는 문제를 해결하려고 과감한 선택을 하는 경우가 있다.
 
@@ -130,7 +130,7 @@ utility.drop_collection("my_collection")
 
 ---
 
-# 2. 실행 스크립트 준비
+## 2. 실행 스크립트 준비
 
 ```text
 scripts/
@@ -178,7 +178,7 @@ uvicorn app.main:app
 
 ---
 
-# 3. .env.example 만들기
+## 3. .env.example 만들기
 
 ```env
 MILVUS_HOST=localhost
@@ -205,7 +205,7 @@ AI가 설정값을 찾기 위해 프로젝트를 뒤지는 경우가 많다.
 
 ---
 
-## 실제 .env는 커밋 금지
+### 실제 .env는 커밋 금지
 
 ```gitignore
 .env
@@ -222,7 +222,7 @@ TIBERO_PASSWORD=your_password
 
 ---
 
-# 4. Architecture Diagram
+## 4. Architecture Diagram
 
 간단한 구조도라도 만들어 둔다.
 
@@ -271,7 +271,7 @@ AI는 구조를 이해해야 좋은 수정을 할 수 있다.
 
 ---
 
-# docs 문서 추천
+## docs 문서 추천
 
 ```text
 docs/
@@ -281,7 +281,7 @@ docs/
 └── tibero.md
 ```
 
-## architecture.md
+### architecture.md
 
 전체 시스템 구조
 
@@ -291,7 +291,7 @@ docs/
 
 ---
 
-## rag_pipeline.md
+### rag_pipeline.md
 
 검색 로직 설명
 
@@ -304,7 +304,7 @@ docs/
 
 ---
 
-## milvus_backup.md
+### milvus_backup.md
 
 운영 시 매우 중요
 
@@ -315,7 +315,7 @@ docs/
 
 ---
 
-## tibero.md
+### tibero.md
 
 신규 개발자가 가장 어려워하는 부분
 
@@ -328,7 +328,7 @@ docs/
 
 ---
 
-# 최종 추천 구조
+## 최종 추천 구조
 
 ```text
 project/
@@ -358,7 +358,7 @@ project/
 
 ---
 
-# 정리
+## 정리
 
 Codex를 잘 쓰는 핵심은 좋은 프롬프트보다 **좋은 프로젝트 문서화**에 가깝다.
 

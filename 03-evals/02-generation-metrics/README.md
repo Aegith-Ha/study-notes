@@ -1,0 +1,114 @@
+# 생성 평가 지표 (Generation Metrics)
+
+검색된 컨텍스트로 만든 답변을 점수로 바꾸는 방법을 정리한다. 이 README에는 두 지표 계열의 비교, 검색 평가와 분리하는 방법, 메인 지표 결정, 실험 결과를 두고, 지표별 설명은 하위 노트에 둔다.
+
+- 검색 평가는 [01-retrieval-metrics](../01-retrieval-metrics/README.md) 참고
+- 골든셋을 만드는 방법은 [03-golden-set](../03-golden-set/README.md) 참고
+- judge 설계와 검증은 [04-llm-judge](../04-llm-judge/README.md)에서 다룬다
+
+## 하위 노트
+
+- [01-reference-based](./01-reference-based.md): 정답 기반 지표 (EM, Token F1, Answer Correctness, Citation 등). 정의, 손계산 예시, 설계 판단
+- [02-reference-free](./02-reference-free.md): 정답 없는 지표 (Faithfulness, Answer Relevance, Citation Support 등). LLM judge 판정, 한계, 정답 기반 지표와 맞춰 보기
+
+## 두 지표 계열 비교
+
+| 항목 | 정답 기반 | 정답 없음 |
+| --- | --- | --- |
+| 필요한 것 | 질문 + 정답 답변 (+ 근거 문서) | 질문 + 검색된 컨텍스트 + LLM judge |
+| 주요 지표 | Answer Correctness, Claim Recall, EM, Citation Recall | Faithfulness, Answer Relevance, Citation Support, Refusal |
+| 측정하는 것 | 맞았는가 | 근거에 충실한가, 질문에 맞게 답했는가 |
+| 놓치는 것 | 정답에 없는 환각 덧붙임 (정답과 모순되지 않으면) | 검색이 틀렸을 때의 충실한 오답 |
+| 신뢰도 좌우 요소 | 정답 답변 품질, judge 품질 | judge 품질 (편향, 모델 버전) |
+| 적용 범위 | 골든셋 질의 (50~200개) | 모든 질의 |
+| 주로 쓰는 단계 | 생성 설정 비교, 회귀 테스트 | 환각 감시, 운영 모니터링 |
+
+- 두 계열은 서로 대신하지 않는다. 맞았는지는 정답 기반으로, 환각은 Faithfulness로 따로 본다.
+- 두 계열의 절댓값은 섞어서 비교하지 않는다.
+
+## 검색 평가와 분리하기
+
+생성 점수가 낮을 때 원인이 검색인지 생성인지 나눠 봐야 개선할 곳을 정할 수 있다.
+
+### 컨텍스트 두 가지로 평가
+
+| 평가 | 컨텍스트 | 보는 것 |
+| --- | --- | --- |
+| 생성기 단독 | 골든셋 근거 문서(oracle context)를 그대로 넣음 | 근거가 완벽할 때 생성기가 얼마나 잘 답하는가 (생성 상한) |
+| 전체 파이프라인 | 실제 검색 결과 top-k를 넣음 | 사용자가 실제로 받는 답변 품질 |
+
+- 두 점수의 차이가 검색 때문에 잃는 몫이다. 차이가 크면 [04-advanced-rag](../../04-advanced-rag/README.md)의 검색 기법이 우선이고, 생성기 단독 점수가 낮으면 프롬프트나 모델이 우선이다.
+
+### 질의별 원인 나누기
+
+검색 지표(Recall@5)와 생성 지표(Answer Correctness)를 질의마다 같이 보면 네 칸으로 나뉜다.
+
+| | 답변 맞음 | 답변 틀림 |
+| --- | --- | --- |
+| **검색 성공** (Recall@5 > 0) | 정상 | **생성 문제**: 근거를 받고도 틀림 → 프롬프트, 모델 |
+| **검색 실패** (Recall@5 = 0) | **확인 필요**: 근거 없이 맞음 → 모델 사전 지식 또는 우연. Faithfulness 확인 | **검색 문제** → 검색 기법 |
+
+- "검색 실패 + 답변 맞음"은 좋은 결과가 아니다. 문서가 바뀌면 틀릴 수 있는 답변이다.
+- 칸별 질의 수를 결과에 함께 기록한다.
+
+## 메인 지표 (초안)
+
+| 용도 | 계열 | 지표 | 이유 |
+| --- | --- | --- | --- |
+| 기준 지표 | 정답 기반 | **Answer Correctness** (전체 파이프라인) | 사용자가 받는 답이 맞는가 |
+| 생성 상한 | 정답 기반 | Answer Correctness (oracle context) | 검색과 생성 문제 분리 |
+| 환각 | 정답 없음 | **Faithfulness** | 정답 기반 지표가 못 보는 근거 없는 내용 |
+| 단답형 보조 | 정답 기반 | 정규화 후 EM | judge 없이 빠르게 확인 |
+| 거절 | 정답 기반 | 답 없음 질의 거절 정확도, 과잉 거절률 | 무조건 답하거나 무조건 거절하는 설정 걸러내기 |
+| 골든셋 밖 / 운영 | 정답 없음 | Faithfulness, Answer Relevance, Refusal Appropriateness | 골든셋이 닿지 않는 질의의 답변 품질 추적 |
+
+- 이후 프롬프트, 모델, 컨텍스트 구성 비교는 이 표의 기준 지표와 Faithfulness를 함께 본다.
+
+## 실험 조건
+
+| 항목 | 값 |
+| --- | --- |
+| 프로젝트 / 커밋 | - |
+| 골든셋 버전 | - (질문 수, 답변 유형 분포, 답 없음 질의 비율, 생성일) |
+| 생성 모델 / 버전 | - |
+| 생성 프롬프트 버전 | - |
+| 생성 설정 | - (temperature, 최대 토큰) |
+| 컨텍스트 | - (검색기, top-k, 청크 크기 / oracle) |
+| 정규화 규칙 | - (EM, Token F1을 쓸 때) |
+| judge 모델 / 프롬프트 버전 | - (Answer Correctness, Faithfulness 각각) |
+| judge temperature, 판정 질의 수 | - |
+
+## 결과: 기준선
+
+### 정답 기반
+
+| 설정 | 컨텍스트 | Answer Correctness | Claim Recall | 모순 포함 답변 비율 | EM (단답형) | 거절 정확도 | 과잉 거절률 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 기준 프롬프트 | oracle | - | - | - | - | - | - |
+| 기준 프롬프트 | BM25 top-5 | - | - | - | - | - | - |
+
+### 정답 없음
+
+| 설정 | 컨텍스트 | Faithfulness | Answer Relevance | Citation Support | Citation Coverage |
+| --- | --- | --- | --- | --- | --- |
+| 기준 프롬프트 | BM25 top-5 | - | - | - | - |
+
+### 원인 나누기 (BM25 top-5)
+
+| | 답변 맞음 | 답변 틀림 |
+| --- | --- | --- |
+| 검색 성공 | - | - |
+| 검색 실패 | - | - |
+
+### 두 계열 일치도
+
+| 확인 | 값 |
+| --- | --- |
+| Faithfulness 판정과 사람 판정 일치율 / Cohen's kappa | - |
+| 오답 중 Faithfulness가 낮게 나온 비율 | - |
+
+## 관련 코드
+
+- 생성, 지표 계산 코드, judge 프롬프트: - (lawlens의 답변 생성이 아직 구현 전. 구현되면 [99-projects/01-lawlens](../../99-projects/01-lawlens.md)를 거쳐 링크)
+- 실행 방법은 연결된 프로젝트 README 참고
+- 참고 라이브러리: `ragas`, `deepeval` (Faithfulness, Answer Relevance 등 구현 포함. 지표 정의와 프롬프트가 라이브러리마다 다르므로 버전을 기록한다)
