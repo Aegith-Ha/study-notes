@@ -57,4 +57,59 @@
 - 기준 축이 엇갈리면 **평가 도구**(골든셋, judge)를 먼저 의심하고, 단계 축이 엇갈리면 **시스템**(검색기, 생성기)을 의심한다.
 - 질의별 원인 나누기 표는 [02-generation-metrics](./02-generation-metrics/README.md)의 "검색 평가와 분리하기" 참고
 
+## 평가용 오픈소스 도구
+
+지표 계산, judge 평가, 검증 통계, 골든셋 판정에 많이 쓰는 오픈소스와 라이브러리를 용도별로 정리한다. 위 표의 "평가 도구"(골든셋, judge)와 구분해서, 여기서는 그 작업을 돕는 소프트웨어를 말한다.
+
+### 검색 지표 (정답 기반)
+
+| 도구 | 특징 | 관련 노트 |
+| --- | --- | --- |
+| `trec_eval` | TREC 공식 C 도구. 다른 도구가 결과를 이 도구와 맞춘다 | [01-retrieval-metrics](./01-retrieval-metrics/01-reference-based.md) |
+| `pytrec_eval` | trec_eval의 파이썬 래퍼. qrels와 검색 결과를 dict로 넣어 계산 | 위와 같음 |
+| `ranx` | 빠르고 쓰기 쉬움. 여러 검색 결과 비교표, 유의성 검정, RRF 같은 결과 융합까지 지원 | 위와 같음, [04-advanced-rag/01-hybrid-search](../04-advanced-rag/01-hybrid-search/README.md) |
+| `ir-measures` | 여러 백엔드를 하나의 인터페이스로. Judged@k, condensed 지표(nDCG′) 지원 | 위와 같음, [03-golden-set/02-pooling](./03-golden-set/02-pooling.md) |
+| BEIR, MTEB | 공개 검색·임베딩 벤치마크. 모델 후보를 거를 때 순위표로 참고 | [02-retrieval-basics/02-dense-retrieval](../02-retrieval-basics/02-dense-retrieval/README.md) |
+
+### RAG·생성 평가 프레임워크 (judge 기반 지표 포함)
+
+| 도구 | 특징 | 관련 노트 |
+| --- | --- | --- |
+| `ragas` | RAG 전용. Faithfulness, Answer Relevance, Context Precision/Recall 등. 합성 테스트셋 생성 기능 | [02-generation-metrics](./02-generation-metrics/README.md), [03-golden-set/00-generation-methods](./03-golden-set/00-generation-methods.md) |
+| `deepeval` | pytest처럼 테스트로 작성. RAG 지표, 기준표 기반 judge(G-Eval), CI 연결이 쉬움 | [05-regression-ci](./05-regression-ci/README.md) |
+| `promptfoo` | YAML로 프롬프트·모델 비교와 회귀 테스트 작성. 공격(레드팀) 테스트 기능 | [05-regression-ci](./05-regression-ci/README.md), [06-llmops/03-security](../06-llmops/03-security/README.md) |
+| TruLens | Context Relevance, Groundedness, Answer Relevance 중심. 실행 기록 추적 | [02-generation-metrics](./02-generation-metrics/02-reference-free.md) |
+| Inspect | 평가 과제를 코드로 정의하는 범용 LLM 평가 프레임워크 | - |
+| `lm-evaluation-harness` | 공개 벤치마크로 모델 자체를 평가. RAG 시스템 평가용은 아님 | - |
+
+### 추적과 운영 모니터링 (평가 기능 포함)
+
+| 도구 | 특징 | 관련 노트 |
+| --- | --- | --- |
+| Langfuse | 트레이싱, 데이터셋, judge 평가, 사람 점수 수집 | [06-llmops/01-tracing](../06-llmops/01-tracing/README.md) |
+| Arize Phoenix | 트레이싱과 RAG 평가, 임베딩 시각화 | 위와 같음 |
+| MLflow | `mlflow.evaluate`로 LLM 평가와 실험 기록 | - |
+
+### judge 검증과 통계
+
+| 도구 | 용도 | 관련 노트 |
+| --- | --- | --- |
+| `scikit-learn` | `cohen_kappa_score` (가중 kappa 포함) | [04-llm-judge/02-human-agreement](./04-llm-judge/02-human-agreement.md) |
+| `krippendorff` | 판정자가 3명 이상이거나 빠진 판정이 있을 때의 일치도 | 위와 같음 |
+| `scipy`, `statsmodels` | McNemar 검정, bootstrap | [05-regression-ci/01-gate-design](./05-regression-ci/01-gate-design.md) |
+
+### 골든셋 판정(라벨링)
+
+| 도구 | 특징 | 관련 노트 |
+| --- | --- | --- |
+| Label Studio | 범용 라벨링. 질문-문서 관련성 판정 화면을 직접 구성 | [03-golden-set/03-judging-and-review](./03-golden-set/03-judging-and-review.md) |
+| Argilla | LLM·RAG 데이터 검수와 사람 피드백 수집에 특화 | 위와 같음 |
+
+### 고를 때 주의할 점
+
+- **검색 지표는 직접 구현하지 않는다.** `ranx`나 `ir-measures`를 쓰고, 노트의 손계산 예시를 테스트로 넣어 결과를 확인한다([05-regression-ci](./05-regression-ci/01-gate-design.md) L0).
+- **이름이 같아도 정의가 다르다.** 예를 들어 `ragas`의 Context Recall은 정답 답변을 기준으로 계산하고, 노트의 Recall@k는 qrels를 기준으로 계산한다. 프레임워크 지표를 쓸 때는 계산 방식을 확인하고 노트의 지표와 이름을 구분해 기록한다.
+- **프레임워크의 judge도 검증한다.** 내장 judge 프롬프트는 도구마다, 버전마다 다르다. 도구 이름과 버전을 기록하고 [04-llm-judge](./04-llm-judge/README.md) 방식대로 사람 판정과 맞춰 본다.
+- **변화가 빠르다.** 이 목록은 2026년 11월 기준이다. 도입 전에 최신 문서, 유지 상태, 라이선스를 확인한다.
+
 노트 작성 방식은 루트 [README](../README.md)의 작성 규칙 참고.
