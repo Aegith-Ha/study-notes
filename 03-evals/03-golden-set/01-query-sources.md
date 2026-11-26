@@ -3,7 +3,7 @@
 평가셋은 **질의**와 **정답 문서** 한 세트로 이루어진다. 질의는 아래 네 가지 소스(A~D) 중 하나로 만들고, 소스를 바꾸거나 섞어 쓸 수 있다. 정답은 소스와 관계없이 **같은 방식**으로 정한다. 검색 결과를 모아 후보를 만들고(pool), 후보마다 등급을 판정한다(judge).
 
 - 소스 비중, 질문 수, 판정 기준 등 이 프로젝트의 결정은 [README](./README.md) 사양 참고
-- 일반적인 생성 방법과의 대응은 [00-generation-methods](./00-generation-methods.md) 8장 참고
+- 각 소스가 어떤 일반적인 생성 방법의 조합인지는 아래 "생성 방법과의 대응" 참고. 방법별 설명은 [00-generation-methods](./00-generation-methods.md)
 
 소스마다 다른 것은 두 가지뿐이다.
 
@@ -66,6 +66,20 @@ FAQ, 고객 문의 답변, 전문가 상담 기록처럼 **질문과 근거 문�
 | B 문서→질문 | 문서 | 있음 | 낮음 | 중 | 높음 | 진단용 |
 | C 상황 시나리오 | 주제 목록 | 없음 | 높음 | pool 의존 | 중 | 보완, A가 없으면 주력 |
 | D 사용 로그 | 실제 사용자 | 약함/없음 | 가장 높음 | pool 의존 | 중 | 서비스를 연 뒤 |
+
+## 생성 방법과의 대응
+
+각 소스는 [00-generation-methods](./00-generation-methods.md)의 단계별 방법을 조합한 것이다.
+
+| 질문 소스 | 질문 만들기 | 정답 후보 모으기 | 판정 |
+| --- | --- | --- | --- |
+| A 기존 질의응답 데이터 | 기존 자료 재작성 | 자료가 근거로 든 문서(seed) + Pooling | LLM-as-a-Judge + Human Annotation |
+| B 문서 → 질문 | Synthetic, Known-Item | 출발 문서(seed) + Pooling | LLM-as-a-Judge + Human Annotation |
+| C 상황 시나리오 | 사람이 직접 작성 | Pooling | LLM-as-a-Judge + Human Annotation |
+| D 실제 사용 로그 | User Log | Pooling (+ 클릭 기록) | LLM-as-a-Judge + Human Annotation |
+
+- 소스마다 다른 것은 질문 만들기와 seed 유무뿐이고, 판정은 네 소스 모두 같다(아래 공통 정답 단계).
+- Weak Supervision은 메타데이터가 있으면 정답 후보를 늘리는 데, Active Learning은 사람 검수 대상을 고르는 데 덧붙인다.
 
 ## 공통 정답 단계 (모든 소스)
 
