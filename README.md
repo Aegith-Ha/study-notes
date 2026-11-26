@@ -82,7 +82,9 @@
 
 | Topic | GitHub README | Velog 원문 | 프로젝트 링크 |
 | --- | --- | --- | --- |
-| 지표 개선 레버 (무엇을 바꿀 수 있나, 시도 순서) | [00-improvement-levers](./04-advanced-rag/00-improvement-levers.md) | - | - |
+| 지표 개선 레버 (전체 개요) | [README](./04-advanced-rag/00-improvement-levers/README.md) | - | - |
+| 레버 지도: 무엇을 바꿀 수 있나 | [01-lever-map](./04-advanced-rag/00-improvement-levers/01-lever-map.md) | - | - |
+| 시도 순서와 실험 규칙 | [02-order-and-rules](./04-advanced-rag/00-improvement-levers/02-order-and-rules.md) | - | - |
 | 하이브리드 검색 | [README](./04-advanced-rag/01-hybrid-search/README.md) | - | - |
 | 결과 합치기 방법 (가중합, RRF) | [01-fusion-methods](./04-advanced-rag/01-hybrid-search/01-fusion-methods.md) | - | - |
 | 하이브리드 조정과 분석 | [02-tuning-and-analysis](./04-advanced-rag/01-hybrid-search/02-tuning-and-analysis.md) | - | - |

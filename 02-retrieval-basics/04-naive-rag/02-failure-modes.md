@@ -4,7 +4,7 @@ naive RAG에서 자주 생기는 실패를 유형별로 나누고, 어떤 지표
 
 - 폴더 요약과 메인 결정은 [README](./README.md) 참고
 - 파이프라인 구조는 [01-pipeline](./01-pipeline.md) 참고
-- 반대로 바꿀 수 있는 것(레버)에서 출발해 정리한 목록은 [04-advanced-rag/00-improvement-levers](../../04-advanced-rag/00-improvement-levers.md) 참고
+- 반대로 바꿀 수 있는 것(레버)에서 출발해 정리한 목록은 [04-advanced-rag/00-improvement-levers](../../04-advanced-rag/00-improvement-levers/README.md) 참고
 
 ## 1. 실패 유형
 

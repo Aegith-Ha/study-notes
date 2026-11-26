@@ -4,12 +4,13 @@
 
 각 기법은 [03-evals](../03-evals/README.md) 지표로 기준선 대비 개선 폭을 비교한다. 기준선(BM25, dense, 기본 RAG)은 [02-retrieval-basics](../02-retrieval-basics/README.md)에서 만든다.
 
-- 지표를 올리기 위해 바꿀 수 있는 것(레버)과 시도 순서는 [00-improvement-levers](./00-improvement-levers.md)에 모아 두었다. 아래 주제를 고르기 전에 먼저 본다.
+- 지표를 올리기 위해 바꿀 수 있는 것(레버)과 시도 순서는 [00-improvement-levers](./00-improvement-levers/README.md)에 모아 두었다. 아래 주제를 고르기 전에 먼저 본다.
 
 ## Topics
 
 | Topic | 내용 | 상태 |
 | --- | --- | --- |
+| [00-improvement-levers](./00-improvement-levers/README.md) | 지표 개선 레버 전체 개요: 레버 지도, 시도 순서, 실험 규칙 | 초안 |
 | [01-hybrid-search](./01-hybrid-search/README.md) | 하이브리드 검색 (BM25 + 벡터) | 초안 |
 | [02-reranking](./02-reranking/README.md) | 리랭커 (cross-encoder) 도입 | 초안 |
 | [03-query-transform](./03-query-transform/README.md) | 쿼리 재작성, HyDE, 메타데이터 필터링 | 초안 |
