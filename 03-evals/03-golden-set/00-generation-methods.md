@@ -4,6 +4,7 @@
 
 - 질문 소스(A~D)별 구체적인 방법은 [01-query-sources](./01-query-sources.md) 참고
 - 정답 후보를 모으는 Pooling은 [02-pooling](./02-pooling.md) 참고
+- 판정 절차와 검수 대상 고르기의 구체적인 방법은 [03-judging-and-review](./03-judging-and-review.md) 참고
 
 ## 1. 단계별 방법 목록
 
@@ -237,7 +238,7 @@ Golden Set 생성
 
 ## 4. 판정
 
-모은 후보마다 관련성 등급(0 / 1 / 2)을 매기는 방법이다. 이 단계가 골든셋의 **정확도**를 정한다. 등급 정의는 [README](./README.md)의 판정 기준을 따르고, 사람과 LLM이 같은 기준을 쓴다.
+모은 후보마다 관련성 등급(0 / 1 / 2)을 매기는 방법이다. 이 단계가 골든셋의 **정확도**를 정한다. 등급 정의는 [README](./README.md)의 판정 기준을 따르고, 사람과 LLM이 같은 기준을 쓴다. 판정을 합치고 최종 등급을 정하는 절차는 [03-judging-and-review](./03-judging-and-review.md) 2장 참고
 
 | | Human Annotation | LLM-as-a-Judge |
 |---|---|---|
@@ -282,14 +283,14 @@ Golden Set 생성
 
 LLM을 평가자로 사용하여 질문과 문서의 관련성을 판정하는 방법이다. Pooling이나 Weak Supervision으로 모은 후보를 **1차 판정**해서 사람 판정 양을 줄인다.
 
-- 골든셋에서는 judge 판정을 그대로 확정하지 않고 사람이 검수한 것만 넣는다 ([03-update-loop](./03-update-loop.md) 4장).
+- 골든셋에서는 judge 판정을 그대로 확정하지 않고 사람이 검수한 것만 넣는다 ([04-update-loop](./04-update-loop.md) 4장).
 - 쓰기 전에 사람 판정과의 일치도(kappa)를 확인한다. judge 설계와 검증은 [04-llm-judge](../04-llm-judge/README.md) 참고
 
 ---
 
 ## 5. 검수 대상 고르기
 
-사람 검수 예산을 어느 항목에 쓸지 정하는 방법이다. 판정 결과를 바꾸지는 않고, 사람이 볼 순서만 정한다.
+사람 검수 예산을 어느 항목에 쓸지 정하는 방법이다. 판정 결과를 바꾸지는 않고, 사람이 볼 순서만 정한다. 우선 검수 신호, 검수 양, 멈추는 기준은 [03-judging-and-review](./03-judging-and-review.md) 3장 참고
 
 ### 5.1 Active Learning (능동 학습)
 
@@ -323,7 +324,7 @@ LLM 또는 판정 모델 평가
 
 **적합한 목적:** 대규모 Pooling 데이터의 검수 비용 최적화
 
-- 이 프로젝트의 "경계 등급(1) + judge 불일치 항목" 검수([README](./README.md) 구축 흐름)가 이 방식의 단순한 형태다.
+- 이 프로젝트의 "경계 등급(1) + judge 불일치 항목" 검수([README](./README.md) 구축 흐름)가 이 방식의 단순한 형태다. 신호별 우선순위는 [03-judging-and-review](./03-judging-and-review.md) 3.2 참고
 
 ---
 

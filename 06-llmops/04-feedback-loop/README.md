@@ -2,7 +2,7 @@
 
 운영에서 모은 사용자 피드백과 로그를 분류해 원인을 찾고, 골든셋에 반영하고, 개선 후 회귀 테스트로 확인하는 루프를 정리한다. 이 README에는 메인 결정을 두고, 수집과 루프 운영은 하위 노트에 둔다.
 
-- 골든셋 갱신 절차는 [03-evals/03-golden-set/03-update-loop](../../03-evals/03-golden-set/03-update-loop.md) 참고
+- 골든셋 갱신 절차는 [03-evals/03-golden-set/04-update-loop](../../03-evals/03-golden-set/04-update-loop.md) 참고
 - 피드백과 실행 기록 연결은 [01-tracing](../01-tracing/README.md) 참고
 
 ## 하위 노트

@@ -23,7 +23,7 @@ LLM을 채점자로 쓰는 방법을 정리한다. judge는 평가 대상이 아
 | 정답 후보 1차 판정 | 골든셋 pooling, 갱신 루프 불일치 탐지 | 골든셋 | 아니오 (사람이 검수) |
 
 - 정답 기반 지표에도 judge가 쓰인다(Answer Correctness). 정답을 함께 주므로 판정이 더 안정적이지만 검증은 똑같이 한다.
-- judge 판정은 골든셋에 **그대로 넣지 않는다.** 사람이 확인한 것만 넣는다 ([03-update-loop](../03-golden-set/03-update-loop.md)).
+- judge 판정은 골든셋에 **그대로 넣지 않는다.** 사람이 확인한 것만 넣는다 ([04-update-loop](../03-golden-set/04-update-loop.md)).
 
 ## judge 검증과 골든셋의 관계
 

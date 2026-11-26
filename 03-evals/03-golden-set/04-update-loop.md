@@ -2,7 +2,7 @@
 
 골든셋은 한 번 만들고 끝나는 것이 아니라, 정답 기반 평가와 정답 없는 평가를 함께 돌리면서 계속 고쳐 나가는 것이다. 이 노트는 골든셋이 낡는 이유와, judge가 찾은 누락 후보를 골든셋에 반영하는 절차를 정리한다.
 
-- 골든셋을 처음 만드는 방법은 [README](./README.md), [01-query-sources](./01-query-sources.md), [02-pooling](./02-pooling.md) 참고
+- 골든셋을 처음 만드는 방법은 [README](./README.md), [01-query-sources](./01-query-sources.md), [02-pooling](./02-pooling.md), [03-judging-and-review](./03-judging-and-review.md) 참고
 - 정답 기반 지표와 정답 없는 지표는 [01-retrieval-metrics](../01-retrieval-metrics/README.md), [02-generation-metrics](../02-generation-metrics/README.md) 참고
 - judge 설계와 검증은 [04-llm-judge](../04-llm-judge/README.md)에서 다룬다
 - 검색 지표 쪽에서 어떤 신호를 후보로 뽑는지는 [01-retrieval-metrics/02-reference-free](../01-retrieval-metrics/02-reference-free.md) 7장 참고

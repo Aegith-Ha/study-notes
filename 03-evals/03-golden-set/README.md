@@ -10,7 +10,8 @@
 - [00-generation-methods](./00-generation-methods.md): 골든셋 생성 방법을 단계별(질문 만들기, 정답 후보 모으기, 판정, 검수 대상 고르기)로 나눠 비교하고 목적별 조합 정리
 - [01-query-sources](./01-query-sources.md): 평가 질문을 만드는 소스 A~D와 공통 정답 단계
 - [02-pooling](./02-pooling.md): 여러 검색기 결과를 모아 정답 후보를 만드는 방법, 깊이, 한계
-- [03-update-loop](./03-update-loop.md): 정답 기반·정답 없는 평가를 함께 돌리며 골든셋 누락과 노후화를 고치는 갱신 루프
+- [03-judging-and-review](./03-judging-and-review.md): LLM 1차 판정, 판정 병합과 최종 등급 규칙, 사람 검수 대상 고르기(무작위 표본, 우선 검수 신호, 멈추는 기준)
+- [04-update-loop](./04-update-loop.md): 정답 기반·정답 없는 평가를 함께 돌리며 골든셋 누락과 노후화를 고치는 갱신 루프
 
 ## 골든셋의 위치
 
@@ -34,16 +35,16 @@ Pooling, LLM judge는 지표가 아니라 정답을 만드는 과정이다.
 Pool: hybrid · dense · sparse 상위 20개 합집합 + seed (C, D는 바꿔 쓴 질의·문서 제목 검색 결과 추가)
    │
    ▼
-Judge: LLM 1차 판정 (판정 기준은 아래 표)
+Judge: LLM 1차 판정 (판정 기준은 아래 표, 절차는 03-judging-and-review)
    │
    ▼
-사람 검수: 표본 + 경계 등급(1) + judge 불일치 항목
+사람 검수: 무작위 표본 + 우선 검수 신호(seed 불일치, 경계 등급 1, 두 판정 불일치)
    │
    ▼
 정답 답변 작성: 근거 문서로 확인 가능한 내용만, 핵심 주장 목록 함께 (생성 평가용)
    │
    ▼
-골든셋 vN 확정 (dev / test 분리)  ──▶  평가  ──▶  갱신 루프 (03-update-loop)
+골든셋 vN 확정 (dev / test 분리)  ──▶  평가  ──▶  갱신 루프 (04-update-loop)
 ```
 
 ## 사양 (초안)
@@ -53,13 +54,14 @@ Judge: LLM 1차 판정 (판정 기준은 아래 표)
 | 질문 소스 비중 | A 6 : C 3 : B 1. D는 로그가 쌓이면 C를 점차 대체 | [01-query-sources](./01-query-sources.md) 운영 원칙 |
 | 질문 수 | 파일럿 50건 → 목표 200건 | 로드맵 50~200개 |
 | 세는 단위 | 상황(건) 기준. 말투 변형(user / expert)은 판정을 공유하므로 문항 수는 최대 2배 | 01-query-sources 공통 정답 단계 |
-| dev / test | 200건 기준 150 / 50. 소스별·답변 유형별 비율 유지 | [03-update-loop](./03-update-loop.md) 5장 |
+| dev / test | 200건 기준 150 / 50. 소스별·답변 유형별 비율 유지 | [04-update-loop](./04-update-loop.md) 5장 |
 | 답 없음 질의 | 전체의 약 10% | [02-generation-metrics](../02-generation-metrics/01-reference-based.md) 3.4 |
 | 판정 단위 | 문서(또는 섹션). 검색 결과는 청크 → 문서로 매핑 | [01-retrieval-metrics](../01-retrieval-metrics/01-reference-based.md) 3.2 |
 | 등급 | 0 / 1 / 2 (아래 판정 기준) | - |
 | 정답 인정 범위 | 이진 지표(Recall, Precision, MRR)에서는 **1 이상**을 정답으로 본다. nDCG는 등급 그대로 | 부분 근거(1)도 컨텍스트에 필요하므로 |
 | Pooling 깊이 | 상위 20 + seed | [02-pooling](./02-pooling.md) 4장 |
-| 판정 | LLM 1차 판정 + 사람 검수. judge는 검증 통과 후 사용 | [04-llm-judge](../04-llm-judge/02-human-agreement.md) 7장 |
+| 판정 | LLM 1차 판정 + 사람 검수. judge는 검증 통과 후 사용 | [04-llm-judge](../04-llm-judge/02-human-agreement.md) 7장, [03-judging-and-review](./03-judging-and-review.md) |
+| 검수 | 무작위 표본 5~10% + 우선 검수 신호. 표본의 이진 뒤집힘 5% 이하면 나머지는 judge 판정 사용 | [03-judging-and-review](./03-judging-and-review.md) 3장 |
 | 미판정 문서 | 평가 시 0으로 처리하고 Judged@k를 함께 기록 | 01-retrieval-metrics 3.4 |
 | 판정 안 된 문항 | 평가에서 제외 | 01-query-sources 공통 정답 단계 |
 | 점수 보고 | 소스별로 따로, 전체 평균은 참고 | 쉬운 소스(B)가 평균을 끌어올리는 것 방지 |
@@ -74,7 +76,7 @@ Judge: LLM 1차 판정 (판정 기준은 아래 표)
 
 ## 판정 기준 (등급 원본)
 
-사람 판정자, LLM judge, 갱신 루프가 모두 **이 문장 그대로** 쓴다. 기준을 바꾸면 골든셋 메이저 버전을 올린다([03-update-loop](./03-update-loop.md) 7장).
+사람 판정자, LLM judge, 갱신 루프가 모두 **이 문장 그대로** 쓴다. 기준을 바꾸면 골든셋 메이저 버전을 올린다([04-update-loop](./04-update-loop.md) 7장).
 
 | 등급 | 이름 | 정의 | 판정 질문 |
 | --- | --- | --- | --- |
@@ -139,13 +141,13 @@ Q001,DOC_0120,2023-06-01,0,,llm+human
 | --- | --- | --- |
 | `case_id` | 상황 ID | 질문 연결 |
 | `doc_id` | 문서 고정 ID | 검색 지표 |
-| `doc_version` | 문서 개정일 | 노후화 점검 ([03-update-loop](./03-update-loop.md) 6장) |
+| `doc_version` | 문서 개정일 | 노후화 점검 ([04-update-loop](./04-update-loop.md) 6장) |
 | `relevance` | 0 / 1 / 2 | 검색 지표 |
 | `evidence_span` | 정답 근거 문장 (선택) | 청킹 비교용 판정 (01-retrieval-metrics 3.2 C 방식) |
 | `judged_by` | `llm` / `human` / `llm+human` | judge 검증, 갱신 이력 |
 
 - 판정한 문서만 적는다. 이 파일에 없는 문서는 미판정이다.
-- 변경 이력은 별도 파일로 관리한다([03-update-loop](./03-update-loop.md) 7장).
+- 변경 이력은 별도 파일로 관리한다([04-update-loop](./04-update-loop.md) 7장).
 
 ## 관련 코드
 

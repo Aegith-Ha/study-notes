@@ -25,7 +25,7 @@
         [확인] 회귀 테스트 통과 → 배포 → 해당 유형 👎 추이
 ```
 
-- 골든셋 반영 절차(검증, 버전 관리)는 [03-evals/03-golden-set/03-update-loop](../../03-evals/03-golden-set/03-update-loop.md)를 따른다. 이 노트는 그 앞단(운영에서 사례를 고르고 분류하는 부분)을 다룬다.
+- 골든셋 반영 절차(검증, 버전 관리)는 [03-evals/03-golden-set/04-update-loop](../../03-evals/03-golden-set/04-update-loop.md)를 따른다. 이 노트는 그 앞단(운영에서 사례를 고르고 분류하는 부분)을 다룬다.
 
 ## 2. 분류 기준
 

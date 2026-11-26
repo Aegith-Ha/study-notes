@@ -39,7 +39,7 @@ dev 세트 50건, 정답 1개씩인 질의라고 가정
 
 - 골든셋 Pooling 깊이는 20이다([03-golden-set](../../03-evals/03-golden-set/README.md) 사양).
 - 1차 Recall@50은 21~50위 정답이 미판정이라 **낮게 나온다.** 참고용으로 보고 Judged@50을 함께 기록한다.
-- 최종 Recall@5는 리랭커가 21~50위의 **미판정 문서**를 top-5로 올리면 낮게 나올 수 있다. 리랭커 결과 top-5의 Judged@5를 확인하고, 떨어지면 해당 문서를 추가 판정한다([03-update-loop](../../03-evals/03-golden-set/03-update-loop.md)).
+- 최종 Recall@5는 리랭커가 21~50위의 **미판정 문서**를 top-5로 올리면 낮게 나올 수 있다. 리랭커 결과 top-5의 Judged@5를 확인하고, 떨어지면 해당 문서를 추가 판정한다([04-update-loop](../../03-evals/03-golden-set/04-update-loop.md)).
 
 ## 4. 리랭커 효과 평가
 

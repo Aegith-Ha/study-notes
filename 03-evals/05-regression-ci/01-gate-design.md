@@ -36,7 +36,7 @@
 
 ## 3. 어떤 평가셋을 쓰나
 
-골든셋의 dev / test 분리([03-update-loop](../03-golden-set/03-update-loop.md) 5장)를 CI에서도 지킨다.
+골든셋의 dev / test 분리([04-update-loop](../03-golden-set/04-update-loop.md) 5장)를 CI에서도 지킨다.
 
 | 용도 | 평가셋 | 결과 공개 범위 | 이유 |
 | --- | --- | --- | --- |

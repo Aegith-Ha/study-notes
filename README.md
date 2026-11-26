@@ -69,7 +69,8 @@
 | 골든셋 생성 방법 목록 | [00-generation-methods](./03-evals/03-golden-set/00-generation-methods.md) | - | - |
 | 평가 질의 만드는 방법 A~D | [01-query-sources](./03-evals/03-golden-set/01-query-sources.md) | - | - |
 | Pooling 방식 | [02-pooling](./03-evals/03-golden-set/02-pooling.md) | - | - |
-| 골든셋 갱신 루프 | [03-update-loop](./03-evals/03-golden-set/03-update-loop.md) | - | - |
+| 골든셋 판정과 검수 | [03-judging-and-review](./03-evals/03-golden-set/03-judging-and-review.md) | - | - |
+| 골든셋 갱신 루프 | [04-update-loop](./03-evals/03-golden-set/04-update-loop.md) | - | - |
 | LLM judge | [README](./03-evals/04-llm-judge/README.md) | - | - |
 | judge 설계: 채점 기준과 프롬프트 | [01-rubric-design](./03-evals/04-llm-judge/01-rubric-design.md) | - | - |
 | judge 검증: 사람 판정과의 일치도 | [02-human-agreement](./03-evals/04-llm-judge/02-human-agreement.md) | - | - |
