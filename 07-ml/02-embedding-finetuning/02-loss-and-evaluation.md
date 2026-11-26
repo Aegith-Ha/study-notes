@@ -54,7 +54,7 @@
 | 학습 중 | 골든셋 dev | 체크포인트 선택, 하이퍼파라미터 조정 |
 | 최종 | 골든셋 test | 한 번만 실행 |
 | 일반 성능 | 일반 한국어 검색 세트 | 도메인 밖 질문에서 나빠지지 않았는지 (망각) |
-| 유형별 | user / expert 표현, 학습에서 뺀 조문 | 표현 차이 해소, 일반화 |
+| 유형별 | user / expert 표현, 학습에서 뺀 문서 | 표현 차이 해소, 일반화 |
 
 - 지표는 기성 모델 기준선과 같은 조건(Flat 인덱스, 같은 k)으로 잰다([02-retrieval-basics/02-dense-retrieval](../../02-retrieval-basics/02-dense-retrieval/README.md)).
 - 개선 폭이 작으면 같은 문항 대응 비교로 우연인지 확인한다([03-evals/05-regression-ci/01-gate-design](../../03-evals/05-regression-ci/01-gate-design.md)).

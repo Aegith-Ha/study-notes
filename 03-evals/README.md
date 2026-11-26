@@ -10,7 +10,7 @@
 | --- | --- | --- |
 | [01-retrieval-metrics](./01-retrieval-metrics/README.md) | 검색 평가 지표: Recall@k, MRR, NDCG | 초안 |
 | [02-generation-metrics](./02-generation-metrics/README.md) | 생성 평가 지표: 정확성, 답변 관련성 | 초안 |
-| [03-golden-set](./03-golden-set/README.md) | 골든셋 50~200개 구축 (정답 + 근거 문서). 해석례·상황 시나리오로 시작, 실제 사용자 로그로 확대 | 진행 중 |
+| [03-golden-set](./03-golden-set/README.md) | 골든셋 50~200개 구축 (정답 + 근거 문서). 기존 질의응답 데이터·상황 시나리오로 시작, 실제 사용자 로그로 확대 | 진행 중 |
 | [04-llm-judge](./04-llm-judge/README.md) | LLM-as-judge 채점 기준(rubric) 설계, 사람 판단과의 일치도 검증 | 초안 |
 | [05-regression-ci](./05-regression-ci/README.md) | 배포 전 평가셋 자동 실행, CI 회귀 테스트 연결 | 초안 |
 

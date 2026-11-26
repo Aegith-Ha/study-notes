@@ -26,7 +26,7 @@
 | AutoModelForSequenceClassification | 분류, 크로스 인코더 리랭커 |
 
 - 모델과 토크나이저는 **같은 이름·버전**으로 불러온다. 다른 토크나이저를 쓰면 오류 없이 결과만 나빠진다.
-- 최대 길이를 넘는 입력은 잘린다. 긴 조문이 잘리는지 토큰 수를 확인한다([02-retrieval-basics/02-dense-retrieval/02-model-selection](../../02-retrieval-basics/02-dense-retrieval/02-model-selection.md)).
+- 최대 길이를 넘는 입력은 잘린다. 긴 청크가 잘리는지 토큰 수를 확인한다([02-retrieval-basics/02-dense-retrieval/02-model-selection](../../02-retrieval-basics/02-dense-retrieval/02-model-selection.md)).
 - 생성 모델은 대화 템플릿(chat template)을 모델 것으로 적용한다. 틀린 템플릿은 품질을 크게 떨어뜨린다.
 
 ## 3. 한국어 토큰화
@@ -34,7 +34,7 @@
 | 확인 | 이유 |
 | --- | --- |
 | 같은 문장의 토큰 수 | 한국어를 잘게 쪼개는 모델은 같은 길이 제한에 더 적은 내용이 들어감, 비용 증가 |
-| 법령 용어 분해 | "근로기준법" 같은 단어가 어떻게 나뉘는지 |
+| 도메인 용어 분해 | "환불정책" 같은 복합어가 어떻게 나뉘는지 |
 
 - sparse 검색의 형태소 분석과는 다른 문제다. 여기는 모델 입력 단위다([02-retrieval-basics/01-sparse-retrieval](../../02-retrieval-basics/01-sparse-retrieval/README.md)와 비교).
 

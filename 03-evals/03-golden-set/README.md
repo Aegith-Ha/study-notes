@@ -28,10 +28,10 @@ Pooling, LLM judge는 지표가 아니라 정답을 만드는 과정이다.
 질문 소스: A 기존 질의응답(주력) / C 상황 시나리오(보완) / B 문서→질문(진단용) / D 사용 로그(로그가 쌓이면)
    │
    ▼
-질문 정제: 사용자·전문가 말투로 다시 쓰기, 유출 검사(법령명·조문 번호·원문 구절)
+질문 정제: 사용자·전문가 말투로 다시 쓰기, 유출 검사(문서 제목·문서 번호·원문 구절)
    │
    ▼
-Pool: hybrid · dense · sparse 상위 20개 합집합 + seed (C, D는 바꿔 쓴 질의·법령명 검색 결과 추가)
+Pool: hybrid · dense · sparse 상위 20개 합집합 + seed (C, D는 바꿔 쓴 질의·문서 제목 검색 결과 추가)
    │
    ▼
 Judge: LLM 1차 판정 (판정 기준은 아래 표)
@@ -55,7 +55,7 @@ Judge: LLM 1차 판정 (판정 기준은 아래 표)
 | 세는 단위 | 상황(건) 기준. 말투 변형(user / expert)은 판정을 공유하므로 문항 수는 최대 2배 | 01-query-sources 공통 정답 단계 |
 | dev / test | 200건 기준 150 / 50. 소스별·답변 유형별 비율 유지 | [03-update-loop](./03-update-loop.md) 5장 |
 | 답 없음 질의 | 전체의 약 10% | [02-generation-metrics](../02-generation-metrics/01-reference-based.md) 3.4 |
-| 판정 단위 | 문서(조문). 검색 결과는 청크 → 문서로 매핑 | [01-retrieval-metrics](../01-retrieval-metrics/01-reference-based.md) 3.2 |
+| 판정 단위 | 문서(또는 섹션). 검색 결과는 청크 → 문서로 매핑 | [01-retrieval-metrics](../01-retrieval-metrics/01-reference-based.md) 3.2 |
 | 등급 | 0 / 1 / 2 (아래 판정 기준) | - |
 | 정답 인정 범위 | 이진 지표(Recall, Precision, MRR)에서는 **1 이상**을 정답으로 본다. nDCG는 등급 그대로 | 부분 근거(1)도 컨텍스트에 필요하므로 |
 | Pooling 깊이 | 상위 20 + seed | [02-pooling](./02-pooling.md) 4장 |
@@ -84,7 +84,7 @@ Judge: LLM 1차 판정 (판정 기준은 아래 표)
 
 경계 규칙
 - 주제어만 겹치고 답에 필요한 정보가 없으면 **0**이다. 단어 겹침으로 1을 주지 않는다.
-- 개정 전 조문처럼 오래된 자료도 관련성은 내용으로 판정한다. 최신성은 `doc_version`으로 따로 점검한다.
+- 개정 전 문서처럼 오래된 자료도 관련성은 내용으로 판정한다. 최신성은 `doc_version`으로 따로 점검한다.
 - 판정 예시와 judge 프롬프트는 [04-llm-judge/01-rubric-design](../04-llm-judge/01-rubric-design.md) 2장 참고
 
 정답 답변 기준 (생성 평가용)
@@ -102,7 +102,7 @@ Judge: LLM 1차 판정 (판정 기준은 아래 표)
 {
   "query_id": "Q001-user",
   "case_id": "Q001",
-  "question": "전세 계약이 끝났는데 집주인이 보증금을 안 돌려주면 어떻게 하나요?",
+  "question": "결제를 취소했는데 일주일째 환불이 안 들어오면 어떻게 하나요?",
   "variant": "user",
   "source": "C",
   "answer_type": "서술",
@@ -130,15 +130,15 @@ Judge: LLM 1차 판정 (판정 기준은 아래 표)
 
 ```csv
 case_id,doc_id,doc_version,relevance,evidence_span,judged_by
-Q001,LAW_A_0003,2024-01-01,2,"...",human
-Q001,LAW_A_0004,2024-01-01,1,,llm+human
-Q001,LAW_B_0120,2023-06-01,0,,llm+human
+Q001,DOC_0003,2024-01-01,2,"...",human
+Q001,DOC_0004,2024-01-01,1,,llm+human
+Q001,DOC_0120,2023-06-01,0,,llm+human
 ```
 
 | 필드 | 내용 | 쓰는 곳 |
 | --- | --- | --- |
 | `case_id` | 상황 ID | 질문 연결 |
-| `doc_id` | 문서(조문) 고정 ID | 검색 지표 |
+| `doc_id` | 문서 고정 ID | 검색 지표 |
 | `doc_version` | 문서 개정일 | 노후화 점검 ([03-update-loop](./03-update-loop.md) 6장) |
 | `relevance` | 0 / 1 / 2 | 검색 지표 |
 | `evidence_span` | 정답 근거 문장 (선택) | 청킹 비교용 판정 (01-retrieval-metrics 3.2 C 방식) |

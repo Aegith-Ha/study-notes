@@ -21,11 +21,11 @@
 | 개념 | 의미 | 예 |
 | --- | --- | --- |
 | collection | 테이블에 해당하는 저장 단위 | `law_articles` |
-| schema | 필드 정의 | `id`, `doc_id`, `law_name`, `article_title`, `text`, `effective_date`, `embedding` |
+| schema | 필드 정의 | `id`, `doc_id`, `doc_title`, `section_title`, `text`, `effective_date`, `embedding` |
 | 벡터 필드 | 임베딩 저장. 차원 고정 | `embedding` (1024차원) |
-| 스칼라 필드 | 필터·표시용 메타데이터 | `law_name`, `effective_date` |
+| 스칼라 필드 | 필터·표시용 메타데이터 | `doc_title`, `effective_date` |
 | index | 벡터 필드에 거는 검색 인덱스와 척도 | HNSW + COSINE |
-| partition | collection 안의 물리적 구획 | 법령 종류별 (법률 / 시행령 / 시행규칙) |
+| partition | collection 안의 물리적 구획 | 문서 종류별 (정책 / 지침 / 매뉴얼) |
 | 실행 형태 | 가벼운 로컬 실행, 단일 서버, 분산 | 실험은 가벼운 형태로 시작 |
 
 - 척도(metric)는 인덱스를 만들 때 정한다. 임베딩 모델의 권장 척도와 맞춘다([01-embedding-basics](../02-dense-retrieval/01-embedding-basics.md) 2장).
@@ -33,7 +33,7 @@
 
 ## 3. 메타데이터 필터
 
-"2024년 이후 시행된 법률만", "특정 법령 안에서만" 같은 조건 검색이다.
+"2024년 이후 시행된 정책만", "특정 문서 안에서만" 같은 조건 검색이다.
 
 | 방식 | 동작 | 문제 |
 | --- | --- | --- |
@@ -49,7 +49,7 @@
 | 항목 | 내용 |
 | --- | --- |
 | 모델 교체 | 차원이 바뀌면 collection을 새로 만든다. 새 collection을 채운 뒤 바꿔 끼운다 |
-| 문서 갱신 | 개정 조문은 삭제 후 추가 또는 갱신. `doc_id`는 고정하고 `doc_version`으로 구분 ([03-golden-set](../../03-evals/03-golden-set/README.md) 데이터 형식) |
+| 문서 갱신 | 개정된 섹션은 삭제 후 추가 또는 갱신. `doc_id`는 고정하고 `doc_version`으로 구분 ([03-golden-set](../../03-evals/03-golden-set/README.md) 데이터 형식) |
 | 백업 | 벡터 재생성은 비싸다. 정기 백업과 복구 절차를 확인한다 |
 | 메모리 | HNSW는 메모리를 많이 쓴다. 벡터 수 × 차원 × 4바이트보다 넉넉하게 잡는다 |
 | 일관성 | 넣자마자 검색되지 않을 수 있다. 평가 전에 색인 완료를 확인한다 |

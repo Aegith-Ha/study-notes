@@ -83,7 +83,7 @@ B 토큰 (7):   재설정, 링크는, 발송, 후, 12시간, 동안, 유효하�
 | --- | --- | --- |
 | 단답형 (숫자, 날짜, 예/아니오) | 정규화 후 EM | Answer Correctness |
 | 서술형 | Answer Correctness (claim 단위) | BERTScore |
-| 다중 근거 (여러 조문 종합) | Claim Recall | Citation Recall |
+| 다중 근거 (여러 문서 종합) | Claim Recall | Citation Recall |
 | 답 없음 (근거가 문서에 없음) | 거절 정확도 | - |
 
 - 골든셋 질의마다 답변 유형 태그를 달아 두면 유형별로 지표를 나눠 볼 수 있다.
