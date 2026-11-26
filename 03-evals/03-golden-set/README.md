@@ -7,7 +7,7 @@
 
 ## 하위 노트
 
-- [00-generation-methods](./00-generation-methods.md): 골든셋 생성 방법 8가지 (Pooling, Synthetic, Human Annotation 등) 비교와 목적별 선택
+- [00-generation-methods](./00-generation-methods.md): 골든셋 생성 방법을 단계별(질문 만들기, 정답 후보 모으기, 판정, 검수 대상 고르기)로 나눠 비교하고 목적별 조합 정리
 - [01-query-sources](./01-query-sources.md): 평가 질문을 만드는 소스 A~D와 공통 정답 단계
 - [02-pooling](./02-pooling.md): 여러 검색기 결과를 모아 정답 후보를 만드는 방법, 깊이, 한계
 - [03-update-loop](./03-update-loop.md): 정답 기반·정답 없는 평가를 함께 돌리며 골든셋 누락과 노후화를 고치는 갱신 루프

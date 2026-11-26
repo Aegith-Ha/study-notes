@@ -1,6 +1,6 @@
 # 검색 평가 지표 (Retrieval Metrics)
 
-검색 결과를 점수로 바꾸는 방법을 정리한다. 이 README에는 두 지표 계열의 비교와 메인 지표 결정을 두고, 지표별 설명은 하위 노트에 둔다.
+검색 결과를 점수로 바꾸는 방법을 정리한다. 이 README에는 생성 평가와의 차이, 두 지표 계열의 비교, 메인 지표 결정을 두고, 지표별 설명은 하위 노트에 둔다.
 
 - 골든셋을 만드는 방법은 [03-golden-set](../03-golden-set/README.md) 참고
 - 답변 품질 평가는 [02-generation-metrics](../02-generation-metrics/README.md)에서 다룬다
@@ -10,6 +10,29 @@
 
 - [01-reference-based](./01-reference-based.md): 정답 기반 지표 (Recall@k, MRR, nDCG 등). 정의, 손계산 예시, 설계 판단
 - [02-reference-free](./02-reference-free.md): 정답 없는 지표 (Context Relevance, Sufficiency 등). LLM judge 판정, 한계, 정답 기반 지표와 맞춰 보기
+
+## 생성 평가와의 차이
+
+검색 지표는 검색기가 가져온 **문서 목록**을 채점하고, 생성 지표([02-generation-metrics](../02-generation-metrics/README.md))는 LLM이 쓴 **답변**을 채점한다.
+
+| | 검색 지표 (이 폴더) | 생성 지표 |
+| --- | --- | --- |
+| 평가 대상 | 검색 결과 (문서·청크의 순위 목록) | 생성된 답변 (텍스트) |
+| 묻는 것 | 필요한 근거를 가져왔나, 위쪽에 있나 | 답이 맞나, 근거에 충실한가 |
+| 정답 형태 | 정답 문서 목록과 등급 (qrels) | 정답 답변, 정답 주장(claim) 목록 |
+| 정답 기반 지표 | Recall@k, Precision@k, MRR, nDCG, MAP | EM, Token F1, Answer Correctness, Claim Recall, 인용 정확도 |
+| 정답 없는 지표 (judge) | Context Relevance, Sufficiency, Judge nDCG | Faithfulness, Answer Relevance, Citation Support, 거절 |
+| 점수가 낮으면 고칠 곳 | 검색기, 청킹, 하이브리드, 리랭커 | 프롬프트, 생성 모델, 컨텍스트 순서 |
+
+- **결과물 종류로 나눈다.** 쿼리 재작성이나 리랭킹에 LLM을 써도, 사용자에게 보이는 결과가 문서 목록이면 검색 지표로 평가한다. 생성 지표는 LLM이 쓴 답변이나 요약이 결과물일 때 쓴다.
+- **정답 기반 / 정답 없음과는 다른 축이다.** 이 구분(검색 / 생성)은 폴더로, 정답 유무는 폴더 안의 파일(`01-reference-based`, `02-reference-free`)로 나눈다. 두 축을 합친 2×2 표는 [03-evals README](../README.md) 참고
+- **RAG에서는 이어져 있다.** 생성 지표는 검색 결과로 만든 답변을 채점하므로, 답이 틀리면 검색 지표로 원인을 나눈다. 검색 Recall과 답변 정답 여부로 질의를 네 칸으로 나누는 방법은 [02-generation-metrics](../02-generation-metrics/README.md)의 "검색 평가와 분리하기" 참고
+
+| 시스템 | 검색 지표 | 생성 지표 |
+| --- | --- | --- |
+| 검색 결과만 보여 주는 검색 화면 | 사용 | 사용 안 함 |
+| RAG (검색 + 답변) | 사용 (원인 진단용) | 사용 (최종 품질) |
+| 검색 없이 LLM만 쓰는 답변 | 사용 안 함 | 사용 |
 
 ## 두 지표 계열 비교
 

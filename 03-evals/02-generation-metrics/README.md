@@ -1,6 +1,6 @@
 # 생성 평가 지표 (Generation Metrics)
 
-검색된 컨텍스트로 만든 답변을 점수로 바꾸는 방법을 정리한다. 이 README에는 두 지표 계열의 비교, 검색 평가와 분리하는 방법, 메인 지표 결정을 두고, 지표별 설명은 하위 노트에 둔다.
+검색된 컨텍스트로 만든 답변을 점수로 바꾸는 방법을 정리한다. 이 README에는 검색 평가와의 차이, 두 지표 계열의 비교, 검색 평가와 분리하는 방법, 메인 지표 결정을 두고, 지표별 설명은 하위 노트에 둔다.
 
 - 검색 평가는 [01-retrieval-metrics](../01-retrieval-metrics/README.md) 참고
 - 골든셋을 만드는 방법은 [03-golden-set](../03-golden-set/README.md) 참고
@@ -10,6 +10,30 @@
 
 - [01-reference-based](./01-reference-based.md): 정답 기반 지표 (EM, Token F1, Answer Correctness, Citation 등). 정의, 손계산 예시, 설계 판단
 - [02-reference-free](./02-reference-free.md): 정답 없는 지표 (Faithfulness, Answer Relevance, Citation Support 등). LLM judge 판정, 한계, 정답 기반 지표와 맞춰 보기
+
+## 검색 평가와의 차이
+
+생성 지표는 LLM이 쓴 **답변**을 채점하고, 검색 지표([01-retrieval-metrics](../01-retrieval-metrics/README.md))는 검색기가 가져온 **문서 목록**을 채점한다.
+
+| | 검색 지표 | 생성 지표 (이 폴더) |
+| --- | --- | --- |
+| 평가 대상 | 검색 결과 (문서·청크의 순위 목록) | 생성된 답변 (텍스트) |
+| 묻는 것 | 필요한 근거를 가져왔나, 위쪽에 있나 | 답이 맞나, 근거에 충실한가 |
+| 정답 형태 | 정답 문서 목록과 등급 (qrels) | 정답 답변, 정답 주장(claim) 목록 |
+| 정답 기반 지표 | Recall@k, Precision@k, MRR, nDCG, MAP | EM, Token F1, Answer Correctness, Claim Recall, 인용 정확도 |
+| 정답 없는 지표 (judge) | Context Relevance, Sufficiency, Judge nDCG | Faithfulness, Answer Relevance, Citation Support, 거절 |
+| 점수가 낮으면 고칠 곳 | 검색기, 청킹, 하이브리드, 리랭커 | 프롬프트, 생성 모델, 컨텍스트 순서 |
+
+- **결과물 종류로 나눈다.** 생성 지표는 LLM이 쓴 답변이나 요약이 결과물일 때 쓴다. 중간에 LLM을 써도 최종 결과가 문서 목록이면 생성 지표를 쓰지 않는다.
+- **채점 대상이 답변이면 생성 지표다.** Faithfulness, Citation Support는 검색 결과를 함께 보지만 점수가 매겨지는 것은 답변이므로 이 폴더에 둔다.
+- **정답 기반 / 정답 없음과는 다른 축이다.** 이 구분(검색 / 생성)은 폴더로, 정답 유무는 폴더 안의 파일(`01-reference-based`, `02-reference-free`)로 나눈다. 두 축을 합친 2×2 표는 [03-evals README](../README.md) 참고
+- **RAG에서는 이어져 있다.** 답변은 검색 결과로 만들어지므로, 생성 점수가 낮으면 원인이 검색인지 생성인지 나눠야 한다. 방법은 아래 "검색 평가와 분리하기" 참고
+
+| 시스템 | 검색 지표 | 생성 지표 |
+| --- | --- | --- |
+| 검색 결과만 보여 주는 검색 화면 | 사용 | 사용 안 함 |
+| RAG (검색 + 답변) | 사용 (원인 진단용) | 사용 (최종 품질) |
+| 검색 없이 LLM만 쓰는 답변 | 사용 안 함 | 사용 (Faithfulness처럼 컨텍스트가 필요한 지표는 제외) |
 
 ## 두 지표 계열 비교
 
