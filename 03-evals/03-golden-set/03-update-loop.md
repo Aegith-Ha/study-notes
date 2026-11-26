@@ -5,6 +5,7 @@
 - 골든셋을 처음 만드는 방법은 [README](./README.md), [01-query-sources](./01-query-sources.md), [02-pooling](./02-pooling.md) 참고
 - 정답 기반 지표와 정답 없는 지표는 [01-retrieval-metrics](../01-retrieval-metrics/README.md), [02-generation-metrics](../02-generation-metrics/README.md) 참고
 - judge 설계와 검증은 [04-llm-judge](../04-llm-judge/README.md)에서 다룬다
+- 검색 지표 쪽에서 어떤 신호를 후보로 뽑는지는 [01-retrieval-metrics/02-reference-free](../01-retrieval-metrics/02-reference-free.md) 7장 참고
 
 ## 1. 왜 갱신해야 하나
 
