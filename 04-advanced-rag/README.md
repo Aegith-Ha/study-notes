@@ -14,5 +14,6 @@
 | [04-chunking](./04-chunking/README.md) | 문서 구조 기반 청킹, 부모-자식 청크, contextual retrieval | 초안 |
 | [05-document-parsing](./05-document-parsing/README.md) | 표 / PDF 레이아웃 / 이미지 문서 파싱 개선 | 초안 |
 | [06-long-context-vs-rag](./06-long-context-vs-rag/README.md) | 긴 컨텍스트 vs RAG 비교 실험 (비용, 지연시간, 정확도) | 초안 |
+| [07-graph-hierarchical](./07-graph-hierarchical/README.md) | 그래프 검색(참조 링크 확장, GraphRAG), 계층 요약 검색(RAPTOR) | 초안 |
 
 노트 작성 방식은 루트 [README](../README.md)의 작성 규칙 참고.

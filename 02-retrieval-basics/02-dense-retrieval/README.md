@@ -7,7 +7,7 @@
 
 ## 하위 노트
 
-- [01-embedding-basics](./01-embedding-basics.md): bi-encoder 원리, sparse와 비교, 유사도 척도와 정규화 손계산, 인코딩할 때 주의할 점
+- [01-embedding-basics](./01-embedding-basics.md): bi-encoder 원리, sparse와 비교, 유사도 척도와 정규화 손계산, 인코딩할 때 주의할 점, 단일 벡터와 멀티 벡터(ColBERT) 비교
 - [02-model-selection](./02-model-selection.md): 모델 고르는 기준, 공개 순위표의 한계, 골든셋으로 비교하는 방법, sparse와 dense를 함께 보는 법
 
 ## 메인 결정 (초안)
@@ -21,6 +21,7 @@
 | 입력 구성 | 문서 제목 + 섹션 제목 + 본문 | 맥락 제공. 본문만 넣은 경우와 비교 |
 | 청크 | sparse와 같은 섹션 단위. 최대 입력 길이를 넘으면 나눔 | sparse와 같은 단위로 비교 |
 | 실행 | 로컬 실행 우선 | 데이터 외부 전송 제약 |
+| 멀티 벡터 | 1차 검색은 단일 벡터로 하고, 멀티 벡터는 리랭킹 후보로 cross-encoder와 비교 | 저장량이 수십 배라 1차 검색에 쓰기 부담 |
 
 ## 관련 코드
 

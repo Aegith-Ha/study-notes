@@ -6,7 +6,7 @@
 - [`01-python/`](./01-python/) : Python 기초 및 실습
 - [`02-retrieval-basics/`](./02-retrieval-basics/README.md) : 검색 기초 (sparse·dense 검색, 벡터 인덱스, 기본 RAG). 모든 비교의 기준선
 - [`03-evals/`](./03-evals/README.md) : 평가 체계 (검색·생성 평가, 골든셋, LLM judge, 회귀 테스트)
-- [`04-advanced-rag/`](./04-advanced-rag/README.md) : 고급 RAG 기법 (하이브리드, 리랭커, 쿼리 변환, 청킹, 파싱)
+- [`04-advanced-rag/`](./04-advanced-rag/README.md) : 고급 RAG 기법 (하이브리드, 리랭커, 쿼리 변환, 청킹, 파싱, 그래프·계층 검색)
 - [`05-agents/`](./05-agents/README.md) : 에이전트 확장 (Agentic RAG, tool calling·MCP, 계획-실행-검증)
 - [`06-llmops/`](./06-llmops/README.md) : 운영 (트레이싱, 비용, 보안, 피드백 루프)
 - [`07-ml/`](./07-ml/README.md) : ML 심화 (파인튜닝, LoRA, 서빙)
@@ -32,7 +32,7 @@
 | --- | --- | --- |
 | [Retrieval Basics](./02-retrieval-basics/README.md) | sparse(BM25), dense(임베딩), 벡터 인덱스, 기본 RAG | 진행 중 |
 | [Evals](./03-evals/README.md) | 검색 평가, 생성 평가, 골든셋, LLM judge, 회귀 테스트 | 진행 중 |
-| [Advanced RAG](./04-advanced-rag/README.md) | 하이브리드 검색, 리랭커, 쿼리 변환, 청킹, 문서 파싱, 긴 컨텍스트 비교 | 진행 중 |
+| [Advanced RAG](./04-advanced-rag/README.md) | 하이브리드 검색, 리랭커, 쿼리 변환, 청킹, 문서 파싱, 긴 컨텍스트 비교, 그래프·계층 검색 | 진행 중 |
 | [Agents](./05-agents/README.md) | Agentic RAG, function calling·MCP, 계획-실행-검증 루프 | 진행 중 |
 | [LLMOps](./06-llmops/README.md) | 트레이싱, 비용 최적화, 보안, 피드백 루프 | 진행 중 |
 | [ML](./07-ml/README.md) | PyTorch·HF, 임베딩 파인튜닝, LoRA/QLoRA, vLLM 서빙 | 진행 중 |
@@ -100,6 +100,9 @@
 | 긴 컨텍스트 vs RAG | [README](./04-advanced-rag/06-long-context-vs-rag/README.md) | - | - |
 | 실험 설계 | [01-experiment-design](./04-advanced-rag/06-long-context-vs-rag/01-experiment-design.md) | - | - |
 | 비용과 지연 계산 | [02-cost-latency](./04-advanced-rag/06-long-context-vs-rag/02-cost-latency.md) | - | - |
+| 그래프·계층 기반 검색 | [README](./04-advanced-rag/07-graph-hierarchical/README.md) | - | - |
+| 그래프 기반 검색 | [01-graph-retrieval](./04-advanced-rag/07-graph-hierarchical/01-graph-retrieval.md) | - | - |
+| 계층 요약 검색 | [02-hierarchical-summary](./04-advanced-rag/07-graph-hierarchical/02-hierarchical-summary.md) | - | - |
 
 ### Agents
 
