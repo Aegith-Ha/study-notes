@@ -8,7 +8,8 @@
 ## 하위 노트
 
 - [01-inverted-index-tfidf](./01-inverted-index-tfidf.md): 역색인 구조, TF-IDF, 손계산 예시, 한국어 토큰화
-- [02-bm25](./02-bm25.md): BM25 공식, 손계산 예시(TF-IDF와 순위 비교), 파라미터 k1·b 조정, 변형(BM25+, BM25L, BM25F), 학습된 sparse 두 종류(가중치만: bge-m3 sparse / 확장형: SPLADE)와 비교
+- [02-bm25](./02-bm25.md): BM25 공식, 손계산 예시(TF-IDF와 순위 비교), 파라미터 k1·b 조정, 변형(BM25+, BM25L, BM25F), 학습된 sparse와의 관계
+- [03-learned-sparse](./03-learned-sparse.md): 학습된 sparse 두 종류(가중치만: bge-m3 sparse / 확장형: SPLADE), 학습 방식, 손계산, SPLADE와의 관계, 비교할 때 주의
 
 ## sparse 검색의 역할
 

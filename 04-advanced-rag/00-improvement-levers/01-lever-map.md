@@ -42,7 +42,7 @@
 | L1 | 문서 파싱 | 표·PDF 레이아웃 처리, 이미지 설명 | 특정 문서 유형의 Recall | 필요 | 중 | [05-document-parsing](../05-document-parsing/README.md) |
 | L2 | 청킹 | 크기, 겹침, 구조 단위, 부모-자식, 청크 앞 맥락 추가 | Recall@k, Set Recall, Context Sufficiency, Claim Recall | 필요 | 중 | [04-chunking](../04-chunking/README.md) |
 | L3 | 토큰화 (sparse) | 형태소 분석기, 사용자 사전, n-gram | BM25 Recall, 코드·고유명사 질문 | 필요 | 낮음 | [01-inverted-index-tfidf](../../02-retrieval-basics/01-sparse-retrieval/01-inverted-index-tfidf.md) 4장 |
-| L3 | BM25 설정 | k1·b, BM25F(필드별 가중치), 학습된 sparse로 교체 | BM25 Recall | 일부 필요 | 낮음 | [02-bm25](../../02-retrieval-basics/01-sparse-retrieval/02-bm25.md) 3~5장 |
+| L3 | BM25 설정 | k1·b, BM25F(필드별 가중치), 학습된 sparse로 교체 | BM25 Recall | 일부 필요 | 낮음 | [02-bm25](../../02-retrieval-basics/01-sparse-retrieval/02-bm25.md) 3~4장, [03-learned-sparse](../../02-retrieval-basics/01-sparse-retrieval/03-learned-sparse.md) |
 | L4 | 임베딩 모델 | 모델 교체, 다국어·한국어 특화, 멀티 벡터 | dense Recall, 일상어 질문(user 말투) | 필요 | 중 | [02-model-selection](../../02-retrieval-basics/02-dense-retrieval/02-model-selection.md), [01-embedding-basics](../../02-retrieval-basics/02-dense-retrieval/01-embedding-basics.md) 4장 |
 | L4 | 임베딩 입력 구성 | 제목·섹션 제목 붙이기, 질의·문서 접두어 | dense Recall | 필요 | 낮음 | [01-embedding-basics](../../02-retrieval-basics/02-dense-retrieval/01-embedding-basics.md) 3장 |
 | L4 | 임베딩 파인튜닝 | 도메인 데이터로 추가 학습 | dense Recall | 필요 | 높음 | [07-ml/02-embedding-finetuning](../../07-ml/02-embedding-finetuning/README.md) |

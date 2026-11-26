@@ -45,6 +45,7 @@
 | sparse 검색 | [README](./02-retrieval-basics/01-sparse-retrieval/README.md) | - | - |
 | 역색인과 TF-IDF | [01-inverted-index-tfidf](./02-retrieval-basics/01-sparse-retrieval/01-inverted-index-tfidf.md) | - | - |
 | BM25와 변형 | [02-bm25](./02-retrieval-basics/01-sparse-retrieval/02-bm25.md) | - | - |
+| 학습된 sparse 검색 (SPLADE, bge-m3 sparse) | [03-learned-sparse](./02-retrieval-basics/01-sparse-retrieval/03-learned-sparse.md) | - | - |
 | dense 검색 | [README](./02-retrieval-basics/02-dense-retrieval/README.md) | - | - |
 | 임베딩 검색 기초 | [01-embedding-basics](./02-retrieval-basics/02-dense-retrieval/01-embedding-basics.md) | - | - |
 | 임베딩 모델 선택 | [02-model-selection](./02-retrieval-basics/02-dense-retrieval/02-model-selection.md) | - | - |
