@@ -4,6 +4,8 @@
 
 각 기법은 [03-evals](../03-evals/README.md) 지표로 기준선 대비 개선 폭을 비교한다. 기준선(BM25, dense, 기본 RAG)은 [02-retrieval-basics](../02-retrieval-basics/README.md)에서 만든다.
 
+- 지표를 올리기 위해 바꿀 수 있는 것(레버)과 시도 순서는 [00-improvement-levers](./00-improvement-levers.md)에 모아 두었다. 아래 주제를 고르기 전에 먼저 본다.
+
 ## Topics
 
 | Topic | 내용 | 상태 |
