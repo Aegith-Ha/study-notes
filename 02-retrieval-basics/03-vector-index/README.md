@@ -8,7 +8,7 @@
 ## 하위 노트
 
 - [01-ann-algorithms](./01-ann-algorithms.md): 정확 검색과 근사 검색, IVF·HNSW·PQ 원리와 파라미터, IVF 손계산, ANN Recall과 골든셋 Recall의 차이
-- [02-vector-db](./02-vector-db.md): 벡터 DB를 쓰는 이유, Milvus 기본 개념, 메타데이터 필터, 운영에서 신경 쓸 것
+- [02-vector-db](./02-vector-db.md): 벡터 DB를 쓰는 이유, Milvus 기본 개념, 메타데이터 필터, sparse 벡터 저장(직접 만든 벡터 / 내장 BM25), 운영에서 신경 쓸 것
 
 ## 인덱스 품질과 검색 품질
 
@@ -34,6 +34,7 @@
 ## 관련 코드
 
 - lawlens ([99-projects/01-lawlens](../../99-projects/01-lawlens.md)): collection 스키마·인덱스 [`milvus_schema.py`](https://github.com/Aegith-Ha/LawLens/blob/main/src/lawlens/indexing/milvus_schema.py), 저장 [`milvus_store.py`](https://github.com/Aegith-Ha/LawLens/blob/main/src/lawlens/indexing/milvus_store.py), 생성 [`init_milvus.py`](https://github.com/Aegith-Ha/LawLens/blob/main/scripts/init_milvus.py)
+  - sparse는 [02-vector-db](./02-vector-db.md) 4.1 방식이다. bge-m3 `lexical_weights`를 `SPARSE_FLOAT_VECTOR` 필드에 넣고 `SPARSE_INVERTED_INDEX` + `IP`로 검색한다. 내장 BM25(4.2)는 쓰지 않는다
   - 인덱스 파라미터 비교 스크립트는 아직 없음
 - 실행 방법은 연결된 프로젝트 README 참고
 - 참고: Milvus (`pymilvus`), FAISS
