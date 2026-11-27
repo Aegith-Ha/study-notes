@@ -7,9 +7,9 @@
 
 ## 하위 노트
 
-- [01-inverted-index-tfidf](./01-inverted-index-tfidf.md): 역색인 구조와 검색 순서, sparse 벡터와 역색인의 관계, TF-IDF, 손계산 예시, 한국어 토큰화
-- [02-bm25](./02-bm25.md): BM25 공식, 손계산 예시(TF-IDF와 순위 비교, 한 단어 검색에서 횟수가 많아도 1위가 아닌 경우), 파라미터 k1·b 조정, 변형(BM25+, BM25L, BM25F), 학습된 sparse와의 관계
-- [03-learned-sparse](./03-learned-sparse.md): 학습된 sparse 두 종류(가중치만: bge-m3 sparse / 확장형: SPLADE), dense 임베딩과의 차이, 인코딩과 저장 흐름, 학습 방식(구조·손실·증류·희소성 규제), 손계산, SPLADE와의 관계, 검색 속도, 비교할 때 주의
+- [01-inverted-index-tfidf](./01-inverted-index-tfidf.md): 역색인 구조와 검색 순서, sparse 벡터와 역색인의 관계, TF-IDF, 손계산 예시, 분석 순서(정규화·토큰화·동의어 사전)
+- [02-bm25](./02-bm25.md): BM25 공식, 손계산 예시(TF-IDF와 순위 비교, 한 단어 검색에서 횟수가 많아도 1위가 아닌 경우), 파라미터 k1·b 조정, 변형(BM25+, BM25L, BM25F), 공식 밖 보완(동의어, 질의 확장 RM3, 구문·근접 검색), 학습된 sparse와의 관계, 점수를 질의끼리 비교할 수 없는 점
+- [03-learned-sparse](./03-learned-sparse.md): 학습된 sparse 두 종류(가중치만: bge-m3 sparse / 확장형: SPLADE), dense 임베딩과의 차이, 인코딩과 저장 흐름, 학습 방식(구조·손실·증류·희소성 규제), 직접 학습 규모, 도메인 전문 용어 대응 비교, 손계산, SPLADE와의 관계, 한국어 모델, 검색 속도(CPU 서버 포함), 비교할 때 주의
 
 ## sparse 검색의 역할
 
@@ -26,7 +26,8 @@
 | --- | --- | --- |
 | 기준선 알고리즘 | BM25 (Lucene 방식 idf) | 사실상 표준, 라이브러리 지원이 넓음 |
 | 파라미터 | k1 = 1.2, b = 0.75로 시작. dev 세트에서만 조정 | 기본값도 하나의 기준선 |
-| 토큰화 | 형태소 분석(예: Kiwi) + 기능어 제거 + 도메인 용어 사용자 사전 | 한국어는 공백 기준이 거의 쓸모없음 |
+| 토큰화 | 정규화(NFKC, 소문자, 숫자 표기) + 형태소 분석(예: Kiwi) + 기능어 제거 + 도메인 용어 사용자 사전 | 한국어는 공백 기준이 거의 쓸모없음 |
+| 동의어 | 검색 시점 동의어 사전으로 시작, 질의 확장(RM3)은 비교 실험 | 학습 없이 어휘 불일치를 줄이는 가장 싼 방법 |
 | 색인 단위 | 골든셋 판정 단위와 맞춰 섹션 단위 | 청크 → 문서 매핑 없이 바로 비교 가능 |
 | 비교 실험 | 토크나이저 3종(공백 / 형태소 / 2-gram), BM25 vs BM25F | 토큰화가 sparse 품질을 가장 크게 좌우 |
 | 학습된 sparse | BM25와 별도 기준선으로 비교하고, 종류(가중치만 / 확장형)를 함께 기록. 하이브리드에 어느 쪽을 쓸지는 dev 세트로 결정 | 강약이 다르고, 같은 모델의 dense와는 실패가 겹치기 쉬움. 동의어 대응은 확장형만 기대할 수 있음 |
@@ -34,6 +35,6 @@
 ## 관련 코드
 
 - lawlens ([99-projects/01-lawlens](../../99-projects/01-lawlens.md)): sparse 인코딩 [`encoder.py`](https://github.com/Aegith-Ha/LawLens/blob/main/src/lawlens/indexing/encoder.py), 단일 방식 검색 [`hybrid.py`](https://github.com/Aegith-Ha/LawLens/blob/main/src/lawlens/retrieval/hybrid.py)
-  - lawlens의 sparse는 BM25가 아니라 bge-m3의 학습된 sparse 벡터다. 입력 토큰에만 가중치를 주는 방식이라 문서에 없는 단어로 확장하지 않는다. BM25 기준선은 따로 구현해야 한다.
+  - lawlens의 sparse는 BM25가 아니라 bge-m3의 학습된 sparse 벡터다. 입력 토큰에만 가중치를 주는 방식이라 문서에 없는 단어로 확장하지 않는다. BM25 기준선은 따로 구현해야 한다. 같은 Milvus 컬렉션에 내장 BM25 필드를 추가하면 바로 비교할 수 있다([03-vector-index/02-vector-db](../03-vector-index/02-vector-db.md) 4.2, 한국어 분석기 설정 주의).
 - 실행 방법은 연결된 프로젝트 README 참고
 - 참고 라이브러리: `rank_bm25`, `bm25s`, Elasticsearch / OpenSearch, Milvus full-text search, `kiwipiepy` (형태소 분석)

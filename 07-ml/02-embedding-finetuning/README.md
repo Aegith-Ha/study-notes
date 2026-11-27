@@ -2,7 +2,7 @@
 
 기성 임베딩 모델과 리랭커가 특정 도메인에서 부족할 때 도메인 데이터로 파인튜닝하는 방법을 정리한다. 학습 데이터 만들기와 손실·평가를 하위 노트에 두고, 이 README에는 메인 결정을 둔다.
 
-- 기성 모델 비교는 [02-retrieval-basics/02-dense-retrieval/02-model-selection](../../02-retrieval-basics/02-dense-retrieval/02-model-selection.md), 리랭커는 [04-advanced-rag/02-reranking](../../04-advanced-rag/02-reranking/README.md) 참고
+- 기성 모델 비교는 [02-retrieval-basics/02-dense-retrieval/03-model-selection](../../02-retrieval-basics/02-dense-retrieval/03-model-selection.md), 리랭커는 [04-advanced-rag/02-reranking](../../04-advanced-rag/02-reranking/README.md) 참고
 
 ## 하위 노트
 

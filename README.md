@@ -48,7 +48,8 @@
 | 학습된 sparse 검색 (SPLADE, bge-m3 sparse) | [03-learned-sparse](./02-retrieval-basics/01-sparse-retrieval/03-learned-sparse.md) | - | - |
 | dense 검색 | [README](./02-retrieval-basics/02-dense-retrieval/README.md) | - | - |
 | 임베딩 검색 기초 | [01-embedding-basics](./02-retrieval-basics/02-dense-retrieval/01-embedding-basics.md) | - | - |
-| 임베딩 모델 선택 | [02-model-selection](./02-retrieval-basics/02-dense-retrieval/02-model-selection.md) | - | - |
+| 멀티 벡터 검색 (ColBERT, late interaction) | [02-multi-vector](./02-retrieval-basics/02-dense-retrieval/02-multi-vector.md) | - | - |
+| 임베딩 모델 선택 | [03-model-selection](./02-retrieval-basics/02-dense-retrieval/03-model-selection.md) | - | - |
 | 벡터 인덱스 | [README](./02-retrieval-basics/03-vector-index/README.md) | - | - |
 | 근사 최근접 탐색 알고리즘 | [01-ann-algorithms](./02-retrieval-basics/03-vector-index/01-ann-algorithms.md) | - | - |
 | 벡터 DB | [02-vector-db](./02-retrieval-basics/03-vector-index/02-vector-db.md) | - | - |

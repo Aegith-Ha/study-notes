@@ -26,7 +26,7 @@
 | AutoModelForSequenceClassification | 분류, 크로스 인코더 리랭커 |
 
 - 모델과 토크나이저는 **같은 이름·버전**으로 불러온다. 다른 토크나이저를 쓰면 오류 없이 결과만 나빠진다.
-- 최대 길이를 넘는 입력은 잘린다. 긴 청크가 잘리는지 토큰 수를 확인한다([02-retrieval-basics/02-dense-retrieval/02-model-selection](../../02-retrieval-basics/02-dense-retrieval/02-model-selection.md)).
+- 최대 길이를 넘는 입력은 잘린다. 긴 청크가 잘리는지 토큰 수를 확인한다([02-retrieval-basics/02-dense-retrieval/03-model-selection](../../02-retrieval-basics/02-dense-retrieval/03-model-selection.md)).
 - 생성 모델은 대화 템플릿(chat template)을 모델 것으로 적용한다. 틀린 템플릿은 품질을 크게 떨어뜨린다.
 
 ## 3. 한국어 토큰화
