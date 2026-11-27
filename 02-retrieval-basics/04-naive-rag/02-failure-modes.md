@@ -20,7 +20,7 @@ naive RAG에서 자주 생기는 실패를 유형별로 나누고, 어떤 지표
 | F8 | 근거를 받고도 틀림 | 정답 문서를 받았는데 예외 조건을 빠뜨림 | Recall@5 성공 + Correctness 실패 | 프롬프트, 생성 모델 |
 | F9 | 근거 밖 내용 생성 | 자료에 없는 절차를 덧붙임 | Faithfulness 낮음 | 프롬프트, 생성 모델 |
 | F10 | 거절 실패 | 자료에 근거가 없는데 사전 지식으로 답함 | 답 없음 질의 거절 정확도 낮음 | 프롬프트 |
-| F11 | 다중 근거 부족 | "환불 기한과 배송비 부담 주체는?"에 두 섹션이 필요한데 top-5에 하나만 옴 | 문서 단위 Recall@5는 보통, 조합 충족률(Set Recall) 낮음 ([01-reference-based](../../03-evals/01-retrieval-metrics/01-reference-based.md) 3.6) | 쿼리 분해 ([04-advanced-rag/03-query-transform](../../04-advanced-rag/03-query-transform/README.md)), 다양성 고려 리랭킹, top-k 늘리기 |
+| F11 | 다중 근거 부족 | "환불 기한과 배송비 부담 주체는?"에 두 섹션이 필요한데 top-5에 하나만 옴 | 문서 단위 Recall@5는 보통, 조합 충족률(Set Recall) 낮음 ([01-reference-based](../../03-evals/01-retrieval-metrics/01-reference-based.md) 3.6) | 쿼리 분해 ([04-advanced-rag/03-query-transform](../../04-advanced-rag/03-query-transform/README.md)), 다양성 고려 재정렬 ([04-advanced-rag/02-reranking/02-candidate-depth](../../04-advanced-rag/02-reranking/02-candidate-depth.md) 5장 MMR), top-k 늘리기 |
 | F12 | 문서 간 충돌 | 구버전과 신버전, 일반 규정과 예외 규정이 함께 들어와 섞인 답을 냄 | Recall@5 성공 + Correctness 실패, 답변에 서로 다른 기준이 섞임 | 메타데이터 필터(최신만), 컨텍스트에 시행일·버전 표시, 충돌 시 처리 규칙을 프롬프트에 |
 | F13 | 대화 맥락 누락 | 앞 질문 뒤에 "그럼 예외는?"을 그대로 검색 | 대화형 질의에서만 Recall 낮음 | 대화 맥락으로 질문 재작성 ([04-advanced-rag/03-query-transform/01-query-rewrite-hyde](../../04-advanced-rag/03-query-transform/01-query-rewrite-hyde.md)) |
 
