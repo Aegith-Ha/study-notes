@@ -8,7 +8,7 @@
 ## 하위 노트
 
 - [01-lever-map](./01-lever-map.md): 레버를 당기기 전 평가 점검, 파이프라인 위의 레버 위치(L1~L12), 검색 쪽 레버 표, 생성 쪽 레버 표 (움직이는 지표, 재색인 여부, 비용, 자세한 노트 링크)
-- [02-order-and-rules](./02-order-and-rules.md): 싼 것부터 시도하는 순서와 예외, 레버를 비교할 때 지킬 실험 규칙
+- [02-order-and-rules](./02-order-and-rules.md): 싼 것부터 시도하는 순서와 예외, 레버를 비교할 때 지킬 실험 규칙, 실험 도구(AutoRAG, DSPy, Hydra, Optuna, MLflow 등)와 쓸 때 주의할 점
 
 ## 전체 그림
 
