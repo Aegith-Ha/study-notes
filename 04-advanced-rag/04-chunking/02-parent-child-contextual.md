@@ -2,7 +2,7 @@
 
 검색은 작은 단위로 정밀하게 하고 LLM에는 큰 단위를 넘기는 부모-자식 청크, 그리고 청크마다 문서 맥락을 덧붙여 검색 품질을 올리는 contextual retrieval을 정리한다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - 기본 청킹 방법은 [01-chunking-strategies](./01-chunking-strategies.md) 참고
 
 ## 1. 부모-자식 청크

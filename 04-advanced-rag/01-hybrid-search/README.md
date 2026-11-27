@@ -1,6 +1,6 @@
 # 하이브리드 검색 (Hybrid Search)
 
-BM25와 dense 검색 결과를 합쳐, 정확 일치(BM25)와 의미 유사(dense)를 모두 잡는 방법을 정리한다. 기본 RAG 실패 유형 중 F1(표현 불일치)과 F2(정확 일치 실패)를 고친다. 이 README에는 메인 결정을 두고, 합치기 방법과 조정 방법은 하위 노트에 둔다.
+BM25와 dense 검색 결과를 합쳐, 정확 일치(BM25)와 의미 유사(dense)를 모두 잡는 방법을 정리한다. 기본 RAG 실패 유형 중 F1(표현 불일치)과 F2(정확 일치 실패)를 고친다. 이 README에는 기본 선택과 이유를 두고, 합치기 방법과 조정 방법은 하위 노트에 둔다.
 
 - 기준선은 [02-retrieval-basics](../../02-retrieval-basics/README.md), 지표는 [03-evals/01-retrieval-metrics](../../03-evals/01-retrieval-metrics/README.md) 참고
 
@@ -9,7 +9,7 @@ BM25와 dense 검색 결과를 합쳐, 정확 일치(BM25)와 의미 유사(dens
 - [01-fusion-methods](./01-fusion-methods.md): 가중합과 RRF, 정규화 방식, 손계산 예시(min-max의 함정, α 민감도, RRF), 합치기 전 후보 수
 - [02-tuning-and-analysis](./02-tuning-and-analysis.md): 효과 상한 가늠하기, 조정 순서, 말투·소스별로 나눠 보기, 질의별 변화 분석
 
-## 메인 결정 (초안)
+## 기본 선택과 이유
 
 | 항목 | 결정 | 이유 |
 | --- | --- | --- |

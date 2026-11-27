@@ -1,6 +1,6 @@
 # LLM judge: LLM을 채점자로 쓰기 (LLM-as-a-Judge)
 
-LLM을 채점자로 쓰는 방법을 정리한다. judge는 평가 대상이 아니라 **평가 도구**다. 검색 지표와 생성 지표 양쪽, 그리고 골든셋 구축에서 공통으로 쓰인다. 이 README에는 judge가 쓰이는 곳과 메인 결정을 두고, 설계와 검증 방법은 하위 노트에 둔다.
+LLM을 채점자로 쓰는 방법을 정리한다. judge는 평가 대상이 아니라 **평가 도구**다. 검색 지표와 생성 지표 양쪽, 그리고 골든셋 구축에서 공통으로 쓰인다. 이 README에는 judge가 쓰이는 곳과 기본 선택을 두고, 설계와 검증 방법은 하위 노트에 둔다.
 
 - 검색 지표는 [01-retrieval-metrics](../01-retrieval-metrics/README.md), 생성 지표는 [02-generation-metrics](../02-generation-metrics/README.md) 참고
 - 골든셋 구축과 갱신은 [03-golden-set](../03-golden-set/README.md) 참고
@@ -37,7 +37,7 @@ LLM을 채점자로 쓰는 방법을 정리한다. judge는 평가 대상이 아
 - 골든셋은 judge를 검증하는 시험지가 되고, 검증된 judge는 골든셋의 누락을 찾는다.
 - 그래서 rubric(등급 기준)은 골든셋 판정 기준과 같은 문장, 같은 버전으로 관리한다. 원본은 [03-golden-set README](../03-golden-set/README.md)의 판정 기준이다.
 
-## 메인 결정 (초안)
+## 기본 선택과 이유
 
 | 항목 | 결정 | 이유 |
 | --- | --- | --- |

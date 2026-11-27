@@ -1,6 +1,6 @@
 # dense 검색 (Dense Retrieval)
 
-질의와 문서를 임베딩 벡터로 바꿔 의미가 가까운 문서를 찾는 dense 검색을 정리한다. BM25와 함께 두 번째 검색 기준선이다. 이 README에는 메인 결정을 두고, 원리와 모델 선택 방법은 하위 노트에 둔다.
+질의와 문서를 임베딩 벡터로 바꿔 의미가 가까운 문서를 찾는 dense 검색을 정리한다. BM25와 함께 두 번째 검색 기준선이다. 이 README에는 기본 선택과 이유를 두고, 원리와 모델 선택 방법은 하위 노트에 둔다.
 
 - 평가 지표는 [03-evals/01-retrieval-metrics](../../03-evals/01-retrieval-metrics/README.md) 참고
 - sparse 검색은 [01-sparse-retrieval](../01-sparse-retrieval/README.md), 벡터 인덱스는 [03-vector-index](../03-vector-index/README.md) 참고
@@ -11,7 +11,7 @@
 - [02-multi-vector](./02-multi-vector.md): 멀티 벡터(ColBERT)란, 토큰 벡터가 만들어지는 과정(문맥 임베딩), MaxSim 손계산, 청킹과의 차이와 late chunking, 단일 벡터·멀티 벡터·cross-encoder 비교, 학습 방식, 검색 속도(PLAID, 리랭킹 전용), 한국어·다국어 모델과 라이브러리, Milvus 저장 방식(Array of Structs + MAX_SIM / 토큰마다 한 행)
 - [03-model-selection](./03-model-selection.md): 모델 고르는 기준, 저장량과 줄이는 방법(양자화, Matryoshka), 공개 순위표의 한계, 골든셋으로 비교하는 방법과 차이의 유의성, sparse와 dense를 함께 보는 법, 모델 크기 축(BERT급 / LLM 기반), 한국어 모델 예시, 모델 교체 절차
 
-## 메인 결정 (초안)
+## 기본 선택과 이유
 
 | 항목 | 결정 | 이유 |
 | --- | --- | --- |
@@ -22,7 +22,7 @@
 | 척도 | 모델 권장 척도. 정규화 후 코사인(= 내적) 기본 | 정규화하면 척도 간 순위가 같아짐 |
 | 입력 구성 | 문서 제목 + 섹션 제목 + 본문 | 맥락 제공. 본문만 넣은 경우와 비교 |
 | 청크 | sparse와 같은 섹션 단위. 최대 입력 길이를 넘으면 나눔 | sparse와 같은 단위로 비교 |
-| 실행 | 로컬 실행 우선 | 데이터 외부 전송 제약 |
+| 실행 | 데이터를 외부로 보낼 수 없으면 로컬 실행, 아니면 API도 후보 | 데이터 전송 제약이 선택지를 정함 |
 | 차이 판단 | 같은 질문끼리 짝지어 McNemar / paired bootstrap. 유의한 차이가 없으면 작은 모델 | 수백 질문 규모에서는 0.02 차이도 우연일 수 있음 |
 | 임계값 | 고정 임계값 쓰지 않음. 필요하면 dev 세트로 모델별로 정함 | 모델마다 점수 분포가 다름 |
 | 저장량 | float32로 시작, 문제가 되면 float16 → int8 순으로 줄임 | 줄일 때마다 Recall 재측정 |

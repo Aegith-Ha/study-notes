@@ -2,7 +2,7 @@
 
 검색·생성 지표를 올리기 위해 **바꿀 수 있는 것**(레버)을 파이프라인 단계별로 모으고, 각 레버가 어떤 지표를 움직이는지와 비용을 정리한다. 레버마다 자세한 내용은 해당 노트로 연결한다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - 어떤 순서로 시도하고 어떻게 비교할지는 [02-order-and-rules](./02-order-and-rules.md) 참고
 - 틀린 질문에서 출발해 원인을 찾는 방향은 [02-retrieval-basics/04-naive-rag/02-failure-modes](../../02-retrieval-basics/04-naive-rag/02-failure-modes.md) 참고. 이 노트는 반대로 레버에서 출발한다
 - 지표 정의는 [03-evals/01-retrieval-metrics](../../03-evals/01-retrieval-metrics/README.md), [03-evals/02-generation-metrics](../../03-evals/02-generation-metrics/README.md) 참고

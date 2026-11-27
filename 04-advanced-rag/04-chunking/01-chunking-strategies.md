@@ -2,7 +2,7 @@
 
 문서를 검색 단위(청크)로 나누는 방법과 크기의 영향을 정리한다. 기본 RAG 실패 유형 중 F6(본문과 예외 문장이 다른 청크로 나뉨)을 고친다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - 작게 찾고 크게 넘기는 방법은 [02-parent-child-contextual](./02-parent-child-contextual.md) 참고
 
 ## 1. 청크 크기의 영향

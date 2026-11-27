@@ -2,7 +2,7 @@
 
 모델을 불러오고, 데이터를 다루고, 결과를 재현하는 데 쓰는 Hugging Face 도구(transformers, tokenizers, datasets, Hub)를 정리한다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - PyTorch 기초는 [01-pytorch-basics](./01-pytorch-basics.md) 참고
 
 ## 1. 구성 요소

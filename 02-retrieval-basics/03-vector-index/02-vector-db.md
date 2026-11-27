@@ -2,7 +2,7 @@
 
 벡터 인덱스를 직접 다루는 대신 저장, 검색, 메타데이터 필터, 운영을 함께 제공하는 벡터 DB의 기본 개념을 Milvus를 예로 정리한다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - 인덱스 알고리즘은 [01-ann-algorithms](./01-ann-algorithms.md) 참고
 
 ## 1. 왜 벡터 DB를 쓰나
@@ -16,16 +16,57 @@
 
 - 처음 실험은 Flat 검색이나 가벼운 실행 형태로 시작하고, 서비스로 갈 때 서버 형태로 옮긴다.
 
+### 선택지 비교
+
+| 종류 | 예 | 강점 | 약점 | 맞는 경우 |
+| --- | --- | --- | --- | --- |
+| 전용 벡터 DB | Milvus | 대규모·분산, 인덱스 종류가 많음, dense·sparse·BM25·멀티 벡터를 한 collection에 | 구성 요소가 많아 운영이 무거움 (가벼운 실행 형태로 시작 가능) | 수백만 개 이상, 여러 검색 방식 비교 |
+| 전용 벡터 DB | Qdrant, Weaviate | 단일 서버로 시작하기 쉬움, 필터 검색이 잘 되어 있음, sparse·하이브리드 지원 | 기능 범위와 대규모 운영 방식이 제품마다 다름 | 중소 규모 서비스 |
+| 기존 DB 확장 | pgvector (PostgreSQL) | 원문·메타데이터·벡터를 한 DB에서 SQL로, 트랜잭션, 운영 경험 재사용 | 아주 큰 규모나 높은 처리량에서는 전용 DB보다 불리 | 이미 PostgreSQL을 쓰고 문서 수가 많지 않을 때 |
+| 검색 엔진 | Elasticsearch, OpenSearch | BM25·형태소 분석기·사용자 사전이 성숙, 벡터 검색도 지원 | 벡터 전용 기능은 벡터 DB보다 늦게 들어옴, 메모리 사용 큼 | sparse가 중요하고 이미 검색 엔진을 쓸 때 |
+| 가벼운 내장형 | Chroma, LanceDB, FAISS | 설치 없이 파일·프로세스 안에서 실행 | 동시 접근, 운영 기능이 약함 | 실험, 노트북, 소규모 |
+
+### 라이선스와 비용
+
+직접 설치해 쓰는 것(self-hosted)은 대부분 무료 오픈소스이고, 같은 제품의 관리형 클라우드는 유료다. 2026년 조사 기준이며, 라이선스는 바뀔 수 있으니 도입 전에 각 저장소의 LICENSE 파일을 확인한다.
+
+| 제품 | 라이선스 (직접 설치) | 상용 서비스에 써도 되나 | 유료 선택지 |
+| --- | --- | --- | --- |
+| Milvus | Apache 2.0 | 됨 | Zilliz Cloud (관리형) |
+| Qdrant | Apache 2.0 | 됨 | Qdrant Cloud (관리형, 무료 등급 있음) |
+| Weaviate | BSD-3-Clause (핵심). 일부 새 코드는 별도 상용 라이선스 | 핵심은 됨. 상용 라이선스 부분을 쓰는지 확인 | Weaviate Cloud (관리형) |
+| pgvector | PostgreSQL License (MIT·BSD와 비슷한 허용형) | 됨 | 클라우드 PostgreSQL 서비스 비용만 |
+| OpenSearch | Apache 2.0 | 됨 | 클라우드 관리형 서비스 |
+| Elasticsearch | AGPLv3, SSPL, Elastic License 2.0 중 선택. 일부 기능은 유료 구독 | 내부 사용은 보통 문제없음. 고쳐서 외부에 서비스로 제공하거나 "검색 서비스" 자체를 팔면 조건 확인 | Elastic Cloud, 유료 구독 |
+| Chroma | Apache 2.0 | 됨 | Chroma Cloud (관리형) |
+| LanceDB | Apache 2.0 | 됨 | 관리형 서비스 |
+| FAISS | MIT | 됨 | 없음 (라이브러리) |
+| Pinecone | 비공개 (관리형 전용) | 됨 (서비스 약관에 따름) | 사용량 기반 유료, 무료 등급 있음 |
+
+라이선스 읽는 법
+- **허용형 (Apache 2.0, MIT, BSD, PostgreSQL License):** 상용 서비스에 그대로 써도 되고 코드를 고쳐도 공개할 의무가 없다. 저작권 표시와 라이선스 문구만 유지한다. Apache 2.0은 특허 사용 허락도 포함한다.
+- **AGPLv3:** 쓰는 것은 자유지만, **고친 코드를 네트워크 서비스로 제공하면 그 코드를 공개해야 한다.** 고치지 않고 그대로 쓰면 보통 문제없다.
+- **SSPL, Elastic License 2.0:** 오픈소스 정의(OSI)에 맞지 않는 소스 공개형이다. 내부 사용은 되지만, 그 제품을 관리형 서비스로 다른 회사에 파는 것을 막는다.
+- **관리형 클라우드:** 라이선스 대신 비용(저장량, 처리량, 노드 시간)과 데이터 위치를 본다. 데이터를 외부로 보낼 수 없으면 직접 설치형만 남는다.
+
+- 무료로 직접 설치해도 서버, 메모리, 운영 인력 비용은 든다. 문서 수가 적으면 관리형 무료 등급이나 pgvector가 더 쌀 수 있다.
+- 라이선스 판단이 애매하면(AGPL 코드를 고칠 계획 등) 회사의 법무 검토를 받는다. 이 표는 출발점일 뿐이다.
+
+- 고를 때 볼 것: 문서 규모, 필요한 검색 방식(BM25, sparse, 멀티 벡터, 필터), 한국어 분석기 지원, 운영 인력, 이미 쓰는 인프라, 라이선스와 비용.
+- 검색 품질은 DB보다 임베딩 모델·청크·토큰화가 대부분 정한다. 같은 인덱스 종류와 파라미터면 DB를 바꿔도 결과는 비슷하다. DB는 기능과 운영 편의로 고른다.
+
 ## 2. 기본 개념 (Milvus 기준)
 
 | 개념 | 의미 | 예 |
 | --- | --- | --- |
-| collection | 테이블에 해당하는 저장 단위 | `law_articles` |
+| collection | 테이블에 해당하는 저장 단위 | `doc_chunks` |
 | schema | 필드 정의 | `id`, `doc_id`, `doc_title`, `section_title`, `text`, `effective_date`, `embedding` |
 | 벡터 필드 | 임베딩 저장. 차원 고정 | `embedding` (1024차원) |
 | 스칼라 필드 | 필터·표시용 메타데이터 | `doc_title`, `effective_date` |
 | index | 벡터 필드에 거는 검색 인덱스와 척도 | HNSW + COSINE |
 | partition | collection 안의 물리적 구획 | 문서 종류별 (정책 / 지침 / 매뉴얼) |
+| partition key | 필드 값으로 구획을 자동으로 나눔 | `tenant_id`별로 나눠 사용자 그룹마다 따로 검색 |
+| 스칼라 인덱스 | 필터에 쓰는 스칼라 필드에 거는 인덱스 | 문자열은 INVERTED, 값 종류가 적으면 BITMAP |
 | 실행 형태 | 가벼운 로컬 실행, 단일 서버, 분산 | 실험은 가벼운 형태로 시작 |
 
 - 척도(metric)는 인덱스를 만들 때 정한다. 임베딩 모델의 권장 척도와 맞춘다([01-embedding-basics](../02-dense-retrieval/01-embedding-basics.md) 2장).
@@ -41,6 +82,9 @@
 | 사전 필터 | 조건에 맞는 벡터 안에서만 검색 | 조건이 좁으면 ANN 인덱스가 비효율적일 수 있음 |
 
 - 벡터 DB는 보통 검색 중에 조건을 함께 적용한다. 그래도 조건이 아주 좁으면 결과 수와 지연을 확인한다.
+- 필터에 자주 쓰는 필드에는 스칼라 인덱스를 건다. 없으면 조건 확인이 전체 훑기가 되어 느려진다.
+- 좁은 필터에서는 ANN Recall이 떨어질 수 있다. 필터 조건별로 따로 잰다([01-ann-algorithms](./01-ann-algorithms.md) 3.2).
+- 자주 나누는 큰 구분은 partition key로 나누면 필터 대신 구획 검색이 된다. 사용자 그룹별 접근 제한(멀티 테넌시)에도 쓴다.
 - 필터 조건을 질문에서 자동으로 뽑는 것은 [04-advanced-rag/03-query-transform](../../04-advanced-rag/03-query-transform/README.md)에서 다룬다.
 - 시행일(`effective_date`) 같은 필드를 넣어 두면 구버전 문서 반환율 점검([05-regression-ci](../../03-evals/05-regression-ci/01-gate-design.md) L1)에 바로 쓸 수 있다.
 
@@ -116,6 +160,7 @@ Milvus는 dense 벡터뿐 아니라 sparse 벡터도 저장하고 역색인으�
 - 두 방식을 한 컬렉션에 함께 두면 BM25, 학습된 sparse, dense를 별도 검색 엔진 없이 한곳에서 비교할 수 있다. 문서 ID와 메타데이터가 같아 비교 조건을 맞추기 쉽다.
 - 여러 필드를 한 번에 검색하고 합치는 기능(`hybrid_search` + `RRFRanker` / `WeightedRanker`)이 있다. 다만 지원하는 합치기 방식이 원하는 것과 다르면(예: 가중 RRF) 필드별로 따로 검색한 뒤 밖에서 합친다([04-advanced-rag/01-hybrid-search](../../04-advanced-rag/01-hybrid-search/README.md)).
 - 필드 타입, 인덱스 이름, 파라미터는 Milvus 버전마다 다르다. 쓰는 버전의 문서를 기준으로 확인하고 버전을 결과와 함께 기록한다.
+- 멀티 벡터(ColBERT)는 sparse와 또 다른 필드 형태(Array of Structs + MAX_SIM, 2.6.4 이상)로 저장한다. 저장 방식은 [02-dense-retrieval/02-multi-vector](../02-dense-retrieval/02-multi-vector.md) 9장 참고
 
 ## 5. 운영에서 신경 쓸 것
 
@@ -124,8 +169,29 @@ Milvus는 dense 벡터뿐 아니라 sparse 벡터도 저장하고 역색인으�
 | 모델 교체 | 차원이 바뀌면 collection을 새로 만든다. 새 collection을 채운 뒤 바꿔 끼운다 |
 | 문서 갱신 | 개정된 섹션은 삭제 후 추가 또는 갱신. `doc_id`는 고정하고 `doc_version`으로 구분 ([03-golden-set](../../03-evals/03-golden-set/README.md) 데이터 형식) |
 | 백업 | 벡터 재생성은 비싸다. 정기 백업과 복구 절차를 확인한다 |
-| 메모리 | HNSW는 메모리를 많이 쓴다. 벡터 수 × 차원 × 4바이트보다 넉넉하게 잡는다 |
-| 일관성 | 넣자마자 검색되지 않을 수 있다. 평가 전에 색인 완료를 확인한다 |
+| 메모리 | HNSW는 원본 벡터 + 그래프 연결을 메모리에 둔다. 100만 × 1,024차원이면 약 4.2GB, 색인·삭제 여유까지 1.5~2배 ([01-ann-algorithms](./01-ann-algorithms.md) 2.2) |
+| 일관성 | 넣자마자 검색되지 않을 수 있다. 평가 전에 색인 완료를 확인한다 (아래 5.1) |
+| 삭제 | 삭제는 바로 지워지지 않고 표시만 된다. 정리(compaction) 전까지 공간을 차지하고 검색에서만 빠진다 |
+
+### 5.1 Milvus 내부 동작 (평가에 영향을 주는 것)
+
+```text
+넣은 데이터 ──▶ growing segment (아직 인덱스 없음, 정확 검색 또는 임시 인덱스)
+                    │ 일정 크기가 되거나 flush하면
+                    ▼
+               sealed segment ──▶ 인덱스 생성 (HNSW 등)
+검색은 두 종류 segment를 모두 보고 결과를 합친다
+```
+
+| 개념 | 내용 | 평가에 주는 영향 |
+| --- | --- | --- |
+| 일관성 수준 | Strong (넣은 것 바로 보임) / Bounded (조금 늦게 보임, 기본값) / Session (내가 넣은 것은 보임) / Eventually (가장 느슨) | 넣은 직후 평가하면 일부 문서가 빠질 수 있음. 평가할 때는 Strong으로 검색하거나 flush 후 충분히 기다림 |
+| growing / sealed segment | 새 데이터는 인덱스가 없는 segment에 먼저 들어감 | 같은 데이터라도 인덱스가 만들어지기 전과 후의 결과가 다를 수 있음 |
+| compaction | 작은 segment를 합치고 삭제 표시된 데이터를 실제로 지움 | segment 구성이 바뀌면 ANN 결과 순서가 조금 달라질 수 있음 |
+| load | collection을 메모리에 올려야 검색 가능 | 메모리 부족이면 load 실패. 메모리 계산 필요 |
+
+- 평가 전 순서: 넣기 → flush → 인덱스 생성 완료 확인 → load → 벡터 수 확인 → 검색.
+- ANN 결과가 실행마다 조금씩 달라지는 것은 이 구조 때문일 수 있다. 회귀 테스트에서는 이 노이즈를 감안한다([03-evals/05-regression-ci/01-gate-design](../../03-evals/05-regression-ci/01-gate-design.md) 5장).
 
 ## 6. 확인할 점
 

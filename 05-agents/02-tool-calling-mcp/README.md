@@ -1,6 +1,6 @@
 # 도구 호출과 MCP (Tool Calling, MCP)
 
-LLM이 함수(도구)를 골라 호출하게 하는 function calling과, 도구를 여러 앱에 표준 방식으로 연결하는 MCP를 정리한다. 사내 DB·API를 에이전트에 안전하게 연결하는 것이 목표다. 이 README에는 메인 결정을 두고, 원리와 설계 원칙은 하위 노트에 둔다.
+LLM이 함수(도구)를 골라 호출하게 하는 function calling과, 도구를 여러 앱에 표준 방식으로 연결하는 MCP를 정리한다. 사내 DB·API를 에이전트에 안전하게 연결하는 것이 목표다. 이 README에는 기본 선택과 이유를 두고, 원리와 설계 원칙은 하위 노트에 둔다.
 
 - 검색을 도구로 쓰는 Agentic RAG는 [01-agentic-rag](../01-agentic-rag/README.md) 참고
 
@@ -9,7 +9,7 @@ LLM이 함수(도구)를 골라 호출하게 하는 function calling과, 도구�
 - [01-function-calling](./01-function-calling.md): 동작 흐름, 도구 정의(이름, 설명, 스키마), 설계 원칙, 평가 지표와 손계산 예시
 - [02-mcp](./02-mcp.md): 표준이 필요한 이유, 구성 요소(호스트, 클라이언트, 서버, tools·resources·prompts), 사내 DB·API 연결 원칙, 보안 위험
 
-## 메인 결정 (초안)
+## 기본 선택과 이유
 
 | 항목 | 결정 | 이유 |
 | --- | --- | --- |

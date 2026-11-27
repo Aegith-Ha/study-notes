@@ -1,6 +1,6 @@
 # sparse 검색 (Sparse Retrieval)
 
-단어 겹침으로 문서를 찾는 sparse 검색을 정리한다. BM25가 이 저장소의 첫 번째 검색 기준선이다. 이 README에는 메인 결정을 두고, 원리 설명은 하위 노트에 둔다.
+단어 겹침으로 문서를 찾는 sparse 검색을 정리한다. BM25가 이 저장소의 첫 번째 검색 기준선이다. 이 README에는 기본 선택과 이유를 두고, 원리 설명은 하위 노트에 둔다.
 
 - 평가 지표는 [03-evals/01-retrieval-metrics](../../03-evals/01-retrieval-metrics/README.md) 참고
 - dense 검색은 [02-dense-retrieval](../02-dense-retrieval/README.md), 둘을 섞는 하이브리드는 [04-advanced-rag/01-hybrid-search](../../04-advanced-rag/01-hybrid-search/README.md) 참고
@@ -20,7 +20,7 @@
 
 - 사용자 말투(`user`) 질문에서는 약하고 전문가 말투(`expert`) 질문에서는 강할 가능성이 높다. 골든셋의 `variant`별로 나눠서 본다([03-golden-set](../../03-evals/03-golden-set/README.md) 데이터 형식).
 
-## 메인 결정 (초안)
+## 기본 선택과 이유
 
 | 항목 | 결정 | 이유 |
 | --- | --- | --- |

@@ -2,7 +2,7 @@
 
 모델 학습에 필요한 PyTorch의 핵심 개념(텐서, 자동 미분, 학습 루프, device와 dtype)과 GPU 메모리를 미리 계산하는 방법을 정리한다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - Hugging Face 도구는 [02-huggingface](./02-huggingface.md) 참고
 
 ## 1. 핵심 개념

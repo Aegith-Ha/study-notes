@@ -1,6 +1,6 @@
 # PyTorch와 Hugging Face 기초 (PyTorch, Hugging Face)
 
-이후 주제(임베딩 파인튜닝, LoRA, 서빙)에 필요한 PyTorch 학습 루프와 Hugging Face 생태계(transformers, datasets, Hub)의 기본을 정리한다. 이 README에는 메인 결정을 두고, 개념은 하위 노트에 둔다.
+이후 주제(임베딩 파인튜닝, LoRA, 서빙)에 필요한 PyTorch 학습 루프와 Hugging Face 생태계(transformers, datasets, Hub)의 기본을 정리한다. 이 README에는 기본 선택과 이유를 두고, 개념은 하위 노트에 둔다.
 
 - 임베딩 모델을 쓰는 쪽의 기초는 [02-retrieval-basics/02-dense-retrieval](../../02-retrieval-basics/02-dense-retrieval/README.md) 참고
 
@@ -9,7 +9,7 @@
 - [01-pytorch-basics](./01-pytorch-basics.md): 텐서, 자동 미분, 학습 루프, device와 dtype, GPU 메모리 계산 손계산 예시
 - [02-huggingface](./02-huggingface.md): transformers(Auto 클래스, 토크나이저), datasets, Hub와 모델 카드·라이선스, 재현성
 
-## 메인 결정 (초안)
+## 기본 선택과 이유
 
 | 항목 | 결정 | 이유 |
 | --- | --- | --- |

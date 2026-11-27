@@ -43,6 +43,28 @@
 - 판정은 LLM(Claude, Codex)이 했고 사람이 확인한 표본은 아직 없다.
 - 상세 절차는 프로젝트의 [`eval/golden/README.md`](https://github.com/Aegith-Ha/LawLens/blob/main/eval/golden/README.md) 참고. 학습 노트 쪽 정리는 [03-evals/03-golden-set](../03-evals/03-golden-set/README.md).
 
+## 프로젝트 선택
+
+학습 노트 README의 "기본 선택과 이유"는 프로젝트와 상관없는 일반 출발점이다. 이 프로젝트가 실제로 고른 것과, 법령 데이터라서 달라진 사정은 여기에 모은다. 레버 실험으로 설정을 바꾸면 이 표를 고친다([04-advanced-rag/00-improvement-levers](../04-advanced-rag/00-improvement-levers/README.md)). 기준 커밋 `6720aea` 기준이다.
+
+| 주제 | 노트의 기본 선택 | 이 프로젝트의 선택 | 이유 / 상태 |
+| --- | --- | --- | --- |
+| 청크 ([04-chunking](../04-advanced-rag/04-chunking/README.md)) | 섹션 단위, 골든셋 판정 단위와 맞춤 | 조문 단위 + 계층 헤더 | 법령은 조문이 자연스러운 근거 단위이고 판정도 조문 단위 |
+| sparse ([01-sparse-retrieval](../02-retrieval-basics/01-sparse-retrieval/README.md)) | BM25 기준선 + 학습된 sparse 별도 비교 | bge-m3 학습된 sparse(가중치만, 확장 없음) | BM25 기준선은 아직 없음. Milvus 내장 BM25로 추가할 수 있음 |
+| dense ([02-dense-retrieval](../02-retrieval-basics/02-dense-retrieval/README.md)) | 후보 3~4개를 골든셋으로 비교 | bge-m3 dense, 로컬 실행 | 한 번 실행으로 dense·sparse를 함께 얻음. 다른 모델과의 비교는 아직 없음 |
+| 벡터 DB ([03-vector-index](../02-retrieval-basics/03-vector-index/README.md)) | 규모·기능·라이선스로 고름 | Milvus (pymilvus 3.0) | dense·sparse를 한 collection에서 하이브리드로 비교 |
+| 인덱스 | 실험은 Flat, 서비스는 HNSW 조정 | dense HNSW(M = 16, efConstruction = 200, COSINE), sparse `SPARSE_INVERTED_INDEX` + IP | 검색 파라미터 조정 실험(ef 곡선)은 아직 없음 |
+| 메타데이터 필터 | 필터 필드에 스칼라 인덱스 | 시행 시작·종료일 `STL_SORT`, 법령 ID·종류·버전 `INVERTED` | 기준 시점(as_of)의 유효한 조문만 검색 |
+| 하이브리드 ([01-hybrid-search](../04-advanced-rag/01-hybrid-search/README.md)) | RRF k = 60 | 가중 RRF, k = 30, dense 가중치 0.6 | 기준 커밋에서 변경. 비교 근거는 프로젝트 기록 참고 |
+| 정확 조회 ([03-query-transform](../04-advanced-rag/03-query-transform/README.md)) | 식별자가 있으면 DB 조회 결과를 앞에 | "○○법 제N조" 같은 조문 인용을 직접 조회해 앞에 붙임 | 조문 번호 질문은 검색보다 조회가 정확 |
+| 문서 파싱 ([05-document-parsing](../04-advanced-rag/05-document-parsing/README.md)) | 구조화된 원문 우선 | 법령 본문은 Open API의 구조화 원문. PDF 파싱은 별표·서식에만 필요 | 별표 파싱은 아직 없음 |
+| 골든셋 pool ([03-golden-set](../03-evals/03-golden-set/README.md)) | 서로 다른 계열의 검색기를 섞어 pool 구성 | 같은 모델(bge-m3)의 dense·sparse·hybrid | 노트 권장보다 다양성이 낮음. 다른 계열(BM25, 다른 임베딩 모델) 추가 필요 |
+| 판정 ([04-llm-judge](../03-evals/04-llm-judge/README.md)) | LLM 1차 + 사람 검수, judge 검증 후 사용 | LLM 2개(Claude, Codex) 판정 후 병합 | 사람이 확인한 표본은 아직 없음 → judge 검증 전 |
+| 프롬프트·인용 ([04-naive-rag](../02-retrieval-basics/04-naive-rag/README.md)) | 문서 ID 또는 번호 인용 + 생성 뒤 인용 검증 | 번호 방식(`[1]`, `[2]`) 초안, 정보 제공 고지 문구 | 답변 생성과 인용 검증은 구현 전 (Phase 2 TODO) |
+| 리랭커 ([02-reranking](../04-advanced-rag/02-reranking/README.md)) | 다국어 cross-encoder로 시작 | 없음 | 구현 전 |
+
+- 값은 기준 커밋을 읽어 옮긴 것이다. 코드가 바뀌면 기준 커밋과 함께 고친다.
+
 ## 연결된 노트
 
 | 노트 | 연결 코드 |

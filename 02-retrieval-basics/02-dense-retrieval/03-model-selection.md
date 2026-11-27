@@ -2,7 +2,7 @@
 
 dense 검색 품질은 임베딩 모델이 대부분을 정한다. 후보를 고르는 기준과, 공개 순위표가 아니라 우리 골든셋으로 비교하는 방법을 정리한다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - 임베딩 검색 원리는 [01-embedding-basics](./01-embedding-basics.md), 멀티 벡터는 [02-multi-vector](./02-multi-vector.md) 참고
 
 ## 1. 고르는 기준

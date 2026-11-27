@@ -2,7 +2,7 @@
 
 BM25와 dense 검색 결과를 하나의 순위로 합치는 방법을 정리한다. 두 검색기는 점수의 범위와 의미가 달라서 그냥 더할 수 없다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - 가중치 조정과 결과 분석은 [02-tuning-and-analysis](./02-tuning-and-analysis.md) 참고
 
 ## 1. 왜 그냥 더하면 안 되나

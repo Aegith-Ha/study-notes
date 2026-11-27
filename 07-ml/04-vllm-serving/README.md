@@ -1,6 +1,6 @@
 # vLLM 서빙 (vLLM Serving)
 
-오픈소스 LLM을 vLLM으로 직접 서빙할 때 알아야 할 원리(KV 캐시, PagedAttention, 연속 배칭)와 처리량·지연 측정, API 사용과의 비용 비교를 정리한다. 이 README에는 메인 결정을 두고, 원리와 측정 방법은 하위 노트에 둔다.
+오픈소스 LLM을 vLLM으로 직접 서빙할 때 알아야 할 원리(KV 캐시, PagedAttention, 연속 배칭)와 처리량·지연 측정, API 사용과의 비용 비교를 정리한다. 이 README에는 기본 선택과 이유를 두고, 원리와 측정 방법은 하위 노트에 둔다.
 
 - 파인튜닝한 어댑터 서빙은 [03-lora-qlora/01-lora](../03-lora-qlora/01-lora.md) 4장 참고
 - 운영 지표 수집은 [06-llmops/01-tracing](../../06-llmops/01-tracing/README.md) 참고
@@ -10,7 +10,7 @@
 - [01-vllm-basics](./01-vllm-basics.md): KV 캐시와 메모리 손계산, PagedAttention, 연속 배칭, 접두어 캐시, 양자화, OpenAI 호환 API
 - [02-serving-benchmark](./02-serving-benchmark.md): 지연(TTFT, TPOT)과 처리량, 동시 요청 수에 따른 변화, 손계산 예시, API와 비용 비교
 
-## 메인 결정 (초안)
+## 기본 선택과 이유
 
 | 항목 | 결정 | 이유 |
 | --- | --- | --- |

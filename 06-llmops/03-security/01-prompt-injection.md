@@ -2,7 +2,7 @@
 
 LLM에게 원래 지시와 다른 지시를 따르게 만드는 공격을 직접·간접으로 나누고, 피해 유형과 층별 대응, 평가 방법을 정리한다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - 문서 권한과 개인정보는 [02-access-control-pii](./02-access-control-pii.md) 참고
 
 ## 1. 유형

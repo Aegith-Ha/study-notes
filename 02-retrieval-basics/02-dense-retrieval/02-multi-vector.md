@@ -2,7 +2,7 @@
 
 청크 하나를 벡터 하나로 압축하지 않고, 토큰마다 벡터를 남겨 두었다가 검색할 때 질의 토큰과 하나씩 맞춰 보는 멀티 벡터 검색을 정리한다. 대표 모델은 ColBERT다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - 단일 벡터 dense 검색은 [01-embedding-basics](./01-embedding-basics.md), 모델 선택은 [03-model-selection](./03-model-selection.md) 참고
 - 토큰마다 숫자 하나를 남기는 학습된 sparse는 [01-sparse-retrieval/03-learned-sparse](../01-sparse-retrieval/03-learned-sparse.md) 참고
 

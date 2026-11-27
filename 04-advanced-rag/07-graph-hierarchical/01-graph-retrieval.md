@@ -2,7 +2,7 @@
 
 문서나 개체 사이의 연결을 그래프로 만들고, 검색할 때 그 연결을 따라가 관련 문서를 더 가져오는 방법을 정리한다. 가장 가벼운 참조 링크 확장부터 LLM으로 개체·관계를 뽑는 GraphRAG까지 다룬다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - 요약을 여러 단계로 쌓는 방법은 [02-hierarchical-summary](./02-hierarchical-summary.md) 참고
 
 ## 1. 왜 그래프인가

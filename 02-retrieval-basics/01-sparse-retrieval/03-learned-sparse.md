@@ -2,7 +2,7 @@
 
 BM25처럼 "단어 → 가중치" 형태의 sparse 벡터를 쓰되, 가중치를 공식이 아니라 언어 모델이 매기는 검색을 정리한다. 가중치만 학습하는 방식과 문서에 없는 단어까지 덧붙이는 확장형(SPLADE)으로 나눠 보고, 대표 모델인 SPLADE를 따로 설명한다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - 공식 기반 sparse 검색은 [02-bm25](./02-bm25.md), 역색인은 [01-inverted-index-tfidf](./01-inverted-index-tfidf.md) 참고
 - 의미 기반 검색은 [02-dense-retrieval](../02-dense-retrieval/README.md) 참고
 

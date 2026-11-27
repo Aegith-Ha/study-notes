@@ -2,7 +2,7 @@
 
 1차 검색이 가져온 후보를 더 정확한 모델로 다시 정렬하는 리랭커의 원리와 종류, 비용을 정리한다. 기본 RAG 실패 유형 중 F3(정답이 top-20 안에는 있는데 top-5 밖)을 고친다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - 1차 후보 수 정하기는 [02-candidate-depth](./02-candidate-depth.md) 참고
 
 ## 1. bi-encoder와 cross-encoder

@@ -2,7 +2,7 @@
 
 기반 모델을 4-bit로 양자화해 LoRA 학습 메모리를 더 줄이는 QLoRA와, 파인튜닝을 할지 RAG·프롬프트로 해결할지 판단하는 기준, 평가 방법을 정리한다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - LoRA 원리는 [01-lora](./01-lora.md) 참고
 
 ## 1. QLoRA 구성

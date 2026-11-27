@@ -1,6 +1,6 @@
 # 임베딩·리랭커 파인튜닝 (Embedding Fine-tuning)
 
-기성 임베딩 모델과 리랭커가 특정 도메인에서 부족할 때 도메인 데이터로 파인튜닝하는 방법을 정리한다. 학습 데이터 만들기와 손실·평가를 하위 노트에 두고, 이 README에는 메인 결정을 둔다.
+기성 임베딩 모델과 리랭커가 특정 도메인에서 부족할 때 도메인 데이터로 파인튜닝하는 방법을 정리한다. 학습 데이터 만들기와 손실·평가를 하위 노트에 두고, 이 README에는 기본 선택과 이유를 둔다.
 
 - 기성 모델 비교는 [02-retrieval-basics/02-dense-retrieval/03-model-selection](../../02-retrieval-basics/02-dense-retrieval/03-model-selection.md), 리랭커는 [04-advanced-rag/02-reranking](../../04-advanced-rag/02-reranking/README.md) 참고
 
@@ -9,7 +9,7 @@
 - [01-training-data](./01-training-data.md): (질의, 관련 문서) 쌍 만들기, 하드 네거티브 채굴, 거짓 네거티브, 골든셋과의 분리
 - [02-loss-and-evaluation](./02-loss-and-evaluation.md): 대조 손실과 배치 내 네거티브 손계산 예시, 리랭커 학습, 평가와 일반 성능 저하 확인
 
-## 메인 결정 (초안)
+## 기본 선택과 이유
 
 | 항목 | 결정 | 이유 |
 | --- | --- | --- |

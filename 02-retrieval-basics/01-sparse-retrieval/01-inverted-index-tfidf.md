@@ -2,7 +2,7 @@
 
 sparse 검색의 바탕인 역색인 구조와, 단어 빈도로 문서 점수를 매기는 가장 기본적인 방법인 TF-IDF를 정리한다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - TF-IDF의 한계를 고친 BM25는 [02-bm25](./02-bm25.md) 참고
 
 ## 1. sparse 검색이란

@@ -1,6 +1,6 @@
 # 골든셋 생성 방법 목록 (Generation Methods)
 
-평가 데이터(골든셋)를 만드는 일반적인 방법을 **구축 단계별로** 모은 목록이다. 골든셋 하나는 단계마다 방법을 하나 이상 골라 조합해서 만든다. 구축 단계의 흐름과 이 프로젝트에서 쓰는 조합은 [README](./README.md) 구축 흐름에 둔다.
+평가 데이터(골든셋)를 만드는 일반적인 방법을 **구축 단계별로** 모은 목록이다. 골든셋 하나는 단계마다 방법을 하나 이상 골라 조합해서 만든다. 구축 단계의 흐름과 기본으로 쓰는 조합은 [README](./README.md) 구축 흐름에 둔다.
 
 - 질문 소스(A~D)별 구체적인 방법은 [01-query-sources](./01-query-sources.md) 참고
 - 정답 후보를 모으는 Pooling은 [02-pooling](./02-pooling.md) 참고
@@ -318,7 +318,7 @@ LLM 또는 판정 모델 평가
 
 **적합한 목적:** 대규모 Pooling 데이터의 검수 비용 최적화
 
-- 이 프로젝트의 "경계 등급(1) + judge 불일치 항목" 검수([README](./README.md) 구축 흐름)가 이 방식의 단순한 형태다. 신호별 우선순위는 [03-judging-and-review](./03-judging-and-review.md) 3.2 참고
+- 기본 사양의 "경계 등급(1) + judge 불일치 항목" 검수([README](./README.md) 구축 흐름)가 이 방식의 단순한 형태다. 신호별 우선순위는 [03-judging-and-review](./03-judging-and-review.md) 3.2 참고
 
 ---
 

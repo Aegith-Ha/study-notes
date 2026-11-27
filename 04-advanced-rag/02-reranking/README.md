@@ -1,6 +1,6 @@
 # 리랭커 (Reranking)
 
-1차 검색 후보를 cross-encoder로 다시 정렬해, 정답을 LLM에 넣는 top-5 안으로 끌어올리는 방법을 정리한다. 기본 RAG 실패 유형 중 F3(순위 문제)을 고친다. 이 README에는 메인 결정을 두고, 원리와 후보 수 정하기는 하위 노트에 둔다.
+1차 검색 후보를 cross-encoder로 다시 정렬해, 정답을 LLM에 넣는 top-5 안으로 끌어올리는 방법을 정리한다. 기본 RAG 실패 유형 중 F3(순위 문제)을 고친다. 이 README에는 기본 선택과 이유를 두고, 원리와 후보 수 정하기는 하위 노트에 둔다.
 
 - 1차 검색은 [01-hybrid-search](../01-hybrid-search/README.md), 지표는 [03-evals/01-retrieval-metrics](../../03-evals/01-retrieval-metrics/README.md) 참고
 
@@ -9,7 +9,7 @@
 - [01-cross-encoder](./01-cross-encoder.md): bi-encoder와 cross-encoder, 리랭커 종류(모델, LLM pointwise·listwise), 비용과 지연, 입력 구성
 - [02-candidate-depth](./02-candidate-depth.md): 1차 후보 수 N과 상한, 손계산 예시(리랭커가 살린 비율), Pooling 깊이와의 관계, 효과 평가 지표
 
-## 메인 결정 (초안)
+## 기본 선택과 이유
 
 | 항목 | 결정 | 이유 |
 | --- | --- | --- |

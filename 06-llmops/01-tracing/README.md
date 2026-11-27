@@ -1,6 +1,6 @@
 # 트레이싱 (Tracing)
 
-요청 하나가 검색, 리랭크, LLM 호출, 도구 호출을 거치는 과정을 단계별로 기록하고, 이 기록으로 실패 원인과 지연·비용을 찾는 방법을 정리한다. 이 README에는 메인 결정을 두고, 설계와 도구·모니터링은 하위 노트에 둔다.
+요청 하나가 검색, 리랭크, LLM 호출, 도구 호출을 거치는 과정을 단계별로 기록하고, 이 기록으로 실패 원인과 지연·비용을 찾는 방법을 정리한다. 이 README에는 기본 선택과 이유를 두고, 설계와 도구·모니터링은 하위 노트에 둔다.
 
 - 에이전트 경로 평가는 [05-agents/01-agentic-rag/02-trajectory-evaluation](../../05-agents/01-agentic-rag/02-trajectory-evaluation.md) 참고
 - 운영 질의 품질 지표는 [03-evals/01-retrieval-metrics/02-reference-free](../../03-evals/01-retrieval-metrics/02-reference-free.md), [03-evals/02-generation-metrics/02-reference-free](../../03-evals/02-generation-metrics/02-reference-free.md) 참고
@@ -10,7 +10,7 @@
 - [01-trace-design](./01-trace-design.md): trace와 span, 단계별로 남길 필드, 개인정보 처리, 지연 분해 손계산 예시
 - [02-tools-and-monitoring](./02-tools-and-monitoring.md): 도구 비교(Langfuse, Phoenix, OpenTelemetry), 운영 대시보드 지표, 알림 기준, 샘플링
 
-## 메인 결정 (초안)
+## 기본 선택과 이유
 
 | 항목 | 결정 | 이유 |
 | --- | --- | --- |

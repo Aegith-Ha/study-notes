@@ -2,7 +2,7 @@
 
 RAG·에이전트 요청을 trace와 span으로 나누어 기록하는 구조와, 각 단계에서 남겨야 할 필드를 정리한다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - 도구와 모니터링은 [02-tools-and-monitoring](./02-tools-and-monitoring.md) 참고
 
 ## 1. 왜 필요한가

@@ -1,6 +1,6 @@
 # 긴 컨텍스트 vs RAG (Long Context vs RAG)
 
-검색 없이 문서를 통째로 긴 컨텍스트에 넣는 방식과 RAG를 정확도, 비용, 지연으로 비교한다. "컨텍스트 창이 커졌는데 RAG가 아직 필요한가"에 이 프로젝트 데이터로 답하는 것이 목적이다. 이 README에는 메인 결정을 두고, 실험 설계와 비용 계산은 하위 노트에 둔다.
+검색 없이 문서를 통째로 긴 컨텍스트에 넣는 방식과 RAG를 정확도, 비용, 지연으로 비교한다. "컨텍스트 창이 커졌는데 RAG가 아직 필요한가"에 자기 데이터로 답하는 방법을 정리하는 것이 목적이다. 이 README에는 기본 선택과 이유를 두고, 실험 설계와 비용 계산은 하위 노트에 둔다.
 
 - 생성 지표는 [03-evals/02-generation-metrics](../../03-evals/02-generation-metrics/README.md) 참고
 - RAG 쪽 설정은 [01-hybrid-search](../01-hybrid-search/README.md) ~ [04-chunking](../04-chunking/README.md)의 채택 설정 참고
@@ -10,7 +10,7 @@
 - [01-experiment-design](./01-experiment-design.md): 비교할 설정(R / L / RL / O), 고정할 것, 측정 지표, 위치 실험(lost in the middle), 결과 해석
 - [02-cost-latency](./02-cost-latency.md): 질의당 비용 공식, 입력 토큰 손계산(RAG 대비 21배), 프롬프트 캐싱 효과, 지연 구간, 판단 기준
 
-## 메인 결정 (초안)
+## 기본 선택과 이유
 
 | 항목 | 결정 | 이유 |
 | --- | --- | --- |

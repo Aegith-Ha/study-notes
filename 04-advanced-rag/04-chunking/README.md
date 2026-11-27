@@ -1,6 +1,6 @@
 # 청킹 (Chunking)
 
-문서를 검색 단위로 나누는 방법과, 작게 찾고 크게 넘기는 부모-자식 청크, 청크에 맥락을 덧붙이는 contextual retrieval을 정리한다. 기본 RAG 실패 유형 중 F6(청크 경계 문제)을 고친다. 이 README에는 메인 결정을 두고, 방법 설명은 하위 노트에 둔다.
+문서를 검색 단위로 나누는 방법과, 작게 찾고 크게 넘기는 부모-자식 청크, 청크에 맥락을 덧붙이는 contextual retrieval을 정리한다. 기본 RAG 실패 유형 중 F6(청크 경계 문제)을 고친다. 이 README에는 기본 선택과 이유를 두고, 방법 설명은 하위 노트에 둔다.
 
 - 청크를 바꾸면 검색과 생성 지표가 모두 움직인다. [01-retrieval-metrics](../../03-evals/01-retrieval-metrics/README.md), [02-generation-metrics](../../03-evals/02-generation-metrics/README.md) 참고
 
@@ -9,7 +9,7 @@
 - [01-chunking-strategies](./01-chunking-strategies.md): 크기의 영향, 고정 길이·문장·구조·의미 기준, 고정 길이 손계산, 구조 단위(섹션·하위 항목) 청킹, 평가할 때 주의
 - [02-parent-child-contextual](./02-parent-child-contextual.md): 부모-자식 청크, contextual retrieval(규칙 기반·LLM 생성), 평가
 
-## 메인 결정 (초안)
+## 기본 선택과 이유
 
 | 항목 | 결정 | 이유 |
 | --- | --- | --- |

@@ -2,7 +2,7 @@
 
 검색을 한 번 하고 끝내는 기본 RAG와 달리, LLM이 검색할지, 무엇으로 검색할지, 더 검색할지를 스스로 정하는 구조를 정리한다.
 
-- 폴더 요약과 메인 결정은 [README](./README.md) 참고
+- 폴더 요약과 기본 선택은 [README](./README.md) 참고
 - 이 구조를 평가하는 방법은 [02-trajectory-evaluation](./02-trajectory-evaluation.md) 참고
 
 ## 1. 기본 RAG와의 차이
